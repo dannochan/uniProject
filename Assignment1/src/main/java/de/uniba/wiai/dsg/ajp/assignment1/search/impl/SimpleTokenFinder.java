@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class SimpleTokenFinder implements TokenFinder {
+public class SimpleTokenFinder<TODO> implements TokenFinder {
 
     public SimpleTokenFinder() {
         /*
@@ -42,10 +42,12 @@ public class SimpleTokenFinder implements TokenFinder {
 
             List<Path> listOfRoot = findAndFilterDirectory(pathOfRoot, ignoredItems, task.getFileExtension());
 
-            for (Path entry: listOfRoot
+            for (Path path: listOfRoot
                  ) {
-                System.out.println(entry.toString());
+                System.out.println(path.toString());
             }
+
+            //readFiles(listOfRoot);
 
 
         }catch (IOException e){
@@ -53,6 +55,16 @@ public class SimpleTokenFinder implements TokenFinder {
         }
 
 
+
+    }
+
+    private void readFiles(List<Path> listOfRoot, String extensionName) {
+
+        for (Path element: listOfRoot
+             ) {
+
+            element.getFileName();
+        }
 
     }
 
@@ -64,9 +76,9 @@ public class SimpleTokenFinder implements TokenFinder {
         }
 
         try (Stream<Path> treeWalk = Files.walk(path)){
-            result = treeWalk.filter(Files::isDirectory).
+            result = treeWalk.filter(Files::isReadable).
                                     filter(path1 -> !checkNameOfFile(path1, list)).
-                                      //  filter(path1 -> path1.getFileName().toString().endsWith(fileExtension)).
+                                        filter(p->p.getFileName().toString().endsWith(fileExtension)).
                                            collect(Collectors.toList());
 
         } catch (IOException e) {
@@ -92,6 +104,10 @@ public class SimpleTokenFinder implements TokenFinder {
             return result;
     }
 
+ // eine Method, um die Datei lesen zu können
+   // TODO implement here
 
 
+ // eine Method, um die Ausgabe in eine Datei speichern zu können.
+    // TODO implement here
 }
