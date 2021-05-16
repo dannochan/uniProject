@@ -34,71 +34,57 @@ public class SimpleTokenFinder implements TokenFinder {
         // TODO: Implement here!
 
         Path pathOfRoot = Path.of(task.getRootFolder()); // variable for iteration
-        Path pathOfIgnoreFile = Path.of(task.getIgnoreFile());
+        File ignoreFile = new File(task.getIgnoreFile());
 
-        //eine Arraylist um die PATHS abzuspeichen
-        List<Path> pathsOfFiles;
-
-        if (Files.isDirectory(pathOfRoot)) {
-
-            try {
-                Stream<Path> filesWalk = Files.walk(pathOfRoot);
-                List<String> itemsToIgnore = readFile(pathOfIgnoreFile);
-                pathsOfFiles = filesWalk.filter(Files::isDirectory).
-                                    filter(x-> checkIgnoreItem(x, itemsToIgnore)).
-                                            collect(Collectors.toList());
-
-                pathsOfFiles.forEach(System.out::println);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-    }
-
-    public static List<Path> directoryWalk(Path path) throws IOException {
-        List<Path> paths = new ArrayList<>();
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(path)) {
-            for (Path entry : stream
-            ) {
-                if (Files.isDirectory(entry)) {
-                    directoryWalk(entry);
-                }
-                paths.add(entry);
-            }
-            return paths;
-        }
-    }
-        // a method to traverse directories and give back boolean value as result
-    public boolean checkIgnoreItem(Path path, List<String> items){
-        boolean result = false;
-
-        for (String element:
-             items) {
-            if (path.toString().contains(element)){
-                //print to be deleted
-                System.out.println("Directory should be ignored!");
-                result =true;
-            }
-        }
-        return result;
-    }
-        // a Method to read file and give back a list
-    public List<String> readFile(Path filePath){
-        List<String> tmpList = new ArrayList<>();
         try {
-            BufferedReader reader = Files.newBufferedReader(filePath, StandardCharsets.UTF_8);
+            List<String> ignoredItems = Files.readAllLines(ignoreFile.toPath(), StandardCharsets.UTF_8);
 
-            String line = reader.readLine();
-            while (line!=null){
-                tmpList.add(line);
+
+
+            if (pathOfRoot==null && pathOfRoot.getFileName()==null) {
+                // do something
             }
+            List<Path> listOfRoot = findAndFilterDirectory(pathOfRoot, ignoredItems, task.getFileExtension());
+
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+
+
+    }
+
+    private static List<Path> findAndFilterDirectory(Path path, List<String> list, String fileExtension) throws TokenFinderException {
+        List<Path> result = null;
+
+        if(!Files.isDirectory(path)){
+            throw new TokenFinderException("The given path is not an available root folder!");
+        }
+
+        try (Stream<Path> treeWalk = Files.walk(path)){
+            result = treeWalk.filter(Files::isRegularFile).
+                                    filter(path1 -> !checkNameOfFile(path1, list)).
+                                        filter(path1 -> path1.getFileName().toString().endsWith(fileExtension)).
+                                           collect(Collectors.toList());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return tmpList;
+        return result;
     }
+
+
+    private static boolean checkNameOfFile(Path pathForCheck, List<String> listForCheck){
+
+            boolean result = false;
+            for (String elem : listForCheck) {
+                if (pathForCheck.toAbsolutePath().toString().contains(elem)){
+                    result = true;
+                }
+
+            }
+            return result;
+    }
+
 
 }
