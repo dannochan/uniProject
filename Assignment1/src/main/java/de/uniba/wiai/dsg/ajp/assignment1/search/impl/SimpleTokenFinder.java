@@ -40,7 +40,7 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
 
             List<Path> listOfRoot = findAndFilterDirectory(pathOfRoot, ignoredItems, task.getFileExtension(), task.getResultFile());
 
-            tokenSearchAndCount(listOfRoot, task.getToken());
+            tokenSearchAndCount(listOfRoot, task.getToken(), task.getResultFile());
 
 
         } catch (IOException e) {
@@ -92,8 +92,8 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
 
     // eine Method, um die Text-Datei zu lesen und die Token in der Datei zu zählen.
 
-    public static void tokenSearchAndCount(List<Path> pathList, String keyword) {
-        List<String> outoutTmp = new ArrayList<>();
+    public static void tokenSearchAndCount(List<Path> pathList, String keyword, String resultFile) {
+        List<String> outputTmp = new ArrayList<>();
 
         int count = 0; // eine Variable um die Summe des Token zu tracken.
 
@@ -111,11 +111,13 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
                 int columm_Number = 0;
                 String tokenLeft = "";
                 String tokenRight = "";
+
                 // den Inhalt durchlaufen
 
                 for (int lineIndex = 0; lineIndex < contentInList.size(); lineIndex++) {
 
                     String tmpLine = contentInList.get(lineIndex);
+                    int pos = tmpLine.indexOf(keyword);
 
                     // zählen, wieviel Token in jeder Zeile der File zu finden sind. die Funktion gibt das Ergebnis zurück
                     countToken = getCountToken(keyword, contentInList, lineIndex) + countToken;
@@ -124,24 +126,28 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
                     // System.out.println("line " + (lineIndex+1)  +" "+ contentInList.get(lineIndex) + "  " +contentInList.get(lineIndex).indexOf(keyword));
                     //    System.out.println(elem + "Hier auch ? " + countToken);
                     if (tmpLine.contains(keyword)){
-                        tokenLeft = contentInList.get(lineIndex);
-                        columm_Number = tmpLine.indexOf(keyword);
+
+                        tokenLeft = contentInList.get(lineIndex).substring(0, pos);
+                        tokenRight = contentInList.get(lineIndex).substring(pos+keyword.length());
+                        columm_Number = tmpLine.indexOf(keyword, columm_Number++);
                         line_Number = lineIndex+1;
                     }
-
                     if(tmpLine.indexOf(keyword)!=1){
 
-
                     }
-                   // tokenLeft = contentInList.get(lineIndex).substring(0,tmp);
-                   // tokenRight = contentInList.get(lineIndex).substring(tmp, tmp+1);
-                   // System.out.println(left);
+
 
                 }
                 count = count + countToken;
-                System.out.println(tokenLeft);
-                System.out.format(" %s includes **%s** %d times%n", elem, keyword, countToken);
-                System.out.format("%s : %d  %d >  %s %n",  elem, line_Number, columm_Number, keyword );
+
+                String output1 = String.format(" %s includes **%s** %d times%n", elem, keyword, countToken);
+                System.out.println(output1);
+                outputTmp.add(output1);
+
+                String output2 = String.format("%s : %d  %d > %s**%s**%s %n",
+                        elem, line_Number, columm_Number, tokenLeft, keyword, tokenRight);
+                System.out.println(output2);
+                outputTmp.add(output2);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -149,7 +155,10 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
 
         }
         // Anzahl des Token in Projekt zählen
-        System.out.println("Number of the token for project " + count);
+        outputTmp.add("Number of the token for project " + count);
+
+        //das ergebnis in result Text-Datei reinschreiben
+        writeToFileNewLines(resultFile, outputTmp);
     }
 
     private static int getCountToken(String keyword, List<String> contentOfFile, int lineNumber) {
