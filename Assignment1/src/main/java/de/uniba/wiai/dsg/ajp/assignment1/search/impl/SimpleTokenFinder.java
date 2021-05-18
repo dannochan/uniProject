@@ -34,6 +34,10 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
         Path pathOfRoot = Path.of(task.getRootFolder());
         File ignoreFile = new File(task.getIgnoreFile());
 
+        // Validieren der Eingabe bzw. Arguments muss auch noch gemacht werden
+        // TODO: Implement validation here
+
+
 
         try {
             List<String> ignoredItems = Files.readAllLines(ignoreFile.toPath(), StandardCharsets.UTF_8);
@@ -93,9 +97,11 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
     // eine Method, um die Text-Datei zu lesen und die Token in der Datei zu zählen.
 
     public static void tokenSearchAndCount(List<Path> pathList, String keyword, String resultFile) {
+        //eine List, die das Ergebnis von dem TokenSearch speichern.
         List<String> outputTmp = new ArrayList<>();
 
-        int count = 0; // eine Variable um die Summe des Token zu tracken.
+        // eine Variable um die Summe des Token von dem Projekt zu tracken.
+        int count = 0;
 
         for (Path elem : pathList
         ) {
@@ -119,12 +125,10 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
                     String tmpLine = contentInList.get(lineIndex);
                     int pos = tmpLine.indexOf(keyword);
 
-                    // zählen, wieviel Token in jeder Zeile der File zu finden sind. die Funktion gibt das Ergebnis zurück
+                    // zählen, wieviel Tokens in jeder Zeile der File zu finden sind. die Funktion gibt das Ergebnis zurück
                     countToken = getCountToken(keyword, contentInList, lineIndex) + countToken;
 
 
-                    // System.out.println("line " + (lineIndex+1)  +" "+ contentInList.get(lineIndex) + "  " +contentInList.get(lineIndex).indexOf(keyword));
-                    //    System.out.println(elem + "Hier auch ? " + countToken);
                     if (tmpLine.contains(keyword)){
 
                         tokenLeft = contentInList.get(lineIndex).substring(0, pos);
@@ -132,11 +136,6 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
                         columm_Number = tmpLine.indexOf(keyword, columm_Number++);
                         line_Number = lineIndex+1;
                     }
-                    if(tmpLine.indexOf(keyword)!=1){
-
-                    }
-
-
                 }
                 count = count + countToken;
 
@@ -177,6 +176,7 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
 
         Path path = Path.of(outputFile); // Die Text-Datei, die zu bearbeiten ist.
 
+
         if (Files.exists(path)) {          // prüfen, ob die Datei schon existiert.
             //Falls die Output Datei schon existiert, werden die neuen Line in Datei reingeschrien
             try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
@@ -189,6 +189,7 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
             // Falls die Datei noch nicht existiert, wird zuerst eine Text-File erstellt.
         } else {
             try {
