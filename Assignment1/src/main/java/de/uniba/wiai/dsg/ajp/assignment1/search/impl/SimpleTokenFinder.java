@@ -4,7 +4,6 @@ import de.uniba.wiai.dsg.ajp.assignment1.search.SearchTask;
 import de.uniba.wiai.dsg.ajp.assignment1.search.TokenFinder;
 import de.uniba.wiai.dsg.ajp.assignment1.search.TokenFinderException;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,7 +30,6 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
     @Override
     public void search(final SearchTask task) throws TokenFinderException {
 
-
         // Variable für die Path von Wurzelverzeichniss und die Ignore-File
         Path pathOfRoot = Path.of(task.getRootFolder());
         File ignoreFile = new File(task.getIgnoreFile());
@@ -43,8 +40,9 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
 
             List<Path> listOfRoot = findAndFilterDirectory(pathOfRoot, ignoredItems, task.getFileExtension(), task.getResultFile());
 
+            tokenSearchAndCount(listOfRoot, task.getToken());
 
-            readFiles(listOfRoot, task.getToken());
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -53,7 +51,7 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
 
 
     public List<Path> findAndFilterDirectory(Path path, List<String> list, String fileExtension, String resultFile) throws TokenFinderException {
-        List<Path> result = null;
+        List<Path> result = new ArrayList<>();
 
         if (!Files.isDirectory(path)) {
             throw new TokenFinderException("The given path is not an available root folder!");
@@ -61,7 +59,7 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
 
         try (Stream<Path> treeWalk = Files.walk(path)) {
             result = treeWalk.filter(Files::isReadable).
-                    filter(path1 -> !checkNameOfFile(path1, list, resultFile)).
+                    filter(path1 -> !checkNameOfFile(path1, list, resultFile)).  //nur die Files ohne Name "Ignore" und "lib"
                     filter(p -> p.getFileName().toString().endsWith(fileExtension)).
                     collect(Collectors.toList());
 
@@ -93,17 +91,31 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
     }
 
     // eine Method, um die Datei lesen zu können
-    // TODO implement here
-    public static void readFiles(List<Path> pathList, String keyword) {
+    public static void tokenSearchAndCount(List<Path> pathList, String keyword) {
         List<String> outoutTmp = new ArrayList<>();
+
+        int count = 0; // eine Variable um die Summe des Token zu tracken.
 
         for (Path elem : pathList
         ) {
+            try (Stream<String> lines = Files.lines(elem)) { //jede File lesen
 
-            try (Stream<String> lines = Files.lines(elem)) {
+                System.out.println("For File " + elem);
+                List<String> contentInList = lines.collect(Collectors.toList());        // der Inhalt der File wird in eine List umgewandelt
+                int countToken = 0;                                                     // die Summe des Tokens in einer File
+                // den Inhalt durchlaufen
+                for (int lineIndex=0; lineIndex<contentInList.size();lineIndex++){
 
-                System.out.println(elem.toString() + " is the path of " +elem.getFileName());
-             //   System.out.println(lines.filter(x -> !x.contains(keyword)).distinct().count());
+                    countToken = getCountToken(keyword, contentInList, lineIndex) + countToken;
+                //  System.out.println("line " + (lineIndex+1)  +" "+ contentInList.get(lineIndex) + "  " +contentInList.get(lineIndex).indexOf(keyword));
+                    System.out.println(elem + "Hier auch ? " + countToken);
+
+                }
+                count  = count + countToken;
+                System.out.format(" %s includes %s %d times%n", elem, keyword, countToken);
+                // System.out.println(elem.toString() + " is the path of " +elem.getFileName());
+
+                System.out.println("count for project " + count);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -113,11 +125,17 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
 
     }
 
-    private static void countOccurence(String x, String keyword) {
+    private static int getCountToken(String keyword, List<String> contentOfFile, int lineNumber) {
+        int countResult = 0 ;
 
+        for (int index = 0; (index= contentOfFile.get(lineNumber).indexOf(keyword, index))>=0; index++){   //
+         countResult++;
+        }
+        return countResult;
     }
+
+
     // eine Method, damit die Ergebniss in eine Text-Datei gespeichert werden.
-    // TODO implement here
 
     public static void writeToFileNewLines(String outputFile, List<String> newLines) {
 
