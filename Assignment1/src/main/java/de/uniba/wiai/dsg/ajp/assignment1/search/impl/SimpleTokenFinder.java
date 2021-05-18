@@ -90,7 +90,8 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
         return result;
     }
 
-    // eine Method, um die Datei lesen zu können
+    // eine Method, um die Text-Datei zu lesen und die Token in der Datei zu zählen.
+
     public static void tokenSearchAndCount(List<Path> pathList, String keyword) {
         List<String> outoutTmp = new ArrayList<>();
 
@@ -98,38 +99,64 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
 
         for (Path elem : pathList
         ) {
-            try (Stream<String> lines = Files.lines(elem)) { //jede File lesen
+            // Files lesen mit Stream
+            try (Stream<String> lines = Files.lines(elem)) {
 
-                System.out.println("For File " + elem);
-                List<String> contentInList = lines.collect(Collectors.toList());        // der Inhalt der File wird in eine List umgewandelt
-                int countToken = 0;                                                     // die Summe des Tokens in einer File
+                // der Inhalt der File wird in eine List umgewandelt
+                List<String> contentInList = lines.collect(Collectors.toList());
+
+                /*Hier fängt es an, den gewünschten Token in der Text-Datei zu suchen*/
+                int countToken = 0;
+                int line_Number = 0;
+                int columm_Number = 0;
+                String tokenLeft = "";
+                String tokenRight = "";
                 // den Inhalt durchlaufen
-                for (int lineIndex=0; lineIndex<contentInList.size();lineIndex++){
 
+                for (int lineIndex = 0; lineIndex < contentInList.size(); lineIndex++) {
+
+                    String tmpLine = contentInList.get(lineIndex);
+
+                    // zählen, wieviel Token in jeder Zeile der File zu finden sind. die Funktion gibt das Ergebnis zurück
                     countToken = getCountToken(keyword, contentInList, lineIndex) + countToken;
-                //  System.out.println("line " + (lineIndex+1)  +" "+ contentInList.get(lineIndex) + "  " +contentInList.get(lineIndex).indexOf(keyword));
-                    System.out.println(elem + "Hier auch ? " + countToken);
+
+
+                    // System.out.println("line " + (lineIndex+1)  +" "+ contentInList.get(lineIndex) + "  " +contentInList.get(lineIndex).indexOf(keyword));
+                    //    System.out.println(elem + "Hier auch ? " + countToken);
+                    if (tmpLine.contains(keyword)){
+                        tokenLeft = contentInList.get(lineIndex);
+                        columm_Number = tmpLine.indexOf(keyword);
+                        line_Number = lineIndex+1;
+                    }
+
+                    if(tmpLine.indexOf(keyword)!=1){
+
+
+                    }
+                   // tokenLeft = contentInList.get(lineIndex).substring(0,tmp);
+                   // tokenRight = contentInList.get(lineIndex).substring(tmp, tmp+1);
+                   // System.out.println(left);
 
                 }
-                count  = count + countToken;
-                System.out.format(" %s includes %s %d times%n", elem, keyword, countToken);
-                // System.out.println(elem.toString() + " is the path of " +elem.getFileName());
-
-                System.out.println("count for project " + count);
+                count = count + countToken;
+                System.out.println(tokenLeft);
+                System.out.format(" %s includes **%s** %d times%n", elem, keyword, countToken);
+                System.out.format("%s : %d  %d >  %s %n",  elem, line_Number, columm_Number, keyword );
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
         }
-
+        // Anzahl des Token in Projekt zählen
+        System.out.println("Number of the token for project " + count);
     }
 
     private static int getCountToken(String keyword, List<String> contentOfFile, int lineNumber) {
-        int countResult = 0 ;
+        int countResult = 0;
 
-        for (int index = 0; (index= contentOfFile.get(lineNumber).indexOf(keyword, index))>=0; index++){   //
-         countResult++;
+        for (int index = 0; (index = contentOfFile.get(lineNumber).indexOf(keyword, index)) >= 0; index++) {   //
+            countResult++;
         }
         return countResult;
     }
@@ -153,7 +180,7 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        // Falls die Datei noch nicht existiert, wird zuerst eine Text-File erstellt.
+            // Falls die Datei noch nicht existiert, wird zuerst eine Text-File erstellt.
         } else {
             try {
                 Files.write(path, newLines, StandardOpenOption.CREATE_NEW);
