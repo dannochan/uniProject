@@ -62,7 +62,7 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
 
         try (Stream<Path> treeWalk = Files.walk(path)) {
             result = treeWalk.filter(Files::isReadable).
-                    filter(path1 -> !checkNameOfFile(path1, list, resultFile)).  //nur die Files ohne Name "Ignore" und "lib"
+                    filter(path1 -> !isIgnoreFile(path1, list, resultFile)).  //nur die Files ohne Name "Ignore" und "lib"
                     filter(p -> p.getFileName().toString().endsWith(fileExtension)).
                     collect(Collectors.toList());
 
@@ -74,7 +74,7 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
 
     // ein Method, um die Directories mit den in der angegebenen File steheden Name zu filtern
 
-    private static boolean checkNameOfFile(Path pathForCheck, List<String> listForCheck, String resultFile) {
+    private static boolean isIgnoreFile(Path pathForCheck, List<String> listForCheck, String resultFile) {
         List<String> outputArray = new ArrayList<>();
         boolean result = false;
         for (String elem : listForCheck) {
