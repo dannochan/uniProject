@@ -38,7 +38,6 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
         // TODO: Implement validation here
 
 
-
         try {
             List<String> ignoredItems = Files.readAllLines(ignoreFile.toPath(), StandardCharsets.UTF_8);
 
@@ -74,6 +73,7 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
     }
 
     // ein Method, um die Directories mit den in der angegebenen File steheden Name zu filtern
+
     private static boolean checkNameOfFile(Path pathForCheck, List<String> listForCheck, String resultFile) {
         List<String> outputArray = new ArrayList<>();
         boolean result = false;
@@ -82,9 +82,7 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
 
                 if (pathForCheck.getFileName().toString().endsWith(elem)) {
                     String outputLine = pathForCheck + " directory was ignored.";
-
                     outputArray.add(outputLine);
-
                 }
                 result = true;
             }
@@ -95,7 +93,7 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
     }
 
     // eine Method, um die Text-Datei zu lesen und die Token in der Datei zu zählen.
-
+    // Parameter von der Method: 1. List der Paths von allen Files, 2. Token in String 3.Text Datei von Ergebnis
     public static void tokenSearchAndCount(List<Path> pathList, String keyword, String resultFile) {
         //eine List, die das Ergebnis von dem TokenSearch speichern.
         List<String> outputTmp = new ArrayList<>();
@@ -117,56 +115,53 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
                 int columm_Number = 0;
                 String tokenLeft = "";
                 String tokenRight = "";
+                String output1;
+                String output2;
 
-                // den Inhalt durchlaufen
+                if (contentInList.isEmpty()) {
+                    countToken = 0;
+                } else {
+                    // den Inhalt durchlaufen
 
-                for (int lineIndex = 0; lineIndex < contentInList.size(); lineIndex++) {
-
-                    String tmpLine = contentInList.get(lineIndex);
-                    int pos = tmpLine.indexOf(keyword);
-
-                    // zählen, wieviel Tokens in jeder Zeile der File zu finden sind. die Funktion gibt das Ergebnis zurück
-                    countToken = getCountToken(keyword, contentInList, lineIndex) + countToken;
+                    for (int lineIndex = 0; lineIndex < contentInList.size(); lineIndex++) {
 
 
-                    if (tmpLine.contains(keyword)){
+                        for (int index = 0; (index = contentInList.get(lineIndex).indexOf(keyword, index)) >= 0; index++) {   //
 
-                        tokenLeft = contentInList.get(lineIndex).substring(0, pos);
-                        tokenRight = contentInList.get(lineIndex).substring(pos+keyword.length());
-                        columm_Number = tmpLine.indexOf(keyword, columm_Number++);
-                        line_Number = lineIndex+1;
+                            columm_Number = contentInList.get(lineIndex).indexOf(keyword, index);
+                            line_Number = lineIndex + 1;
+
+                            tokenLeft = contentInList.get(lineIndex).substring(0, columm_Number);
+                            tokenRight = contentInList.get(lineIndex).substring(columm_Number + keyword.length());
+
+
+                            output2 = String.format("%s : %d  %d > %s**%s**%s %n",
+                                    elem, line_Number, columm_Number, tokenLeft, keyword, tokenRight);
+                            System.out.println(output2);
+                            outputTmp.add(output2);
+                            countToken++;
+                        }
+
                     }
-                }
-                count = count + countToken;
 
-                String output1 = String.format(" %s includes **%s** %d times%n", elem, keyword, countToken);
+                }
+
+                output1 = String.format(" %s includes **%s** %d times%n", elem, keyword, countToken);
                 System.out.println(output1);
                 outputTmp.add(output1);
-
-                String output2 = String.format("%s : %d  %d > %s**%s**%s %n",
-                        elem, line_Number, columm_Number, tokenLeft, keyword, tokenRight);
-                System.out.println(output2);
-                outputTmp.add(output2);
+                count = count + countToken;
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
-        }
+        } // Ende der 1. For-Schleife (PathList). Alle File werden schon gelesen.
+
         // Anzahl des Token in Projekt zählen
         outputTmp.add("Number of the token for project " + count);
 
         //das ergebnis in result Text-Datei reinschreiben
         writeToFileNewLines(resultFile, outputTmp);
-    }
-
-    private static int getCountToken(String keyword, List<String> contentOfFile, int lineNumber) {
-        int countResult = 0;
-
-        for (int index = 0; (index = contentOfFile.get(lineNumber).indexOf(keyword, index)) >= 0; index++) {   //
-            countResult++;
-        }
-        return countResult;
     }
 
 
