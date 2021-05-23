@@ -5,7 +5,6 @@ import de.uniba.wiai.dsg.ajp.assignment1.search.TokenFinder;
 import de.uniba.wiai.dsg.ajp.assignment1.search.TokenFinderException;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class SimpleTokenFinder<TODO> implements TokenFinder {
+public class SimpleTokenFinder implements TokenFinder {
 
     public SimpleTokenFinder() {
         /*
@@ -30,35 +29,29 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
     @Override
     public void search(final SearchTask task) throws TokenFinderException {
 
-        // Variable für die Path von Wurzelverzeichniss und die Ignore-File
-        Path pathOfRoot = Path.of(task.getRootFolder());
-        File ignoreFile = new File(task.getIgnoreFile());
+        taskValidator validator = new taskValidator(task);
 
-        // Validieren der Eingabe bzw. Arguments muss auch noch gemacht werden
-        // TODO: Implement validation here
+        if(validator.validation()){
 
+            try {
+                List<String> ignoredItems = Files.readAllLines(validator.getIgnoreFile(), StandardCharsets.UTF_8);
 
-        try {
-            List<String> ignoredItems = Files.readAllLines(ignoreFile.toPath(), StandardCharsets.UTF_8);
+                List<Path> listOfRoot = findAndFilterDirectory(validator.getRootFolder(), ignoredItems, validator.getFileExtension(), validator.getOutputFile());
 
-            List<Path> listOfRoot = findAndFilterDirectory(pathOfRoot, ignoredItems, task.getFileExtension(), task.getResultFile());
-
-            tokenSearchAndCount(listOfRoot, task.getToken(), task.getResultFile());
+                tokenSearchAndCount(listOfRoot, validator.getToken(), validator.getOutputFile());
 
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }
 
 
-    public List<Path> findAndFilterDirectory(Path path, List<String> list, String fileExtension, String resultFile) throws TokenFinderException {
+    public List<Path> findAndFilterDirectory(Path path, List<String> list, String fileExtension, Path resultFile) throws TokenFinderException {
         List<Path> result = new ArrayList<>();
 
-        if (!Files.isDirectory(path)) {
-            throw new TokenFinderException("The given path is not an available root folder!");
-        }
 
         try (Stream<Path> treeWalk = Files.walk(path)) {
             result = treeWalk.filter(Files::isReadable).
@@ -74,14 +67,14 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
 
     // ein Method, um die Directories mit den in der angegebenen File steheden Name zu filtern
 
-    private static boolean isIgnoreFile(Path pathForCheck, List<String> listForCheck, String resultFile) {
+    private static boolean isIgnoreFile(Path pathForCheck, List<String> listForCheck, Path resultFile) {
         List<String> outputArray = new ArrayList<>();
         boolean result = false;
         for (String elem : listForCheck) {
             if (pathForCheck.toAbsolutePath().toString().contains(elem)) {
 
                 if (pathForCheck.getFileName().toString().endsWith(elem)) {
-                    String outputLine = pathForCheck + " directory was ignored.";
+                    String outputLine = pathForCheck + " directory was ignored. %n";
                     outputArray.add(outputLine);
                 }
                 result = true;
@@ -94,7 +87,7 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
 
     // eine Method, um die Text-Datei zu lesen und die Token in der Datei zu zählen.
     // Parameter von der Method: 1. List der Paths von allen Files, 2. Token in String 3.Text Datei von Ergebnis
-    public static void tokenSearchAndCount(List<Path> pathList, String keyword, String resultFile) {
+    public static void tokenSearchAndCount(List<Path> pathList, String keyword, Path resultFile) {
         //eine List, die das Ergebnis von dem TokenSearch speichern.
         List<String> outputTmp = new ArrayList<>();
 
@@ -167,14 +160,11 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
 
     // eine Method, damit die Ergebniss in eine Text-Datei gespeichert werden.
 
-    public static void writeToFileNewLines(String outputFile, List<String> newLines) {
+    public static void writeToFileNewLines(Path outputFile, List<String> newLines) {
 
-        Path path = Path.of(outputFile); // Die Text-Datei, die zu bearbeiten ist.
-
-
-        if (Files.exists(path)) {          // prüfen, ob die Datei schon existiert.
+        if (Files.exists(outputFile)) {          // prüfen, ob die Datei schon existiert.
             //Falls die Output Datei schon existiert, werden die neuen Line in Datei reingeschrien
-            try (BufferedWriter writer = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
+            try (BufferedWriter writer = Files.newBufferedWriter(outputFile, StandardOpenOption.APPEND)) {
 
                 for (String elem : newLines) {
 
@@ -188,7 +178,7 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
             // Falls die Datei noch nicht existiert, wird zuerst eine Text-File erstellt.
         } else {
             try {
-                Files.write(path, newLines, StandardOpenOption.CREATE_NEW);
+                Files.write(outputFile, newLines, StandardOpenOption.CREATE_NEW);
             } catch (IOException e) {
                 e.printStackTrace();
             }
