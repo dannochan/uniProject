@@ -36,7 +36,7 @@ public class SimpleTokenFinder<TODO> implements TokenFinder {
 
         // Validieren der Eingabe bzw. Arguments muss auch noch gemacht werden
         // TODO: Implement validation here
-
+        // Hüsnü Kommentar
 
         try {
             List<String> ignoredItems = Files.readAllLines(ignoreFile.toPath(), StandardCharsets.UTF_8);
