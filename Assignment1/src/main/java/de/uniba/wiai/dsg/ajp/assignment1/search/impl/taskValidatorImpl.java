@@ -5,7 +5,7 @@ import de.uniba.wiai.dsg.ajp.assignment1.search.SearchTask;
 import java.nio.file.Path;
 import java.nio.file.Files;
 
-public class taskValidator {
+public class taskValidatorImpl {
 
     private Path rootFolder;
     private Path ignoreFile;
@@ -13,7 +13,7 @@ public class taskValidator {
     private String token;
     private Path outputFile;
 
-    public taskValidator(SearchTask task) {
+    public taskValidatorImpl(SearchTask task) {
         this.rootFolder = Path.of(task.getRootFolder());
         this.ignoreFile = Path.of(task.getIgnoreFile());
         this.outputFile = Path.of(task.getResultFile());
@@ -25,21 +25,26 @@ public class taskValidator {
         return rootFolder;
     }
 
+
     public Path getIgnoreFile() {
         return ignoreFile;
     }
+
 
     public Path getOutputFile() {
         return outputFile;
     }
 
+
     public String getFileExtension() {
         return fileExtension;
     }
 
+
     public String getToken() {
         return token;
     }
+
 
     public boolean validation(){
 
@@ -54,18 +59,18 @@ public class taskValidator {
     4. es ist nicht lesebar
      */
 
-    private boolean rootFolderValidate(){
-        if (rootFolder.toString().isEmpty()){
+    private boolean rootFolderValidate() {
+        if (rootFolder.toString().isEmpty()) {
             System.err.println("The path of root folder cannot be empty!");
             return false;
         }
 
-        if (!rootFolder.toFile().exists()){
+        if (!rootFolder.toFile().exists()) {
             System.err.println("The folder " + rootFolder + " doesn't exists!");
             return false;
         }
 
-        if (!rootFolder.toFile().isDirectory()){
+        if (!rootFolder.toFile().isDirectory()) {
             System.err.println("The given folder" + rootFolder + " is not a valid folder ");
             return false;
         }
@@ -74,19 +79,19 @@ public class taskValidator {
 
     }
 
-    private boolean checkIgnoreFile (){
+    private boolean checkIgnoreFile() {
 
-        if (!Files.exists(ignoreFile)){
+        if (!Files.exists(ignoreFile)) {
             System.err.println("The file " + ignoreFile + " doesn't exist!");
             return false;
         }
 
-        if (!Files.isRegularFile(ignoreFile)){
+        if (!Files.isRegularFile(ignoreFile)) {
             System.err.println("The file " + ignoreFile + " is not an actual file!");
             return false;
         }
 
-        if (!Files.isReadable(ignoreFile)){
+        if (!Files.isReadable(ignoreFile)) {
             System.err.println("The file " + ignoreFile + " is not readable!");
             return false;
         }
@@ -94,36 +99,36 @@ public class taskValidator {
         return true;
     }
 
-    private boolean checkOutput(){
+    private boolean checkOutput() {
 
         Path parent = outputFile.getParent();
 
-        if (!Files.exists(parent)){
-            System.err.println("The File cannot be create because parent folder of " +outputFile + "does not exist!" );
+        if (!Files.exists(parent)) {
+            System.err.println("The File cannot be create because parent folder of " + outputFile + "does not exist!");
             return false;
         }
 
 
-        if (Files.exists(outputFile)&&!Files.isWritable(outputFile)){
+        if (Files.exists(outputFile) && !Files.isWritable(outputFile)) {
             System.err.println("The File" + outputFile + " exists already and is not writable!");
             return false;
         }
         return true;
     }
 
-    private boolean checkExtensionAndToken(){
+    private boolean checkExtensionAndToken() {
 
-        if (fileExtension.matches("\\\\0-9\\\\")){
+        if (fileExtension.matches("\\\\0-9\\\\")) {
             System.err.println("The file Extension " + fileExtension + " shall not contain numbers");
             return false;
         }
 
-        if (fileExtension.isEmpty()){
+        if (fileExtension.isEmpty()) {
             System.err.println("The File Extension cannot be empty!");
             return false;
         }
 
-        if (token.isEmpty()){
+        if (token.isEmpty()) {
             System.err.println("The tpken cannot be empty! Don't you want to search something? ");
             return false;
         }
