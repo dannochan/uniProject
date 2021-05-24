@@ -48,7 +48,7 @@ public class SimpleTokenFinder implements TokenFinder {
 
     }
 
-
+    //*******************************Exception******************************
     public List<Path> findAndFilterDirectory(Path path, List<String> list, String fileExtension, Path resultFile) throws TokenFinderException {
         List<Path> result = new ArrayList<>();
 
@@ -84,6 +84,9 @@ public class SimpleTokenFinder implements TokenFinder {
         writeToFileNewLines(resultFile, outputArray);
         return result;
     }
+
+    //*******************************Exception 2 ******************************
+
 
     // eine Method, um die Text-Datei zu lesen und die Token in der Datei zu zählen.
     // Parameter von der Method: 1. List der Paths von allen Files, 2. Token in String 3.Text Datei von Ergebnis
@@ -159,6 +162,8 @@ public class SimpleTokenFinder implements TokenFinder {
 
 
     // eine Method, damit die Ergebniss in eine Text-Datei gespeichert werden.
+
+    //*******************************  Exception 3 ***********************************
 
     public static void writeToFileNewLines(Path outputFile, List<String> newLines) {
 

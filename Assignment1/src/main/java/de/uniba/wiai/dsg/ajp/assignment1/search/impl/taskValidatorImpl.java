@@ -134,6 +134,7 @@ public class taskValidatorImpl implements taskValidator {
         }
 
         if (fileExtension.isEmpty()) {
+
             System.err.println("The File Extension cannot be empty!");
             return false;
         }
