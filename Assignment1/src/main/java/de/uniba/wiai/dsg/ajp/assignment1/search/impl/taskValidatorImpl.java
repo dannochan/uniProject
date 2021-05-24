@@ -5,13 +5,13 @@ import de.uniba.wiai.dsg.ajp.assignment1.search.SearchTask;
 import java.nio.file.Path;
 import java.nio.file.Files;
 
-public class taskValidatorImpl {
+public class taskValidatorImpl implements taskValidator {
 
-    private Path rootFolder;
-    private Path ignoreFile;
-    private String fileExtension;
-    private String token;
-    private Path outputFile;
+    private final Path rootFolder;
+    private final Path ignoreFile;
+    private final String fileExtension;
+    private final String token;
+    private final Path outputFile;
 
     public taskValidatorImpl(SearchTask task) {
         this.rootFolder = Path.of(task.getRootFolder());
@@ -21,31 +21,37 @@ public class taskValidatorImpl {
         this.token = task.getToken();
     }
 
+    @Override
     public Path getRootFolder() {
         return rootFolder;
     }
 
 
+    @Override
     public Path getIgnoreFile() {
         return ignoreFile;
     }
 
 
+    @Override
     public Path getOutputFile() {
         return outputFile;
     }
 
 
+    @Override
     public String getFileExtension() {
         return fileExtension;
     }
 
 
+    @Override
     public String getToken() {
         return token;
     }
 
 
+    @Override
     public boolean validation(){
 
         return rootFolderValidate()&&checkExtensionAndToken()&&checkOutput()&&checkIgnoreFile();
@@ -59,7 +65,8 @@ public class taskValidatorImpl {
     4. es ist nicht lesebar
      */
 
-    private boolean rootFolderValidate() {
+    @Override
+    public boolean rootFolderValidate() {
         if (rootFolder.toString().isEmpty()) {
             System.err.println("The path of root folder cannot be empty!");
             return false;
@@ -79,7 +86,8 @@ public class taskValidatorImpl {
 
     }
 
-    private boolean checkIgnoreFile() {
+    @Override
+    public boolean checkIgnoreFile() {
 
         if (!Files.exists(ignoreFile)) {
             System.err.println("The file " + ignoreFile + " doesn't exist!");
@@ -99,7 +107,8 @@ public class taskValidatorImpl {
         return true;
     }
 
-    private boolean checkOutput() {
+    @Override
+    public boolean checkOutput() {
 
         Path parent = outputFile.getParent();
 
@@ -116,7 +125,8 @@ public class taskValidatorImpl {
         return true;
     }
 
-    private boolean checkExtensionAndToken() {
+    @Override
+    public boolean checkExtensionAndToken() {
 
         if (fileExtension.matches("\\\\0-9\\\\")) {
             System.err.println("The file Extension " + fileExtension + " shall not contain numbers");

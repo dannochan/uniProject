@@ -29,7 +29,7 @@ public class SimpleTokenFinder implements TokenFinder {
     @Override
     public void search(final SearchTask task) throws TokenFinderException {
 
-        taskValidatorImpl validator = new taskValidatorImpl(task);
+        taskValidator validator = new taskValidatorImpl(task);
 
         if(validator.validation()){
 
