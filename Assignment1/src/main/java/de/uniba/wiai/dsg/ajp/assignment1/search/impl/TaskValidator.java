@@ -2,7 +2,7 @@ package de.uniba.wiai.dsg.ajp.assignment1.search.impl;
 
 import java.nio.file.Path;
 
-public interface taskValidator {
+public interface TaskValidator {
     Path getRootFolder();
 
     Path getIgnoreFile();

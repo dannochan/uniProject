@@ -5,7 +5,7 @@ import de.uniba.wiai.dsg.ajp.assignment1.search.SearchTask;
 import java.nio.file.Path;
 import java.nio.file.Files;
 
-public class taskValidatorImpl implements taskValidator {
+public class TaskValidatorImpl implements TaskValidator {
 
     private final Path rootFolder;
     private final Path ignoreFile;
@@ -13,7 +13,7 @@ public class taskValidatorImpl implements taskValidator {
     private final String token;
     private final Path outputFile;
 
-    public taskValidatorImpl(SearchTask task) {
+    public TaskValidatorImpl(SearchTask task) {
         this.rootFolder = Path.of(task.getRootFolder());
         this.ignoreFile = Path.of(task.getIgnoreFile());
         this.outputFile = Path.of(task.getResultFile());
@@ -54,7 +54,7 @@ public class taskValidatorImpl implements taskValidator {
     @Override
     public boolean validation(){
 
-        return rootFolderValidate()&&checkExtensionAndToken()&&checkOutput()&&checkIgnoreFile();
+        return rootFolderValidate() && checkExtensionAndToken() && checkOutput() && checkIgnoreFile();
     }
 
     /*Allerzuerst wird das Wurzelverzeichnis validiert
@@ -78,7 +78,7 @@ public class taskValidatorImpl implements taskValidator {
         }
 
         if (!rootFolder.toFile().isDirectory()) {
-            System.err.println("The given folder" + rootFolder + " is not a valid folder ");
+            System.err.println("The given folder" + rootFolder + " is not a valid folder.");
             return false;
         }
 
@@ -140,7 +140,7 @@ public class taskValidatorImpl implements taskValidator {
         }
 
         if (token.isEmpty()) {
-            System.err.println("The tpken cannot be empty! Don't you want to search something? ");
+            System.err.println("The token cannot be empty! Don't you want to search something?");
             return false;
         }
 
