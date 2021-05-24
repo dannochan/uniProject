@@ -74,7 +74,7 @@ public class SimpleTokenFinder implements TokenFinder {
             if (pathForCheck.toAbsolutePath().toString().contains(elem)) {
 
                 if (pathForCheck.getFileName().toString().endsWith(elem)) {
-                    String outputLine = pathForCheck + " directory was ignored. %n";
+                    String outputLine = pathForCheck + " directory was ignored.\n";
                     outputArray.add(outputLine);
                 }
                 result = true;
@@ -90,6 +90,7 @@ public class SimpleTokenFinder implements TokenFinder {
 
     // eine Method, um die Text-Datei zu lesen und die Token in der Datei zu zählen.
     // Parameter von der Method: 1. List der Paths von allen Files, 2. Token in String 3.Text Datei von Ergebnis
+
     public static void tokenSearchAndCount(List<Path> pathList, String keyword, Path resultFile) {
         //eine List, die das Ergebnis von dem TokenSearch speichern.
         List<String> outputTmp = new ArrayList<>();
@@ -131,7 +132,7 @@ public class SimpleTokenFinder implements TokenFinder {
                             tokenRight = contentInList.get(lineIndex).substring(columm_Number + keyword.length());
 
 
-                            output2 = String.format("%s : %d  %d > %s**%s**%s %n",
+                            output2 = String.format("%s :%d,%d> %s**%s**%s",
                                     elem, line_Number, columm_Number, tokenLeft, keyword, tokenRight);
                             System.out.println(output2);
                             outputTmp.add(output2);
@@ -142,7 +143,7 @@ public class SimpleTokenFinder implements TokenFinder {
 
                 }
 
-                output1 = String.format(" %s includes **%s** %d times%n", elem, keyword, countToken);
+                output1 = String.format("%s includes **%s** %d times.\n", elem, keyword, countToken);
                 System.out.println(output1);
                 outputTmp.add(output1);
                 count = count + countToken;
@@ -154,7 +155,7 @@ public class SimpleTokenFinder implements TokenFinder {
         } // Ende der 1. For-Schleife (PathList). Alle File werden schon gelesen.
 
         // Anzahl des Token in Projekt zählen
-        outputTmp.add("Number of the token for project " + count);
+        outputTmp.add("The project includes " + "**" + keyword + "** " + count + " times.");
 
         //das ergebnis in result Text-Datei reinschreiben
         writeToFileNewLines(resultFile, outputTmp);
