@@ -2,10 +2,11 @@ package de.uniba.wiai.dsg.ajp.assignment1.search.impl;
 
 import de.uniba.wiai.dsg.ajp.assignment1.search.SearchTask;
 
+
 import java.nio.file.Path;
 import java.nio.file.Files;
 
-public class taskValidatorImpl implements taskValidator {
+public class TaskValidatorImpl implements TaskValidator {
 
     private final String rootFolder;
     private final String ignoreFile;
@@ -13,7 +14,7 @@ public class taskValidatorImpl implements taskValidator {
     private final String token;
     private final String outputFile;
 
-    public taskValidatorImpl(SearchTask task) {
+    public TaskValidatorImpl(SearchTask task) {
         this.rootFolder = task.getRootFolder();
         this.ignoreFile = task.getIgnoreFile();
         this.outputFile = task.getResultFile();
@@ -65,10 +66,9 @@ public class taskValidatorImpl implements taskValidator {
      */
 
     @Override
-    public boolean rootFolderValidate()  {
+    public boolean rootFolderValidate(){
         if (rootFolder.isEmpty() || rootFolder ==null) {
-            System.err.println("The root folder cannot be empty!");
-            return false;
+
         }
 
         if (!Files.exists(getRootFolder())) {
@@ -86,7 +86,7 @@ public class taskValidatorImpl implements taskValidator {
     }
 
     @Override
-    public boolean checkIgnoreFile() {
+    public boolean checkIgnoreFile(){
 
         if (!Files.exists(getIgnoreFile())) {
             System.err.println("The file " + ignoreFile + " doesn't exist!");

@@ -32,7 +32,6 @@ public class SimpleTokenFinder implements TokenFinder {
         TaskValidator validator = new TaskValidatorImpl(task);   //Die Eingabe in SearchTask wird hier auf Validität/Richtigkeit überprüft
 
         if(validator.validation()){
-
             try {
                 List<String> ignoredItems = Files.readAllLines(validator.getIgnoreFile(), StandardCharsets.UTF_8);
 
@@ -41,9 +40,12 @@ public class SimpleTokenFinder implements TokenFinder {
                 tokenSearchAndCount(listOfRoot, validator.getToken(), validator.getOutputFile());
 
 
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (TokenFinderException e) {
+                System.err.println("There is something wrong during searching! \n"  + e);
+            } catch (IOException e){
+                System.err.println("An error occured while the file been read! \n" + e);
             }
+
         }
 
     }
@@ -58,7 +60,7 @@ public class SimpleTokenFinder implements TokenFinder {
                     filter(p -> p.getFileName().toString().endsWith(fileExtension)).
                     collect(Collectors.toList());
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("An Error occured while iterating through the directories ");
         }
         return result;
     }
@@ -86,7 +88,7 @@ public class SimpleTokenFinder implements TokenFinder {
     // Ein Method, um die Text-Datei zu lesen und die Token in der Datei zu zählen
     // Parameter von der Method: 1) List der Paths von allen Files, 2) Token als String,  3) Textdatei vom Ergebnis
 
-    public static void tokenSearchAndCount(List<Path> pathList, String keyword, Path resultFile) {
+    public static void tokenSearchAndCount(List<Path> pathList, String keyword, Path resultFile) throws IOException{
         //Eine List, die das Ergebnis von TokenSearch speichert.
         List<String> outputTmp = new ArrayList<>();
 
@@ -141,7 +143,7 @@ public class SimpleTokenFinder implements TokenFinder {
                 count = count + countToken;
 
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new IOException("The File cannot be read correctly", e);
             }
 
         } // Ende der 1. For-Schleife (PathList). Alle File wurden gelesen.
@@ -158,6 +160,7 @@ public class SimpleTokenFinder implements TokenFinder {
     public static void writeToFileNewLines(Path outputFile, List<String> newLines) {
 
         if (Files.exists(outputFile)) {          // prüfen, ob die Datei schon existiert.
+
                                     //Falls die Output Datei schon existiert, werden die neuen Line in die Datei geschrieben
             try (BufferedWriter writer = Files.newBufferedWriter(outputFile, StandardOpenOption.APPEND)) {
                 for (String elem : newLines) {
@@ -165,13 +168,13 @@ public class SimpleTokenFinder implements TokenFinder {
                     writer.newLine();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                System.err.println("The file cannot be written! something wrong! "+ e);
             }
         } else {                    // Falls die Datei noch nicht existiert, wird zuerst eine Text-File erstellt.
             try {
                 Files.write(outputFile, newLines, StandardOpenOption.CREATE_NEW);
             } catch (IOException e) {
-                e.printStackTrace();
+                System.err.println("Error occured when trying to create and write the file. Make sure the file does not exist yet! " + e);
             }
         }
     }
