@@ -29,7 +29,7 @@ public class SimpleTokenFinder implements TokenFinder {
     @Override
     public void search(final SearchTask task) throws TokenFinderException {
 
-        taskValidator validator = new taskValidatorImpl(task);
+        TaskValidator validator = new TaskValidatorImpl(task);   //Die Eingabe in SearchTask wird hier auf Validität/Richtigkeit überprüft
 
         if(validator.validation()){
 
@@ -48,25 +48,22 @@ public class SimpleTokenFinder implements TokenFinder {
 
     }
 
-    //*******************************Exception******************************
+
     public List<Path> findAndFilterDirectory(Path path, List<String> list, String fileExtension, Path resultFile) throws TokenFinderException {
         List<Path> result = new ArrayList<>();
 
-
         try (Stream<Path> treeWalk = Files.walk(path)) {
             result = treeWalk.filter(Files::isReadable).
-                    filter(path1 -> !isIgnoreFile(path1, list, resultFile)).  //nur die Files ohne Name "Ignore" und "lib"
+                    filter(p -> !isIgnoreFile(p, list, resultFile)).                    // Die Files werden bis auf "Ignore" und "lib" gefiltert
                     filter(p -> p.getFileName().toString().endsWith(fileExtension)).
                     collect(Collectors.toList());
-
         } catch (IOException e) {
             e.printStackTrace();
         }
         return result;
     }
 
-    // ein Method, um die Directories mit den in der angegebenen File steheden Name zu filtern
-
+    // Ein Method, um die Directories nach den in der angegebenen File bzw. dem Namen zu filtern
     private static boolean isIgnoreFile(Path pathForCheck, List<String> listForCheck, Path resultFile) {
         List<String> outputArray = new ArrayList<>();
         boolean result = false;
@@ -85,17 +82,15 @@ public class SimpleTokenFinder implements TokenFinder {
         return result;
     }
 
-    //*******************************Exception 2 ******************************
 
-
-    // eine Method, um die Text-Datei zu lesen und die Token in der Datei zu zählen.
-    // Parameter von der Method: 1. List der Paths von allen Files, 2. Token in String 3.Text Datei von Ergebnis
+    // Ein Method, um die Text-Datei zu lesen und die Token in der Datei zu zählen
+    // Parameter von der Method: 1) List der Paths von allen Files, 2) Token als String,  3) Textdatei vom Ergebnis
 
     public static void tokenSearchAndCount(List<Path> pathList, String keyword, Path resultFile) {
-        //eine List, die das Ergebnis von dem TokenSearch speichern.
+        //Eine List, die das Ergebnis von TokenSearch speichert.
         List<String> outputTmp = new ArrayList<>();
 
-        // eine Variable um die Summe des Token von dem Projekt zu tracken.
+        // Eine Variable, um die Summe des Token von dem Projekt zu tracken.
         int count = 0;
 
         for (Path elem : pathList
@@ -103,7 +98,7 @@ public class SimpleTokenFinder implements TokenFinder {
             // Files lesen mit Stream
             try (Stream<String> lines = Files.lines(elem)) {
 
-                // der Inhalt der File wird in eine List umgewandelt
+                // Der Inhalt der File wird in eine List umgewandelt
                 List<String> contentInList = lines.collect(Collectors.toList());
 
                 /*Hier fängt es an, den gewünschten Token in der Text-Datei zu suchen*/
@@ -115,12 +110,9 @@ public class SimpleTokenFinder implements TokenFinder {
                 String output1;
                 String output2;
 
-                if (contentInList.isEmpty()) {
-                    countToken = 0;
-                } else {
-                    // den Inhalt durchlaufen
+                if (!contentInList.isEmpty()) {
 
-                    for (int lineIndex = 0; lineIndex < contentInList.size(); lineIndex++) {
+                    for (int lineIndex = 0; lineIndex < contentInList.size(); lineIndex++) {    // Hier wird der Inhalt durchlaufen und die Suchergebnisse formatiert
 
 
                         for (int index = 0; (index = contentInList.get(lineIndex).indexOf(keyword, index)) >= 0; index++) {   //
@@ -152,37 +144,30 @@ public class SimpleTokenFinder implements TokenFinder {
                 e.printStackTrace();
             }
 
-        } // Ende der 1. For-Schleife (PathList). Alle File werden schon gelesen.
+        } // Ende der 1. For-Schleife (PathList). Alle File wurden gelesen.
 
-        // Anzahl des Token in Projekt zählen
+        // Anzahl des Tokens wird in Projekt gezählt
         outputTmp.add("The project includes " + "**" + keyword + "** " + count + " times.");
 
-        //das ergebnis in result Text-Datei reinschreiben
+        //Das Ergebnis wird in resultFile Text-Datei geschrieben
         writeToFileNewLines(resultFile, outputTmp);
     }
 
 
-    // eine Method, damit die Ergebniss in eine Text-Datei gespeichert werden.
-
-    //*******************************  Exception 3 ***********************************
-
+    // Ein Method, um die Ergebniss in einer Text-Datei speichern zu können
     public static void writeToFileNewLines(Path outputFile, List<String> newLines) {
 
         if (Files.exists(outputFile)) {          // prüfen, ob die Datei schon existiert.
-            //Falls die Output Datei schon existiert, werden die neuen Line in Datei reingeschrien
+                                    //Falls die Output Datei schon existiert, werden die neuen Line in die Datei geschrieben
             try (BufferedWriter writer = Files.newBufferedWriter(outputFile, StandardOpenOption.APPEND)) {
-
                 for (String elem : newLines) {
-
                     writer.write(elem);
                     writer.newLine();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-            // Falls die Datei noch nicht existiert, wird zuerst eine Text-File erstellt.
-        } else {
+        } else {                    // Falls die Datei noch nicht existiert, wird zuerst eine Text-File erstellt.
             try {
                 Files.write(outputFile, newLines, StandardOpenOption.CREATE_NEW);
             } catch (IOException e) {
