@@ -7,35 +7,35 @@ import java.nio.file.Files;
 
 public class taskValidatorImpl implements taskValidator {
 
-    private final Path rootFolder;
-    private final Path ignoreFile;
+    private final String rootFolder;
+    private final String ignoreFile;
     private final String fileExtension;
     private final String token;
-    private final Path outputFile;
+    private final String outputFile;
 
     public taskValidatorImpl(SearchTask task) {
-        this.rootFolder = Path.of(task.getRootFolder());
-        this.ignoreFile = Path.of(task.getIgnoreFile());
-        this.outputFile = Path.of(task.getResultFile());
+        this.rootFolder = task.getRootFolder();
+        this.ignoreFile = task.getIgnoreFile();
+        this.outputFile = task.getResultFile();
         this.fileExtension = task.getFileExtension();
         this.token = task.getToken();
     }
 
     @Override
     public Path getRootFolder() {
-        return rootFolder;
+        return Path.of(rootFolder);
     }
 
 
     @Override
     public Path getIgnoreFile() {
-        return ignoreFile;
+        return Path.of(ignoreFile);
     }
 
 
     @Override
     public Path getOutputFile() {
-        return outputFile;
+        return Path.of(outputFile);
     }
 
 
@@ -53,7 +53,6 @@ public class taskValidatorImpl implements taskValidator {
 
     @Override
     public boolean validation(){
-
         return rootFolderValidate()&&checkExtensionAndToken()&&checkOutput()&&checkIgnoreFile();
     }
 
@@ -66,18 +65,18 @@ public class taskValidatorImpl implements taskValidator {
      */
 
     @Override
-    public boolean rootFolderValidate() {
-        if (rootFolder.toString().isEmpty()) {
-            System.err.println("The path of root folder cannot be empty!");
+    public boolean rootFolderValidate()  {
+        if (rootFolder.isEmpty() || rootFolder ==null) {
+            System.err.println("The root folder cannot be empty!");
             return false;
         }
 
-        if (!rootFolder.toFile().exists()) {
+        if (!Files.exists(getRootFolder())) {
             System.err.println("The folder " + rootFolder + " doesn't exists!");
             return false;
         }
 
-        if (!rootFolder.toFile().isDirectory()) {
+        if (!Files.isDirectory(getRootFolder())) {
             System.err.println("The given folder" + rootFolder + " is not a valid folder ");
             return false;
         }
@@ -89,17 +88,17 @@ public class taskValidatorImpl implements taskValidator {
     @Override
     public boolean checkIgnoreFile() {
 
-        if (!Files.exists(ignoreFile)) {
+        if (!Files.exists(getIgnoreFile())) {
             System.err.println("The file " + ignoreFile + " doesn't exist!");
             return false;
         }
 
-        if (!Files.isRegularFile(ignoreFile)) {
+        if (!Files.isRegularFile(getIgnoreFile())) {
             System.err.println("The file " + ignoreFile + " is not an actual file!");
             return false;
         }
 
-        if (!Files.isReadable(ignoreFile)) {
+        if (!Files.isReadable(getIgnoreFile())) {
             System.err.println("The file " + ignoreFile + " is not readable!");
             return false;
         }
@@ -110,7 +109,7 @@ public class taskValidatorImpl implements taskValidator {
     @Override
     public boolean checkOutput() {
 
-        Path parent = outputFile.getParent();
+        Path parent = getOutputFile().getParent();
 
         if (!Files.exists(parent)) {
             System.err.println("The File cannot be create because parent folder of " + outputFile + "does not exist!");
@@ -118,7 +117,7 @@ public class taskValidatorImpl implements taskValidator {
         }
 
 
-        if (Files.exists(outputFile) && !Files.isWritable(outputFile)) {
+        if (Files.exists(getOutputFile()) && !Files.isWritable(getOutputFile())) {
             System.err.println("The File" + outputFile + " exists already and is not writable!");
             return false;
         }
