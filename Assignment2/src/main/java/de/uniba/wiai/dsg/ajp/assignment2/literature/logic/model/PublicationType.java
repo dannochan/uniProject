@@ -1,8 +1,22 @@
 package de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model;
 
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 
+@XmlEnum(String.class)
 public enum PublicationType {
 
-	ARTICLE, TECHREPORT, BOOK, MASTERSTHESIS, PHDTHESIS, INPROCEEDINGS
+    @XmlEnumValue("article")
+    ARTICLE,
+    @XmlEnumValue("techreport")
+    TECHREPORT,
+    @XmlEnumValue("book")
+    BOOK,
+    @XmlEnumValue("mastersthesis")
+    MASTERSTHESIS,
+    @XmlEnumValue("phdthesis")
+    PHDTHESIS,
+    @XmlEnumValue("inproceedings")
+    INPROCEEDINGS
 
 }
