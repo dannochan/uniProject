@@ -39,8 +39,7 @@ public class MainServiceImpl implements MainService {
 
 		// prüfen ob die Datei lesbar ist
 		if(!Files.isReadable(pathOfData)){
-			LiteratureDatabaseException mxlNotValid = new LiteratureDatabaseException(path + " is not valid!");
-			throw mxlNotValid;
+			throw new LiteratureDatabaseException(path + " is not valid!");
 		}
 
 		//  Mithilfe der SchemaFactory wird hier die XML Datei validiert
@@ -59,12 +58,12 @@ public class MainServiceImpl implements MainService {
 			// Exception für Schema schema = sf.newSchema(pathOfData.toFile());
 
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (IOException ex) {
 
 			// wenn die Validierung bei Einlesen der Datei schiefgelaufen ist, was soll man hier tun?
 			// Exception für validator.validate(new StreamSource(pathOfData.toFile()));
 
-			e.printStackTrace();
+			ex.printStackTrace();
 		}
 
 
