@@ -5,10 +5,25 @@ import java.util.List;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.DatabaseService;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.LiteratureDatabaseException;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Author;
+import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Database;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Publication;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.PublicationType;
 
 public class DatabaseServiceImpl implements DatabaseService {
+
+	private Database database;
+
+	DatabaseServiceImpl(){
+
+	}
+
+	DatabaseServiceImpl(Database database){
+		this.database = database;
+	}
+
+	DatabaseServiceImpl(List<Database> databases){
+
+	}
 
 	@Override
 	public void addPublication(String title, int yearPublished, PublicationType type, List<String> authorIDs, String id)
