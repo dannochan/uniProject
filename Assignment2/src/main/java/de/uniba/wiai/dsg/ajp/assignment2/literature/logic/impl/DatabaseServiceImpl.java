@@ -11,6 +11,11 @@ import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Database;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Publication;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.PublicationType;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.nio.file.Path;
+
 
 public class DatabaseServiceImpl implements DatabaseService {
 
@@ -89,7 +94,6 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     public void removePublicationByID(String id) throws LiteratureDatabaseException {
-        // TODO Auto-generated method stub
         //aus Liste der Publicationen entfernen
 
         List<Publication> deleteHelper = getPublications();
@@ -132,11 +136,13 @@ public class DatabaseServiceImpl implements DatabaseService {
         //shows the current Author-Obj., where to search for the Publication to be removed
         ListIterator<Author> loPAIterator = ListOfPublicationAuthors.listIterator();
 
+        //wenn die ListOfPublicationAuthors leer ist funkt. der Iterator nicht
+        if(!ListOfPublicationAuthors.isEmpty()){
         //re-use of deleting Helper Var., shows the Obj. to be removed
         deleteHelperIterator = loPAIterator.next().getPublications().listIterator();
-        loPAIterator.previous();
+        loPAIterator.previous();}
 
-        while(loPAIterator.hasNext()){
+        while (loPAIterator.hasNext()) {
             condition = true;
             //neudeklatration der Helper-Var., da LoPAIterator auf andere Stelle zeigt (geht nicht ohne)
             deleteHelperIterator = loPAIterator.next().getPublications().listIterator();
@@ -163,12 +169,82 @@ public class DatabaseServiceImpl implements DatabaseService {
         }
 
 
-
     }
 
     @Override
     public void removeAuthorByID(String id) throws LiteratureDatabaseException {
-        // TODO Auto-generated method stub
+
+        //aus Liste der Autoren löschen
+        List<Author> deleteHelper = getAuthors();
+        ListIterator<Author> deleteHelperIterator = deleteHelper.listIterator();
+        List<Publication> ListofAuthorsPublications = new LinkedList<>();
+
+        //get current Author ID
+        String deleteID = deleteHelperIterator.next().getId();
+
+        boolean condition = true;
+
+        while (condition) {
+            if (id.equals(deleteID)) {
+
+                // Liste der Publications von loeschenden Author merken
+                ListofAuthorsPublications = deleteHelperIterator.previous().getPublications();
+
+                //zuruecksetzen des Iterators um zu loeschen
+                deleteHelperIterator.next();
+
+                //Loeschen des Authors aus Liste
+                deleteHelperIterator.remove();
+
+
+                //Schleife abbrechen
+                condition = false;
+            } else {
+                //Schleife abbrechen, wenn die Liste aller Authors zu Ende ist
+                if (!deleteHelperIterator.hasNext()) {
+                    condition = false;
+                } else {
+                    deleteID = deleteHelperIterator.next().getId();
+                }
+            }
+        }
+
+        //Autoren aus Publication-Objkten entfernen
+
+        ListIterator<Publication> loAPIterator = ListofAuthorsPublications.listIterator();
+
+        //wenn die Liste leer ist funkt. der Iterator nicht
+        if (!ListofAuthorsPublications.isEmpty()) {
+            //re-use of deleteHelper-Var., shows the Obj. to be removed
+            deleteHelperIterator = loAPIterator.next().getAuthors().listIterator();
+            loAPIterator.previous();
+        }
+
+        while (loAPIterator.hasNext()) {
+            condition = true;
+            //neudeklatration der Helper-Var., da LoAPIterator auf andere Stelle zeigt (geht nicht ohne)
+            deleteHelperIterator = loAPIterator.next().getAuthors().listIterator();
+            loAPIterator.previous();
+            //auslesen der aktuellen Id in der Liste
+            deleteID = deleteHelperIterator.next().getId();
+
+            while (condition) {
+                if (id.equals(deleteID)) {
+                    //Loeschen des Author aus Liste
+                    deleteHelperIterator.remove();
+                    //Schleife abbrechen
+                    condition = false;
+                } else {
+                    //Schleife abbrechen, wenn die Liste aller Authors zu Ende ist
+                    if (!deleteHelperIterator.hasNext()) {
+                        condition = false;
+                    } else {
+                        deleteID = deleteHelperIterator.next().getId();
+                    }
+                }
+            }
+            loAPIterator.next();
+        }
 
     }
 
@@ -189,7 +265,6 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     public List<Publication> getPublications() {
-        // TODO Auto-generated method stub
         List<Publication> listOfAllPublications = new LinkedList<>();
         listOfAllPublications = this.database.getPublications();
         return listOfAllPublications;
@@ -197,7 +272,6 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     public List<Author> getAuthors() {
-        // TODO Auto-generated method stub
         List<Author> listOfAllAuthors = new LinkedList<>();
         listOfAllAuthors = this.database.getAuthors();
         return listOfAllAuthors;
