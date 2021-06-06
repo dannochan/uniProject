@@ -265,16 +265,14 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     public List<Publication> getPublications() {
-        List<Publication> listOfAllPublications = new LinkedList<>();
-        listOfAllPublications = this.database.getPublications();
-        return listOfAllPublications;
+
+        return this.database.getPublications();
     }
 
     @Override
     public List<Author> getAuthors() {
-        List<Author> listOfAllAuthors = new LinkedList<>();
-        listOfAllAuthors = this.database.getAuthors();
-        return listOfAllAuthors;
+
+        return this.database.getAuthors();
     }
 
     @Override
@@ -309,7 +307,6 @@ public class DatabaseServiceImpl implements DatabaseService {
         } catch (JAXBException e) {
             e.printStackTrace();
         }
-
 
     }
 
