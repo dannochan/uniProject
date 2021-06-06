@@ -11,10 +11,6 @@ import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.PublicationType;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
-
-import static java.lang.System.gc;
-
 
 public class Main {
 
@@ -23,7 +19,7 @@ public class Main {
         MainService startIt = new MainServiceImpl();
         try {
 
-            DatabaseService mydatabase = startIt.create();
+            DatabaseService mydatabase = startIt.load("database.xml");
 
             mydatabase.addAuthor("Hans Petter Oechsler", "demhansiseiadress", "a0");
             mydatabase.addAuthor("Hans Petter Oechsler", "demhansiseiadress", "a1");
@@ -36,19 +32,27 @@ public class Main {
             mydatabase.addPublication("Gartensachen", 2021, PublicationType.BOOK, liste, "p2");
 
             mydatabase.removePublicationByID("p2");
-            //garbage colletion anstossen
-            gc();
-            //System.out.println(mydatabase.getPublications());
-            //System.out.println(mydatabase.getAuthors());
-            //ListIterator<Author> a = mydatabase.getAuthors().listIterator();
+            mydatabase.printXMLToConsole();
+            mydatabase.saveXMLToFile("resultFile.xml");
 
+            for (Author author:mydatabase.getAuthors()
+                 ) {
+                System.out.println(author.getName());
+            }
 
-            //System.out.println(a.next().getPublications().listIterator().next().getAuthors());
-            //System.out.println(a.next().getPublications());
-            //System.out.println(mydatabase.getAuthors().listIterator().next().getPublications());
+            for (Publication publication : mydatabase.getPublications()
+            ) {
+                System.out.println(publication.getTitle());
+            }
+
+            //mydatabase.clear();
+            //mydatabase.printXMLToConsole();
+
         } catch (LiteratureDatabaseException e) {
             System.out.println("Schrottbude");
         }
+
+
 
     }
 
