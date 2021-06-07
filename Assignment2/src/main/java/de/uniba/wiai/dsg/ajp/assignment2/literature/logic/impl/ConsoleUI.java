@@ -5,9 +5,8 @@ import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.LiteratureDatabaseExce
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.MainService;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.ui.ConsoleHelper;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+
 
 public class ConsoleUI {
 
@@ -21,10 +20,11 @@ public class ConsoleUI {
 
     public ConsoleUI(){
 
-       // reader = new BufferedReader(new InputStreamReader(System.in));
-        consoleHelper = ConsoleHelper.build();
+        // allerzuerst eine Variable von ConsolHelper Klasse deklarieren, damit das Prog. mit Benutzern interagieren kann
 
-        exit = false;
+        consoleHelper = ConsoleHelper.build(); // diese Funktion von ConsoleHelper liest Datein von User ein.
+
+        exit = false;       // ein Bedingungsvariable
 
         newDB = new MainServiceImpl();
     }
@@ -49,23 +49,27 @@ public class ConsoleUI {
         System.out.println(" (0) Back to main menu / close without saving");
     }
 
+    // when exit nicht falsch ist, wird die
     public void startReadEvaPrint() throws LiteratureDatabaseException {
         while (!exit){
             printMainmenu();
 
                 int option = readOption();
                 evalOption(option);
-
+            // evaluate von Untermenü (auch hier einpacken, mithilfe If-Schleife? )
 
         }
     }
 
+    // In dieser Funktione wird nach einer Eingabe gefragt und validiert.
     private int readOption() {
 
         int result = 9;
 
         try {
             result = consoleHelper.askIntegerInRange("Please choose an option,", 1, 3);
+
+            // was hier noch gerne hätte, ist, nachdem die Fehlermeldung auskommt, wird nochmal nach Eingabe gefragt.
 
             } catch (IOException ioException) {
             System.err.println("input is not valid!");
@@ -75,6 +79,7 @@ public class ConsoleUI {
         return result;
     }
 
+    // Je nach Eingabe der User, wirde verischieden Funktionen aufgerufen.
     private void evalOption(int input) throws LiteratureDatabaseException {
 
         switch (input){
@@ -126,6 +131,8 @@ public class ConsoleUI {
 
     }
 
+    // Hier werden die Methode von MainServiceImpl aufgerufen -> create oder load
+
     private void createNewDatabase() throws LiteratureDatabaseException {
         System.out.println("New Database is created!");
         DatabaseService databaseNew =  newDB.create();
@@ -137,7 +144,38 @@ public class ConsoleUI {
         DatabaseService databaseNew =  newDB.load("database.xml");
     }
 
+    // die Methode, die der Klasse DatebaseService gehören und beim Untermenü aufgerufen werden sollen:
+    private void addAuthor(){
 
+    }
+
+    private void removeAuthor(){
+
+    }
+
+    private void addPublication(){
+
+    }
+
+    private void removePublication(){
+
+    }
+    private void listAuthor(){
+
+    }
+    private void listPublicatio(){
+
+    }
+    private void printXML(){
+
+    }
+
+    private void saveXmlFile(){
+
+    }
+    private void bacKToMain(){
+
+    }
 
 
     // ein Method, um das Menü zu schließen
