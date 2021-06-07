@@ -86,12 +86,14 @@ public class ConsoleUI {
             case 1:
                 loadAndValidateDatabase();
                 printSubmenu();
-                evalSubMenuOption(input);
+                int newOptionA = readOption();
+                evalSubMenuOption(newOptionA);
                 break;
             case 2:
                 createNewDatabase();
                 printSubmenu();
-                evalSubMenuOption(input);
+                int newOptionB = readOption();
+                evalSubMenuOption(newOptionB);
                 break;
             case 3:
                 closeSystem();
