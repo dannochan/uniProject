@@ -18,7 +18,7 @@ public class ConsoleUI {
 
     private DatabaseService newDBS;
 
-    public ConsoleUI(){
+    public ConsoleUI() {
 
         // allerzuerst eine Variable von ConsolHelper Klasse deklarieren, damit das Prog. mit Benutzern interagieren kann
 
@@ -30,14 +30,14 @@ public class ConsoleUI {
     }
 
     //Hauptmenü ausgeben
-    public void printMainmenu(){
+    public void printMainmenu() {
         System.out.println("(1) Load and Validate Literature Database");
         System.out.println("(2) Create New Literature Database");
         System.out.println("(3) Exit System");
     }
 
     //Untermenü ausgeben
-    public void printSubmenu(){
+    public void printSubmenu() {
         System.out.println(" (1) Add Author ");
         System.out.println(" (2) Remove Author");
         System.out.println(" (3) Add Publication");
@@ -51,11 +51,11 @@ public class ConsoleUI {
 
     // when exit nicht falsch ist, wird die
     public void startReadEvaPrint() throws LiteratureDatabaseException {
-        while (!exit){
+        while (!exit) {
             printMainmenu();
 
-                int option = readOption();
-                evalOption(option);
+            int option = readOption();
+            evalOption(option);
             // evaluate von Untermenü (auch hier einpacken, mithilfe If-Schleife? )
 
         }
@@ -71,7 +71,7 @@ public class ConsoleUI {
 
             // was hier noch gerne hätte, ist, nachdem die Fehlermeldung auskommt, wird nochmal nach Eingabe gefragt.
 
-            } catch (IOException ioException) {
+        } catch (IOException ioException) {
             System.err.println("input is not valid!");
             readOption();
         }
@@ -82,107 +82,116 @@ public class ConsoleUI {
     // Je nach Eingabe der User, wirde verischieden Funktionen aufgerufen.
     private void evalOption(int input) throws LiteratureDatabaseException {
 
-        switch (input){
+        switch (input) {
             case 1:
                 loadAndValidateDatabase();
                 printSubmenu();
+                evalSubMenuOption(input);
                 break;
             case 2:
                 createNewDatabase();
                 printSubmenu();
+                evalSubMenuOption(input);
                 break;
             case 3:
                 closeSystem();
                 break;
-                /*
-                switch (nextOption){
-                    case 1:
-                        addAuthor();
-                        break;
-                    case 2:
-                        removeAuthor();
-                        break;
-                    case 3:
-                        addPublication;
-                        break;
-                    case 4:
-                        removePublication();
-                        break;
-                    case 5:
-                        listAuthor();
-                        break;
-                    case 6:
-                        listPublications();
-                        break;
-                    case 7:
-                        printXML();
-                        break;
-                    case 8:
-                        saveXmlFile();
-                        break;
-                    case 9:
-                        backToMain();
-                        break;
-                    default:
-                        break;
 
-                } */
         }
 
+    }
+
+    private void evalSubMenuOption(int input) {
+
+        switch (input) {
+            case 1:
+                addAuthor();
+                break;
+            case 2:
+                removeAuthor();
+                break;
+            case 3:
+                addPublication();
+                break;
+            case 4:
+                removePublication();
+                break;
+            case 5:
+                listAuthor();
+                break;
+            case 6:
+                listPublications();
+                break;
+            case 7:
+                printXML();
+                break;
+            case 8:
+                saveXmlFile();
+                break;
+            case 9:
+                backToMain();
+                break;
+            default:
+                break;
+
+        }
     }
 
     // Hier werden die Methode von MainServiceImpl aufgerufen -> create oder load
 
     private void createNewDatabase() throws LiteratureDatabaseException {
         System.out.println("New Database is created!");
-        DatabaseService databaseNew =  newDB.create();
+        DatabaseService databaseNew = newDB.create();
 
     }
 
     private void loadAndValidateDatabase() throws LiteratureDatabaseException {
         System.out.println("New Database is loaded!");
-        DatabaseService databaseNew =  newDB.load("database.xml");
+        DatabaseService databaseNew = newDB.load("database.xml");
     }
 
     // die Methode, die der Klasse DatebaseService gehören und beim Untermenü aufgerufen werden sollen:
-    private void addAuthor(){
+    private void addAuthor() {
+        System.out.println("You made it!!!!!!!!!!!!!!!!");
+    }
+
+    private void removeAuthor() {
 
     }
 
-    private void removeAuthor(){
+    private void addPublication() {
 
     }
 
-    private void addPublication(){
+    private void removePublication() {
 
     }
 
-    private void removePublication(){
-
-    }
-    private void listAuthor(){
-
-    }
-    private void listPublicatio(){
-
-    }
-    private void printXML(){
+    private void listAuthor() {
 
     }
 
-    private void saveXmlFile(){
+    private void listPublications() {
 
     }
-    private void bacKToMain(){
+
+    private void printXML() {
+
+    }
+
+    private void saveXmlFile() {
+
+    }
+
+    private void backToMain() {
 
     }
 
 
     // ein Method, um das Menü zu schließen
-    private void closeSystem(){
-
+    private void closeSystem() {
         exit = true;
-
+        System.exit(0);
     }
 
 
