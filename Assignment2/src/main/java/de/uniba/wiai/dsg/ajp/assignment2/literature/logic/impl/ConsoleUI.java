@@ -3,6 +3,7 @@ package de.uniba.wiai.dsg.ajp.assignment2.literature.logic.impl;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.DatabaseService;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.LiteratureDatabaseException;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.MainService;
+import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Publication;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.ui.ConsoleHelper;
 
 import java.io.IOException;
@@ -16,9 +17,9 @@ public class ConsoleUI {
 
     private MainService newDB;
 
-    private DatabaseService newDBS;
-
     private boolean MAINMENU = true;
+
+    private DatabaseService databaseNew;
 
     public ConsoleUI() {
 
@@ -159,22 +160,23 @@ public class ConsoleUI {
 
     private void createNewDatabase() throws LiteratureDatabaseException {
         System.out.println("New Database is created!");
-        DatabaseService databaseNew = newDB.create();
+        this.databaseNew = newDB.create();
 
     }
 
     private void loadAndValidateDatabase() throws LiteratureDatabaseException {
         System.out.println("New Database is loaded!");
-        DatabaseService databaseNew = newDB.load("database.xml");
+        this.databaseNew = newDB.load("database.xml");
     }
 
     // die Methode, die der Klasse DatebaseService gehören und beim Untermenü aufgerufen werden sollen:
+
     private void addAuthor() {
         System.out.println("You made it!!!!!!!!!!!!!!!!");
     }
 
     private void removeAuthor() {
-
+        
     }
 
     private void addPublication() {
@@ -186,24 +188,46 @@ public class ConsoleUI {
     }
 
     private void listAuthor() {
-
+        System.out.println("************Authors***********");
+       for (int i = 0; i<this.databaseNew.getAuthors().size(); i++){
+           System.out.println(this.databaseNew.getAuthors().get(i).getName());
+       }
     }
 
     private void listPublications() {
-
+        System.out.println("************Publications******");
+        for (Publication pubIndex: this.databaseNew.getPublications()
+             ) {
+            System.out.println(pubIndex.toString());
+        }
     }
 
     private void printXML() {
+        System.out.println("**********XMl FIle printed**************");
+        try {
+            this.databaseNew.printXMLToConsole();
+        } catch (LiteratureDatabaseException e) {
+            System.err.println("Something went wrong during printing!");
+            // muss hier noch igendwas gemacht werden, um den Fehler richtig zu beheben
+        }
 
     }
 
     private void saveXmlFile() {
 
+        System.out.println("**********Save XML to File**************");
+        try {
+            this.databaseNew.saveXMLToFile("result.xml");
+        }catch (LiteratureDatabaseException e){
+            System.err.println("Something went wrong during printing!");
+            // muss hier noch igendwas gemacht werden, um den Fehler richtig zu beheben
+        }
+
+
     }
 
     private void backToMain() {
         MAINMENU = true;
-
     }
 
 
