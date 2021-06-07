@@ -3,6 +3,7 @@ package de.uniba.wiai.dsg.ajp.assignment2.literature.logic.impl;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.DatabaseService;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.LiteratureDatabaseException;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.MainService;
+import de.uniba.wiai.dsg.ajp.assignment2.literature.ui.ConsoleHelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,7 +11,7 @@ import java.io.InputStreamReader;
 
 public class ConsoleUI {
 
-    private BufferedReader reader;
+    private ConsoleHelper consoleHelper;
 
     private boolean exit;
 
@@ -20,7 +21,8 @@ public class ConsoleUI {
 
     public ConsoleUI(){
 
-        reader = new BufferedReader(new InputStreamReader(System.in));
+       // reader = new BufferedReader(new InputStreamReader(System.in));
+        consoleHelper = ConsoleHelper.build();
 
         exit = false;
 
@@ -51,8 +53,9 @@ public class ConsoleUI {
         while (!exit){
             printMainmenu();
 
-            int option = readOption();
-            evalOption(option);
+                int option = readOption();
+                evalOption(option);
+
 
         }
     }
@@ -62,22 +65,13 @@ public class ConsoleUI {
         int result = 9;
 
         try {
-            result = Integer.parseInt(reader.readLine());
+            result = consoleHelper.askIntegerInRange("Please choose an option,", 1, 3);
 
-            if (result==9){
-
-                System.err.println("Please enter a valid number!");
-                readOption();
-            }
-
-        }catch (NumberFormatException e){
-            System.err.println("Please enter a Integer, not a char or String!");
+            } catch (IOException ioException) {
+            System.err.println("input is not valid!");
             readOption();
         }
-        catch (IOException e) {
-            System.err.println("Data cannot be read! Please try again");
-            readOption();
-        }
+
         return result;
     }
 
@@ -95,6 +89,7 @@ public class ConsoleUI {
             case 3:
                 closeSystem();
                 break;
+                /*
                 switch (nextOption){
                     case 1:
                         addAuthor();
@@ -126,7 +121,7 @@ public class ConsoleUI {
                     default:
                         break;
 
-                }
+                } */
         }
 
     }
