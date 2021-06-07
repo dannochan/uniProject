@@ -124,6 +124,7 @@ public class DatabaseServiceImpl implements DatabaseService {
                 //Schleife abbrechen, wenn die Liste aller Publications zu Ende ist
                 if (!deleteHelperIterator.hasNext()) {
                     condition = false;
+                    //evtl. Exception oder Info dass Pub. nicht vhd.
                 } else {
                     deleteID = deleteHelperIterator.next().getId();
                 }
