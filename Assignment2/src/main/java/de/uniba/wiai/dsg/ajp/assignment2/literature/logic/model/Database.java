@@ -15,6 +15,11 @@ public class Database {
         super();
     }
 
+    public Database(List<Author> authors, List<Publication> publications) {
+        this.authors = authors;
+        this.publications = publications;
+    }
+
     @XmlElement(name = "author", required = false)
     public List<Author> getAuthors() {
         return authors;

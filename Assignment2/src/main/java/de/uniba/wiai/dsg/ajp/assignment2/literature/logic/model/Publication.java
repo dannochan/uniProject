@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlIDREF;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 public class Publication {
 
@@ -18,6 +19,14 @@ public class Publication {
 
     public Publication() {
         super();
+    }
+
+    public Publication(String id, String title, int yearPublished, PublicationType type, List<Author> authors) {
+        this.id = id;
+        this.title = title;
+        this.yearPublished = yearPublished;
+        this.type = type;
+        this.authors = authors;
     }
 
     @XmlAttribute(name = "type", required = true)
@@ -82,4 +91,27 @@ public class Publication {
         }
         return result.toString();
     }
+
+    public static Publication getPublicationByID (String id, Database database) {
+        return database.getPublications().stream()
+                .filter(pub -> pub.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
+
+
+    public static List<Publication> getPublicationByAuthors (String authorName, Database database) {
+        List<Publication> pubs = database.getPublications().stream()
+                                    .filter (pub -> pub.getAuthors().contains(authorName))
+                                    .collect(Collectors.toList());
+        return pubs;
+    }
+
+    public static List<Publication> getPublicationByAuthorsID (String authorID, Database database) {
+        List<Publication> pubs = database.getPublications().stream()
+                .filter (pub -> pub.getAuthors().contains(authorID))
+                .collect(Collectors.toList());
+        return pubs;
+    }
+
 }

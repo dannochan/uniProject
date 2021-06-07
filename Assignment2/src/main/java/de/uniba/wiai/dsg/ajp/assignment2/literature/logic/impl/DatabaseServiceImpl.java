@@ -1,5 +1,6 @@
 package de.uniba.wiai.dsg.ajp.assignment2.literature.logic.impl;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -21,25 +22,18 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     private Database database;
 
-    DatabaseServiceImpl() {
-
-    }
-
-    DatabaseServiceImpl(Database database) {
-        this.database = database;
-    }
-
-    DatabaseServiceImpl(List<Database> databases) {
-
-    }
+    DatabaseServiceImpl() { }
+    DatabaseServiceImpl(Database database) { this.database = database; }
+    DatabaseServiceImpl(List<Database> databases) { }
 
     @Override
     public void addPublication(String title, int yearPublished, PublicationType type, List<String> authorIDs, String id)
             throws LiteratureDatabaseException {
 
-        //TODO: Exceptions einfügen, Email Validierung... Fehler: Wenn Author noch nicht existiert usw.
+        //TODO: Eingabedaten (Title, yearPublished, type und ID) ueberpruefen -> Validator
 
-        Publication freshPublication = new Publication();
+      /*  Andis Code
+       Publication freshPublication = new Publication();
 
         freshPublication.setId(id);
         freshPublication.setTitle(title);
@@ -58,10 +52,27 @@ public class DatabaseServiceImpl implements DatabaseService {
         ListIterator<Author> currentAuthorIterator = currentAuthors.listIterator();
         while (currentAuthorIterator.hasNext()) {
             currentAuthorIterator.next().getPublications().add(freshPublication);
+        } */
+
+        // Abfrage der Autoren, ob bereits in DB hinter
+        // + Umwandlung der Autoren IDs in eine List<Author>, da diese zum Konstruktor einer Publication benötigt wird
+        List<Author> authors = new ArrayList<>(); //code in andys code rein
+        for(String authorID : authorIDs) {
+            Author author = Author.getAuthorByID(authorID, this.database);
+            if (author != null) {
+                authors.add(author);
+            } else {
+                throw new LiteratureDatabaseException("Author with ID: " + authorID + " does not exist!");
+            }
         }
+        //Erzeugung der Publication und Hinzufügen in DB
+        Publication newPub = new Publication(id, title, yearPublished, type, authors);
+        updateAuthorsListWithNewPublication(authors, newPub);
+        database.getPublications().add(newPub);
     }
 
-    private List<Author> getAuthorObjRefFormStringList(List<String> authorsIDs) {
+    //Andis Code
+    /*private List<Author> getAuthorObjRefFormStringList(List<String> authorsIDs) {
 
         //empty Result-List to be returned
         List<Author> currentAuthors = new LinkedList<>();
@@ -90,13 +101,15 @@ public class DatabaseServiceImpl implements DatabaseService {
 
         return currentAuthors;
 
-    }
+    } */
 
     @Override
     public void removePublicationByID(String id) throws LiteratureDatabaseException {
+
+        // Andis Code
         //aus Liste der Publicationen entfernen
 
-        List<Publication> deleteHelper = getPublications();
+    /*    List<Publication> deleteHelper = getPublications();
         ListIterator<Publication> deleteHelperIterator = deleteHelper.listIterator();
         List<Author> ListOfPublicationAuthors = new LinkedList<>();
 
@@ -129,9 +142,23 @@ public class DatabaseServiceImpl implements DatabaseService {
                     deleteID = deleteHelperIterator.next().getId();
                 }
             }
+        } */
+
+        //TODO: Eingabedaten (Email und ID) ueberpruefen -> Validator
+
+        // Publication wird anhand der ID in der Datenbank gesucht, nach dem Löschvorgang wird die Publication /n
+        // Liste aktualisiert
+        Publication pbToBeRemoved = Publication.getPublicationByID(id, this.database);
+        if(pbToBeRemoved != null) {
+            List<Author> authorsOfPubsToBeRemoved = Author.getAuthorsByPublication(id, this.database); //Suchvorgang
+            database.getPublications().remove(pbToBeRemoved); //Löschvorgang in DB
+            updatePublicationListAfterRemovedPublication(authorsOfPubsToBeRemoved, pbToBeRemoved); //Aktualisierung der Publicationen + Löschen der Publication noch bei den einzelnen Verfassern/Autoren
+        } else {
+            throw new LiteratureDatabaseException("Publication not found, check ID"); //Exception, sollte Publication nicht gefunden werden
         }
 
 
+        /* Andis Code
         //<Publication aus Autoren-Obj. entfernen
 
         //shows the current Author-Obj., where to search for the Publication to be removed
@@ -167,7 +194,7 @@ public class DatabaseServiceImpl implements DatabaseService {
                 }
             }
             loPAIterator.next();
-        }
+        } */
 
 
     }
@@ -175,6 +202,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public void removeAuthorByID(String id) throws LiteratureDatabaseException {
 
+        /* Andi Code
         //aus Liste der Autoren löschen
         List<Author> deleteHelper = getAuthors();
         ListIterator<Author> deleteHelperIterator = deleteHelper.listIterator();
@@ -245,43 +273,75 @@ public class DatabaseServiceImpl implements DatabaseService {
                 }
             }
             loAPIterator.next();
-        }
+        } */
 
+        //TODO: Eingabedaten (ID) ueberpruefen -> Validator
+
+        Author authorToBeRemoved = Author.getAuthorByID(id, this.database); //Suchvorgang nach Autor
+        if(authorToBeRemoved != null) {
+            database.getAuthors().remove(authorToBeRemoved); //falls in DB vorhande, entfernen
+        } else {
+            if (database.getAuthors().isEmpty()) { //falls nicht in DB vorhanden, überprüfen ob DB leer ist oder es den Autor wirklich nicht gibt
+                throw new LiteratureDatabaseException("Database does have not any author(s)");
+            } else {
+                throw new LiteratureDatabaseException("Author not found");
+            }
+        }
     }
 
     @Override
     public void addAuthor(String name, String email, String id) throws LiteratureDatabaseException {
-
+        /* Andi Code
         Author newAuthor = new Author();
         newAuthor.setName(name);
         newAuthor.setEmail(email);
         newAuthor.setId(id);
 
-        //TODO: Eingabedaten ueberpruefen, wo? Author-Setter oder hier?
+        //TODO: Eingabedaten (Email und ID) ueberpruefen -> Validator
 
         List<Author> inputHelper = getAuthors();
         inputHelper.add(newAuthor);
+        */
 
+        if(Author.getAuthorByID(id, this.database) == null) {
+            Author authorToBeAdded = new Author(id, name, email, new LinkedList<>());
+            database.getAuthors().add(authorToBeAdded);
+        }
     }
 
     @Override
     public List<Publication> getPublications() {
+        // Todo: if abfrage nötig? try catch wegen Exceptions?
 
-        return this.database.getPublications();
+        //aktuelle Publications Liste aufrufen
+        if(database.getPublications() != null) {
+            return this.database.getPublications();
+        }
     }
 
     @Override
     public List<Author> getAuthors() {
+        // Todo: if abfrage nötig? try catch wegen Exceptions?
 
-        return this.database.getAuthors();
+        //aktuelle Authors Liste aufrufen
+        if(database.getAuthors() != null) {
+            return this.database.getAuthors();
+        }
     }
 
     @Override
     public void clear() {
-        List<Publication> publications = getPublications();
+        //Andi Code
+        /*List<Publication> publications = getPublications();
         publications.clear();
         List<Author> authors = getAuthors();
-        authors.clear();
+        authors.clear(); */
+
+        //Todo: Exceptions?
+
+        // aktuelle DB auf Publications und Authors leeren
+        database.getPublications().clear();
+        database.getAuthors().clear();
     }
 
     @Override
@@ -309,6 +369,22 @@ public class DatabaseServiceImpl implements DatabaseService {
             e.printStackTrace();
         }
 
+    }
+
+    private void updateAuthorsListWithNewPublication(List<Author> authors, Publication newPub) {
+        for(Author author : authors){
+            this.database.getAuthors().stream()
+                    .filter(a -> a.getId().equals(author.getId()))
+                    .forEach(a -> a.getPublications().add(newPub));
+        }
+    }
+
+    private void updatePublicationListAfterRemovedPublication(List<Author> authors, Publication delPub) {
+        for(Author author : authors){
+            this.database.getAuthors().stream()
+                    .filter(a -> a.getId().equals(author.getId()))
+                    .forEach(a -> a.getPublications().remove(delPub));
+        }
     }
 
 }
