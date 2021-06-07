@@ -80,16 +80,16 @@ public class Author {
         return result.toString();
     }
 
-    public static Author getAuthorByID (String id, Database db){
+    public static Author getAuthorByID (String id, Database database){
 
-      return db.getAuthors().stream()
+      return database.getAuthors().stream()
               .filter(author -> author.getId().equals(id))
               .findFirst()
               .orElse(null);
     }
 
-    public static List<Author> getAuthorsByPublication (String pubID, Database db) {
-        List<Author> authors = db.getAuthors().stream()
+    public static List<Author> getAuthorsByPublication (String pubID, Database database) {
+        List<Author> authors = database.getAuthors().stream()
                 .filter(author -> author.getPublications().contains(pubID))
                 .collect(Collectors.toList());
         return authors;
