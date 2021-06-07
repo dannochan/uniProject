@@ -18,6 +18,8 @@ public class ConsoleUI {
 
     private DatabaseService newDBS;
 
+    private boolean MAINMENU = true;
+
     public ConsoleUI() {
 
         // allerzuerst eine Variable von ConsolHelper Klasse deklarieren, damit das Prog. mit Benutzern interagieren kann
@@ -52,10 +54,18 @@ public class ConsoleUI {
     // when exit nicht falsch ist, wird die
     public void startReadEvaPrint() throws LiteratureDatabaseException {
         while (!exit) {
-            printMainmenu();
+            if (MAINMENU) {
+                printMainmenu();
 
-            int option = readOption();
-            evalOption(option);
+                int option = readOption();
+                evalOption(option);
+            } else {
+                printSubmenu();
+
+                int option = readOption();
+                evalSubMenuOption(option);
+            }
+
             // evaluate von Untermenü (auch hier einpacken, mithilfe If-Schleife? )
 
         }
@@ -67,7 +77,11 @@ public class ConsoleUI {
         int result = 9;
 
         try {
-            result = consoleHelper.askIntegerInRange("Please choose an option,", 1, 3);
+            if (MAINMENU) {
+                result = consoleHelper.askIntegerInRange("Please choose an option,", 1, 3);
+            } else {
+                result = consoleHelper.askIntegerInRange("Please choose an option,", 0, 8);
+            }
 
             // was hier noch gerne hätte, ist, nachdem die Fehlermeldung auskommt, wird nochmal nach Eingabe gefragt.
 
@@ -86,12 +100,14 @@ public class ConsoleUI {
             case 1:
                 loadAndValidateDatabase();
                 printSubmenu();
+                MAINMENU = false;
                 int newOptionA = readOption();
                 evalSubMenuOption(newOptionA);
                 break;
             case 2:
                 createNewDatabase();
                 printSubmenu();
+                MAINMENU = false;
                 int newOptionB = readOption();
                 evalSubMenuOption(newOptionB);
                 break;
@@ -130,7 +146,7 @@ public class ConsoleUI {
             case 8:
                 saveXmlFile();
                 break;
-            case 9:
+            case 0:
                 backToMain();
                 break;
             default:
@@ -186,6 +202,7 @@ public class ConsoleUI {
     }
 
     private void backToMain() {
+        MAINMENU = true;
 
     }
 
