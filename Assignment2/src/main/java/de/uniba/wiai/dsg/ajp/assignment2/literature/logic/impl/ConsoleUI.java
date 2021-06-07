@@ -32,14 +32,14 @@ public class ConsoleUI {
     }
 
     //Hauptmenü ausgeben
-    public void printMainmenu() {
+    private void printMainmenu() {
         System.out.println("(1) Load and Validate Literature Database");
         System.out.println("(2) Create New Literature Database");
         System.out.println("(3) Exit System");
     }
 
     //Untermenü ausgeben
-    public void printSubmenu() {
+    private void printSubmenu() {
         System.out.println(" (1) Add Author ");
         System.out.println(" (2) Remove Author");
         System.out.println(" (3) Add Publication");
