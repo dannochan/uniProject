@@ -30,7 +30,7 @@ public class DatabaseServiceImpl implements DatabaseService {
     public void addPublication(String title, int yearPublished, PublicationType type, List<String> authorIDs, String id)
             throws LiteratureDatabaseException {
 
-        //TODO: Eingabedaten (Title, yearPublished, type und ID) ueberpruefen -> Validator
+        //TODO: Eingabedaten (Title, yearPublished, type und ID) ueberpruefen -> Validator!
 
       /*  Andis Code
        Publication freshPublication = new Publication();
