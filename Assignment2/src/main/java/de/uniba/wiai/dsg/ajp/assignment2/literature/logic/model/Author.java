@@ -1,11 +1,14 @@
 package de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model;
 
+import javax.sound.midi.Soundbank;
+import javax.xml.bind.SchemaOutputResolver;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlIDREF;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 public class Author {
 
@@ -16,6 +19,13 @@ public class Author {
 
     public Author() {
         super();
+    }
+
+    public Author(String id, String name, String email, List<Publication> publications) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.publications = publications;
     }
 
     @XmlElement(name = "name", required = true)
@@ -69,5 +79,21 @@ public class Author {
         }
         return result.toString();
     }
+
+    public static Author getAuthorByID (String id, Database db){
+
+      return db.getAuthors().stream()
+              .filter(author -> author.getId().equals(id))
+              .findFirst()
+              .orElse(null);
+    }
+
+    public static List<Author> getAuthorsByPublication (String pubID, Database db) {
+        List<Author> authors = db.getAuthors().stream()
+                .filter(author -> author.getPublications().contains(pubID))
+                .collect(Collectors.toList());
+        return authors;
+    }
+
 
 }
