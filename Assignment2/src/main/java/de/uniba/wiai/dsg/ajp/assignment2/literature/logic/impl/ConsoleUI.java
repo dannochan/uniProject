@@ -18,6 +18,10 @@ public class ConsoleUI {
 
     private DatabaseService newDBS;
 
+    private int menuIndex;
+
+    private DatabaseService databaseNew;
+
     public ConsoleUI() {
 
         // allerzuerst eine Variable von ConsolHelper Klasse deklarieren, damit das Prog. mit Benutzern interagieren kann
@@ -27,6 +31,8 @@ public class ConsoleUI {
         exit = false;       // ein Bedingungsvariable
 
         newDB = new MainServiceImpl();
+
+        menuIndex = 1;
     }
 
     //Hauptmenü ausgeben
@@ -52,12 +58,13 @@ public class ConsoleUI {
     // when exit nicht falsch ist, wird die
     public void startReadEvaPrint() throws LiteratureDatabaseException {
         while (!exit) {
-            printMainmenu();
-
+            if (menuIndex==1){
+                printMainmenu();
+            }else {
+                printSubmenu();
+            }
             int option = readOption();
             evalOption(option);
-            // evaluate von Untermenü (auch hier einpacken, mithilfe If-Schleife? )
-
         }
     }
 
@@ -67,7 +74,7 @@ public class ConsoleUI {
         int result = 9;
 
         try {
-            result = consoleHelper.askIntegerInRange("Please choose an option,", 1, 3);
+            result = consoleHelper.askIntegerInRange("Please choose an option,", 0, 8);
 
             // was hier noch gerne hätte, ist, nachdem die Fehlermeldung auskommt, wird nochmal nach Eingabe gefragt.
 
@@ -108,9 +115,11 @@ public class ConsoleUI {
         switch (input) {
             case 1:
                 addAuthor();
+                menuIndex = 0;
                 break;
             case 2:
                 removeAuthor();
+                menuIndex = 0;
                 break;
             case 3:
                 addPublication();
@@ -143,13 +152,13 @@ public class ConsoleUI {
 
     private void createNewDatabase() throws LiteratureDatabaseException {
         System.out.println("New Database is created!");
-        DatabaseService databaseNew = newDB.create();
+        this.databaseNew = newDB.create();
 
     }
 
     private void loadAndValidateDatabase() throws LiteratureDatabaseException {
         System.out.println("New Database is loaded!");
-        DatabaseService databaseNew = newDB.load("database.xml");
+        this.databaseNew = newDB.load("database.xml");
     }
 
     // die Methode, die der Klasse DatebaseService gehören und beim Untermenü aufgerufen werden sollen:
@@ -186,7 +195,7 @@ public class ConsoleUI {
     }
 
     private void backToMain() {
-
+        menuIndex =1;
     }
 
 
