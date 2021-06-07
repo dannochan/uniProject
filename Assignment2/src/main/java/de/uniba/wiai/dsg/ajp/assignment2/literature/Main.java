@@ -1,50 +1,59 @@
 package de.uniba.wiai.dsg.ajp.assignment2.literature;
 
 
-import com.sun.xml.bind.v2.runtime.output.SAXOutput;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.DatabaseService;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.LiteratureDatabaseException;
-import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.impl.DatabaseServiceImpl;
+import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.MainService;
+import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.impl.MainServiceImpl;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Author;
-import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Database;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Publication;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.PublicationType;
-import org.w3c.dom.ls.LSOutput;
 
-import javax.management.modelmbean.XMLParseException;
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Main {
 
-	public static void main(String[] args) {
-		Database db = new Database();
-		DatabaseService dbService = new DatabaseServiceImpl(db);
+    public static void main(String[] args) {
+        // TODO startet eure Anwendung ueber diese main-Methode
+        MainService startIt = new MainServiceImpl();
+        try {
 
-		Author a = new Author("10", "decheng", "decheng@gmail.com", new LinkedList<>());
-		//System.out.println(a);
-		db.getAuthors().add(a);
+            DatabaseService mydatabase = startIt.load("database.xml");
 
-		List<String> authorsID = db.getAuthors().stream().map(author -> author.getId()).collect(Collectors.toList());
-		//System.out.println(db.getAuthors());
+            mydatabase.addAuthor("Hans Petter Oechsler", "demhansiseiadress", "a0");
+            mydatabase.addAuthor("Hans Petter Oechsler", "demhansiseiadress", "a1");
+            mydatabase.addAuthor("Erwin Schnuerschuh","demerwinseiadress","a2");
 
-		Publication pubs = new Publication("1", "guido gave us 5.0", 2020, PublicationType.BOOK, null);
+            List<String> liste = new LinkedList<>();
+            liste.add("a1");
+            liste.add("a2");
+            mydatabase.addPublication("Husten hat er der Hansi", 2020, PublicationType.BOOK, liste, "p1");
+            mydatabase.addPublication("Gartensachen", 2021, PublicationType.BOOK, liste, "p2");
 
-		try {
-			dbService.addPublication(pubs.getTitle(), pubs.getYearPublished(), pubs.getType(), authorsID, pubs.getId());
-			dbService.removeAuthorByID("10"); // wirft exception aus, nur zum testen gedacht
-		} catch (LiteratureDatabaseException e) {
-			e.printStackTrace();
-		}
-		//System.out.println(db.getPublications());
-		//System.out.println(db.getAuthors());
-		try {
-			dbService.removePublicationByID(pubs.getId());
-		} catch (LiteratureDatabaseException e) {
-			e.printStackTrace();
-		}
-		System.out.println(db.getPublications() + "finish");
-	}
+            mydatabase.removePublicationByID("p2");
+            mydatabase.printXMLToConsole();
+            mydatabase.saveXMLToFile("resultFile.xml");
+
+            for (Author author:mydatabase.getAuthors()
+                 ) {
+                System.out.println(author.getName());
+            }
+
+            for (Publication publication : mydatabase.getPublications()
+            ) {
+                System.out.println(publication.getTitle());
+            }
+
+            //mydatabase.clear();
+            //mydatabase.printXMLToConsole();
+
+        } catch (LiteratureDatabaseException e) {
+            System.out.println("Schrottbude");
+        }
+
+
+
+    }
+
 }
