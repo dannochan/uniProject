@@ -102,20 +102,10 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
-    public List<Publication> getPublications() {
-        return this.database.getPublications();
-    }
+    public List<Publication> getPublications() { return this.database.getPublications();}
 
     @Override
-    public List<Author> getAuthors() {
-        // Todo: if abfrage nötig? try catch wegen Exceptions?
-        //TODO: Wieso darf keine leere Liste zurueckgegeben werdden?? MISSING RETURN STATEMENT
-
-        //aktuelle Authors Liste aufrufen
-        //if(database.getAuthors() != null) {
-        return this.database.getAuthors();
-        //}
-    }
+    public List<Author> getAuthors() {return this.database.getAuthors();}
 
     @Override
     public void clear() {
