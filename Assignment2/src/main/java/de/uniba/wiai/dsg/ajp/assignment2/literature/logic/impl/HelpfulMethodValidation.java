@@ -30,8 +30,11 @@ public class HelpfulMethodValidation {
     }
 
     public boolean isNull(Object o) {
-
-        return (o.equals(null));
+        boolean check = false;
+        if(o.equals(null)){
+            check = true;
+        }
+        return check;
     }
 
     public boolean checksValue(String text) {
