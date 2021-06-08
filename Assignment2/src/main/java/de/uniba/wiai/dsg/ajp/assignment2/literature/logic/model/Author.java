@@ -1,14 +1,13 @@
 package de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model;
 
-import javax.sound.midi.Soundbank;
-import javax.xml.bind.SchemaOutputResolver;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlIDREF;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.StringJoiner;
-import java.util.stream.Collectors;
+
 
 public class Author {
 
