@@ -171,19 +171,42 @@ public class ConsoleUI {
 
     // die Methode, die der Klasse DatebaseService gehören und beim Untermenü aufgerufen werden sollen:
 
-    private void addAuthor() {
+    private void addAuthor() throws IOException, LiteratureDatabaseException {
+        /* was wir hier allerzuerst brauchen, sind die entsprechenden Eingabe für die AddPublication.
+         * 1. Name (String)
+         * 2. ID (String)
+         * 5. Email (String)
+         * */
+
+        System.out.println("Now you can add an author: ");
+        String nameNew = consoleHelper.askString("Enter the name of author.");
+        String emailNew = consoleHelper.askString("Enter the email of author.");
+        String idNew = consoleHelper.askString("Enter the id of author");
+
+        this.databaseNew.addAuthor(nameNew,emailNew, idNew);
 
     }
 
-    private void removeAuthor() {
+    private void removeAuthor() throws IOException, LiteratureDatabaseException {
+        // ID (String )nachfragen
 
+        String idNew = consoleHelper.askString("Now enter the Id of the author you want to delete: ");
+        this.databaseNew.removeAuthorByID(idNew);
     }
 
     private void addPublication() {
+        /* was wir hier allerzuerst brauchen, sind die entsprechenden Eingabe für die AddPublication.
+         * 1. title  (String)
+         * 2. yearPublishe (int )
+         * 3. PublicationType
+         * 4. AuthorsID (List von String)
+         * 5. ID (String)
+         * */
 
     }
 
     private void removePublication() {
+        // ID von publicationNachfragen
 
     }
 
