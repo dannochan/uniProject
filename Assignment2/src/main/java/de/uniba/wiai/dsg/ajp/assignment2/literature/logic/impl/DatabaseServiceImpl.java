@@ -28,8 +28,6 @@ public class DatabaseServiceImpl implements DatabaseService {
         this.database = database;
     }
 
-    DatabaseServiceImpl(List<Database> databases) {
-    }
 
     @Override
     public void addPublication(String title, int yearPublished, PublicationType type, List<String> authorIDs, String id)
