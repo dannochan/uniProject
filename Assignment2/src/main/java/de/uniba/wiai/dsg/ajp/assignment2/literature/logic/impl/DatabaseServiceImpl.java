@@ -1,11 +1,13 @@
 package de.uniba.wiai.dsg.ajp.assignment2.literature.logic.impl;
 
+import java.nio.file.InvalidPathException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.DatabaseService;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.LiteratureDatabaseException;
+import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.ValidationHelper;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Author;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Database;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Publication;
@@ -15,6 +17,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.nio.file.Path;
+import java.util.stream.Collectors;
 
 
 public class DatabaseServiceImpl implements DatabaseService {
@@ -34,7 +37,45 @@ public class DatabaseServiceImpl implements DatabaseService {
             throws LiteratureDatabaseException {
 
         //TODO: Eingabedaten (Title, yearPublished, type und ID) ueberpruefen -> Validator!
-        //TODO: Wenn Author noch nicht in databse vhd.-> Wie behandeln?
+        //TODO: Wenn Author noch nicht in databse vhd.-
+
+        HelpfulMethodValidation helpfulMethodValidation = new HelpfulMethodValidation();
+        // validate title
+        if (helpfulMethodValidation.checksValue(title)) {
+            throw new LiteratureDatabaseException("Invalid publication title.");
+        }
+
+        // validate year
+        if (yearPublished < 0) {
+            throw new LiteratureDatabaseException("Invalid publication year.");
+        }
+
+        // validate type
+        if (helpfulMethodValidation.isNull(type)) {
+            throw new LiteratureDatabaseException("Invalid publication type.");
+        }
+
+        // validate authors
+        if (helpfulMethodValidation.isNull(authorIDs) || authorIDs.isEmpty()) {
+            throw new LiteratureDatabaseException("Invalid publication author.");
+        } else {
+            // remove duplicate author Ids
+            authorIDs = authorIDs.stream()
+                    .distinct()
+                    .collect(Collectors.toList());
+        }
+
+        // validate id
+        if (!ValidationHelper.isId(id)) {
+            throw new LiteratureDatabaseException("Invalid publication id.");
+        }
+        if (!helpfulMethodValidation.isPublicationIdUnique(id)) {
+            throw new LiteratureDatabaseException("Publication's id must be unique.");
+        }
+
+
+
+
 
         // Abfrage der Autoren, ob bereits in DB hinter
         // + Umwandlung der Autoren IDs in eine List<Author>, da diese zum Konstruktor einer Publication benötigt wird
@@ -57,7 +98,12 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public void removePublicationByID(String id) throws LiteratureDatabaseException {
 
+
         //TODO: Eingabedaten (Email und ID) ueberpruefen -> Validator
+        // validate id
+        if (!ValidationHelper.isId(id)) {
+            throw new LiteratureDatabaseException("Invalid publication's id.");
+        }
 
         // Publication wird anhand der ID in der Datenbank gesucht, nach dem Löschvorgang wird die Publication /n
         // Liste aktualisiert
@@ -76,6 +122,10 @@ public class DatabaseServiceImpl implements DatabaseService {
     public void removeAuthorByID(String id) throws LiteratureDatabaseException {
 
         //TODO: Eingabedaten (ID) ueberpruefen -> Validator
+        // validate id
+        if (!ValidationHelper.isId(id)) {
+            throw new LiteratureDatabaseException("Invalid publication's id.");
+        }
 
         Author authorToBeRemoved = Author.getAuthorByID(id, this.database); //Suchvorgang nach Autor
         if (authorToBeRemoved != null) {
@@ -94,6 +144,23 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public void addAuthor(String name, String email, String id) throws LiteratureDatabaseException {
         //TODO: Eingabedaten (Email und ID) ueberpruefen -> Validator
+        HelpfulMethodValidation helpfulMethodValidation = new HelpfulMethodValidation();
+
+
+        //validate name
+        if (helpfulMethodValidation.checksValue(name)) {
+            throw new LiteratureDatabaseException("Invalid author's name.");
+        }
+        // validate id
+        if (!ValidationHelper.isId(email)) {
+            throw new LiteratureDatabaseException("Invalid author's id.");
+        }
+
+        if (!helpfulMethodValidation.isAuthorIdUnique(id)) {
+            throw new LiteratureDatabaseException("author's id must be unique.");
+        }
+
+
 
         if (Author.getAuthorByID(id, this.database) == null) {
             Author authorToBeAdded = new Author(id, name, email, new LinkedList<>());
@@ -121,7 +188,7 @@ public class DatabaseServiceImpl implements DatabaseService {
             ms.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             ms.marshal(database, System.out);
         } catch (JAXBException e) {
-            e.printStackTrace();
+            throw new LiteratureDatabaseException("error during marschalling.");
         }
 
     }
@@ -134,8 +201,11 @@ public class DatabaseServiceImpl implements DatabaseService {
             ms.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             ms.marshal(database, Path.of(path).toFile());
         } catch (JAXBException e) {
-            e.printStackTrace();
+            throw new LiteratureDatabaseException("error during marschalling  to xml file.");
+        } catch (InvalidPathException exception) {
+            throw new LiteratureDatabaseException("invalid path");
         }
+
 
     }
 
@@ -163,4 +233,4 @@ public class DatabaseServiceImpl implements DatabaseService {
         }
     }
 
-}
+}//

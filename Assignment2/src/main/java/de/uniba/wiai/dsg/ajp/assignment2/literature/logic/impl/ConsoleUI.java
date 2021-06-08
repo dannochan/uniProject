@@ -10,6 +10,7 @@ import de.uniba.wiai.dsg.ajp.assignment2.literature.ui.ConsoleHelper;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -201,7 +202,7 @@ public class ConsoleUI {
             String emailNew = consoleHelper.askString("Enter the email of author.");
             String idNew = consoleHelper.askString("Enter the id of author");
 
-            this.databaseNew.addAuthor(nameNew,emailNew, idNew);
+            this.databaseNew.addAuthor(nameNew, emailNew, idNew);
 
         } catch (LiteratureDatabaseException e) {
             e.printStackTrace();
@@ -213,7 +214,7 @@ public class ConsoleUI {
 
     private void removeAuthor() {
         // ID (String )nachfragen
-        try{
+        try {
             String idNew = consoleHelper.askString("Now enter the Id of the author you want to delete: ");
             this.databaseNew.removeAuthorByID(idNew);
         } catch (LiteratureDatabaseException e) {
@@ -258,27 +259,24 @@ public class ConsoleUI {
 
 
     }
+
     // eine Methode, die Eingabe von user in Array abspeichert und in List umwandeln kann
     private List<String> enterIDs() {
-        try {
-            int arraySize = consoleHelper.askInteger("Please enter number of ids!");
-            String []resultList = new String[arraySize];
-            for (int i = 0; i<=arraySize; i++){
-                System.out.format(" The %d ID : ");
-             resultList[i] = consoleHelper.askNonEmptyString(" here: ");
-            }
 
-            return Arrays.stream(resultList).collect(Collectors.toList());
+        List<String> resultList = new LinkedList<>();
+        try {
+            System.out.format(" The Author-ID-List (id1, id2, ...) : ");
+            String[] inputArray = (consoleHelper.askNonEmptyString("here: ")).split(", ");
+            resultList = Arrays.stream(inputArray).collect(Collectors.toList());
             // TODO: Bitte hier auch noch Fehler behandeln
         } catch (IOException e) {
             e.printStackTrace();
         }
-        // Kann man null zurückgeben? IdK? Idee?
-            return null;
+        return resultList;
     }
 
     private void removePublication() {
-        try{
+        try {
             String idNew = consoleHelper.askString("Now enter the Id of the author you want to delete: ");
             this.databaseNew.removePublicationByID(idNew);
         } catch (LiteratureDatabaseException e) {
@@ -294,15 +292,15 @@ public class ConsoleUI {
 
     private void listAuthor() {
         System.out.println("************Authors***********");
-       for (int i = 0; i<this.databaseNew.getAuthors().size(); i++){
-           System.out.println(this.databaseNew.getAuthors().get(i).getName());
-       }
+        for (int i = 0; i < this.databaseNew.getAuthors().size(); i++) {
+            System.out.println(this.databaseNew.getAuthors().get(i).getName());
+        }
     }
 
     private void listPublications() {
         System.out.println("************Publications******");
-        for (Publication pubIndex: this.databaseNew.getPublications()
-             ) {
+        for (Publication pubIndex : this.databaseNew.getPublications()
+        ) {
             System.out.println(pubIndex.toString());
         }
     }
@@ -323,7 +321,7 @@ public class ConsoleUI {
         System.out.println("**********Save XML to File**************");
         try {
             this.databaseNew.saveXMLToFile("result.xml");
-        }catch (LiteratureDatabaseException e){
+        } catch (LiteratureDatabaseException e) {
             System.err.println("Something went wrong during printing!");
             // muss hier noch igendwas gemacht werden, um den Fehler richtig zu beheben
         }
