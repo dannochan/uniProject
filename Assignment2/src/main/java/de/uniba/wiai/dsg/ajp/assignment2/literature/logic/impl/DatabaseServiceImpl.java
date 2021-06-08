@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.DatabaseProvider;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.DatabaseService;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.LiteratureDatabaseException;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.ValidationHelper;
@@ -30,7 +29,6 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     DatabaseServiceImpl(Database database) {
         this.database = database;
-        DatabaseProvider.setDbInstance(this.database);
     }
 
 
@@ -38,12 +36,10 @@ public class DatabaseServiceImpl implements DatabaseService {
     public void addPublication(String title, int yearPublished, PublicationType type, List<String> authorIDs, String id)
             throws LiteratureDatabaseException {
 
-        //TODO: Eingabedaten (Title, yearPublished, type und ID) ueberpruefen -> Validator!
         //TODO: Wenn Author noch nicht in databse vhd.-
 
-        HelpfulMethodValidation helpfulMethodValidation = new HelpfulMethodValidation();
         // validate title
-        if (!helpfulMethodValidation.checksValue(title)) {
+        if (HelpfulMethodValidation.checksValue(title)) {
             throw new LiteratureDatabaseException("Invalid publication title.");
         }
 
@@ -53,12 +49,12 @@ public class DatabaseServiceImpl implements DatabaseService {
         }
 
         // validate type
-        if (helpfulMethodValidation.isNull(type)) {
+        if (HelpfulMethodValidation.isNull(type)) {
             throw new LiteratureDatabaseException("Invalid publication type.");
         }
 
         // validate authors
-        if (helpfulMethodValidation.isNull(authorIDs) || authorIDs.isEmpty()) {
+        if (HelpfulMethodValidation.isNull(authorIDs) || authorIDs.isEmpty()) { //liste notEmpty??
             throw new LiteratureDatabaseException("Invalid publication author.");
         } else {
             // remove duplicate author Ids
@@ -71,12 +67,9 @@ public class DatabaseServiceImpl implements DatabaseService {
         if (!ValidationHelper.isId(id)) {
             throw new LiteratureDatabaseException("Invalid publication id.");
         }
-        if (!helpfulMethodValidation.isPublicationIdUnique(id)) {
+        if (!HelpfulMethodValidation.isPublicationIdUnique(id, this.database)) {
             throw new LiteratureDatabaseException("Publication's id must be unique.");
         }
-
-
-
 
 
         // Abfrage der Autoren, ob bereits in DB hinter
@@ -123,8 +116,8 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public void removeAuthorByID(String id) throws LiteratureDatabaseException {
 
-        //TODO: Eingabedaten (ID) ueberpruefen -> Validator
-        // validate id
+
+        //validate id
         if (!ValidationHelper.isId(id)) {
             throw new LiteratureDatabaseException("Invalid publication's id.");
         }
@@ -145,27 +138,26 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     @Override
     public void addAuthor(String name, String email, String id) throws LiteratureDatabaseException {
-        //TODO: Eingabedaten (Email und ID) ueberpruefen -> Validator
-        HelpfulMethodValidation helpfulMethodValidation = new HelpfulMethodValidation();
-
 
         //validate name
-
-        if (!helpfulMethodValidation.checksValue(name)) {
+        if (HelpfulMethodValidation.checksValue(name)) {
             throw new LiteratureDatabaseException("Invalid author's name.");
         }
-        // validate email
+
         if (!ValidationHelper.isEmail(email)) {
+            throw new LiteratureDatabaseException("Invalid author's email.");
+        }
+
+        // validate id
+        if (!ValidationHelper.isId(id)) {
             throw new LiteratureDatabaseException("Invalid author's id.");
         }
 
-        //validate id
-        if (!helpfulMethodValidation.isAuthorIdUnique(id)) {
+        if (!HelpfulMethodValidation.isAuthorIdUnique(id, this.database)) {
             throw new LiteratureDatabaseException("author's id must be unique.");
         }
 
-
-
+        //TODO: ist if-statement noch notwenig nach isAuthorIdUnique-Validierung??
         if (Author.getAuthorByID(id, this.database) == null) {
             Author authorToBeAdded = new Author(id, name, email, new LinkedList<>());
             database.getAuthors().add(authorToBeAdded);
@@ -173,10 +165,14 @@ public class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
-    public List<Publication> getPublications() { return this.database.getPublications();}
+    public List<Publication> getPublications() {
+        return this.database.getPublications();
+    }
 
     @Override
-    public List<Author> getAuthors() {return this.database.getAuthors();}
+    public List<Author> getAuthors() {
+        return this.database.getAuthors();
+    }
 
     @Override
     public void clear() {
@@ -237,4 +233,4 @@ public class DatabaseServiceImpl implements DatabaseService {
         }
     }
 
-}//
+}
