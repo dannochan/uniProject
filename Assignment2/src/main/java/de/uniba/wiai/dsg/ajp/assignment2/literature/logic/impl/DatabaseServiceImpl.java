@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.DatabaseProvider;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.DatabaseService;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.LiteratureDatabaseException;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.ValidationHelper;
@@ -29,6 +30,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 
     DatabaseServiceImpl(Database database) {
         this.database = database;
+        DatabaseProvider.setDbInstance(this.database);
     }
 
 
@@ -41,7 +43,7 @@ public class DatabaseServiceImpl implements DatabaseService {
 
         HelpfulMethodValidation helpfulMethodValidation = new HelpfulMethodValidation();
         // validate title
-        if (helpfulMethodValidation.checksValue(title)) {
+        if (!helpfulMethodValidation.checksValue(title)) {
             throw new LiteratureDatabaseException("Invalid publication title.");
         }
 
@@ -148,14 +150,16 @@ public class DatabaseServiceImpl implements DatabaseService {
 
 
         //validate name
-        if (helpfulMethodValidation.checksValue(name)) {
+
+        if (!helpfulMethodValidation.checksValue(name)) {
             throw new LiteratureDatabaseException("Invalid author's name.");
         }
-        // validate id
-        if (!ValidationHelper.isId(email)) {
+        // validate email
+        if (!ValidationHelper.isEmail(email)) {
             throw new LiteratureDatabaseException("Invalid author's id.");
         }
 
+        //validate id
         if (!helpfulMethodValidation.isAuthorIdUnique(id)) {
             throw new LiteratureDatabaseException("author's id must be unique.");
         }

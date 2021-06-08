@@ -8,11 +8,10 @@ import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.PublicationType;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.ui.ConsoleHelper;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.sql.SQLOutput;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -42,14 +41,14 @@ public class ConsoleUI {
     }
 
     //Hauptmenü ausgeben
-    private void printMainmenu() {
+    private void printMainMenu() {
         System.out.println("(1) Load and Validate Literature Database");
         System.out.println("(2) Create New Literature Database");
         System.out.println("(3) Exit System");
     }
 
     //Untermenü ausgeben
-    private void printSubmenu() {
+    private void printSubMenu() {
         System.out.println(" (1) Add Author ");
         System.out.println(" (2) Remove Author");
         System.out.println(" (3) Add Publication");
@@ -65,53 +64,16 @@ public class ConsoleUI {
     public void startReadEvaPrint() throws LiteratureDatabaseException {
         while (!exit) {
             if (MAINMENU) {
-                printMainmenu();
-
-                int option = readOption();
-                evalOption(option);
+                int option = readOption(1);
+                if (option != -1) evalOption(option);
             } else {
-                printSubmenu();
-
-                int option = readOption();
-                evalSubMenuOption(option);
+                int option = readOption(2);
+                if (option != -1) evalSubMenuOption(option);
             }
-
-            // evaluate von Untermenü (auch hier einpacken, mithilfe If-Schleife? )
 
         }
     }
 
-    // In dieser Funktione wird nach einer Eingabe gefragt und validiert.
-    private int readOption() {
-
-        int result = 9;
-
-        try {
-            if (MAINMENU) {
-                result = consoleHelper.askIntegerInRange("Please choose an option,", 1, 3);
-                while(true){
-                    try{
-                        Scanner scan = new Scanner();
-                        scan.
-
-                    }catch (LiteratureDatabaseException e){
-                        e.
-                        continue;
-                    }
-                }
-            } else {
-                result = consoleHelper.askIntegerInRange("Please choose an option,", 0, 8);
-            }
-
-            // was hier noch gerne hätte, ist, nachdem die Fehlermeldung auskommt, wird nochmal nach Eingabe gefragt.
-
-        } catch (IOException ioException) {
-            System.err.println("input is not valid!");
-            readOption();
-        }
-
-        return result;
-    }
 
     // Je nach Eingabe der User, wirde verischieden Funktionen aufgerufen.
     private void evalOption(int input) throws LiteratureDatabaseException {
@@ -119,16 +81,14 @@ public class ConsoleUI {
         switch (input) {
             case 1:
                 loadAndValidateDatabase();
-                printSubmenu();
                 MAINMENU = false;
-                int newOptionA = readOption();
+                int newOptionA = readOption(2);
                 evalSubMenuOption(newOptionA);
                 break;
             case 2:
                 createNewDatabase();
-                printSubmenu();
                 MAINMENU = false;
-                int newOptionB = readOption();
+                int newOptionB = readOption(2);
                 evalSubMenuOption(newOptionB);
                 break;
             case 3:
@@ -245,7 +205,7 @@ public class ConsoleUI {
             List<String> newAuthorIDs = enterIDs();
 
             String newType = consoleHelper.askString("Now enter the type of this publication!");
-            PublicationType newPT = PublicationType.valueOf(newType);
+            PublicationType newPT = checkEnumKeysWithGivenValue(PublicationType.class, newType);
             String IdNew = consoleHelper.askNonEmptyString("Please enter the ID of the publication!");
 
             this.databaseNew.addPublication(titleNew, publishYear, newPT, newAuthorIDs, IdNew);
@@ -337,6 +297,44 @@ public class ConsoleUI {
     private void closeSystem() {
         exit = true;
         System.exit(0);
+    }
+
+
+    private int readOption(int option) {
+        String choice = "";
+        int lastChoice = -1;
+
+        while(true){
+            try{
+                Scanner scan = new Scanner(System.in);
+
+                if(option == 1) printMainMenu();
+                else if (option == 2) printSubMenu();
+                else return -1;
+
+                System.out.print("Please choose an option: ");
+                choice = scan.nextLine();
+                System.out.println();
+                if(option == 1 && choice.compareTo("1") >= 0 && choice.compareTo("3") <= 0){
+                    lastChoice = Integer.parseInt(choice);
+                    break;
+                } else if (option == 2 && choice.compareTo("0") >= 0 && choice.compareTo("8") <= 0){
+                        lastChoice = Integer.parseInt(choice);
+                        break;
+                }
+                throw new InputMismatchException();
+            } catch (Exception e) {
+                System.out.println("\nPlease choose a VALID option!");
+            }
+        }
+        return lastChoice;
+    }
+
+    public static <E extends Enum<?>> E checkEnumKeysWithGivenValue(Class<E> element, String value)  {
+        for (E key: element.getEnumConstants()) {
+            if(key.name().equalsIgnoreCase(value)) return key;
+        }
+        return null;
     }
 
 
