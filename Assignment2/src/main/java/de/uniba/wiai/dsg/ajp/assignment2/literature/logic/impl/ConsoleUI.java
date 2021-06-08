@@ -250,7 +250,7 @@ public class ConsoleUI {
 
     // eine Methode, die Eingabe von user in Array abspeichert und in List umwandeln kann
     private List<String> enterIDs() {
-        
+
         List<String> resultList = new LinkedList<>();
         try {
             System.out.format(" The Author-ID-List (id1, id2, ...) : ");
