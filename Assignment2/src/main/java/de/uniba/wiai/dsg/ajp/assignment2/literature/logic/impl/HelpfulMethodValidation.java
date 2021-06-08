@@ -38,4 +38,4 @@ public class HelpfulMethodValidation {
 
         return text != "" && text != null;
     }
-}
+}//
