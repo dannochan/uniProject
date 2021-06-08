@@ -19,13 +19,14 @@ public class Main {
 
     public static void main(String[] args) {
         // TODO startet eure Anwendung ueber diese main-Methode
-       MainService startIt = new MainServiceImpl();
-        // ConsoleUI mainMenu = new ConsoleUI();
+       //MainService startIt = new MainServiceImpl();
+        ConsoleUI mainMenu = new ConsoleUI();
         try {
-            //mainMenu.startReadEvaPrint();/*
-            DatabaseService mydatabase = startIt.load("database.xml");
+            mainMenu.startReadEvaPrint();/*
+            /*DatabaseService mydatabase = startIt.load("database.xml");
 
             mydatabase.addAuthor("Hans Petter Oechsler", "demhansiseiadress", "a0");
+            //mydatabase.addAuthor("Hans Petter Oechsler", "demhansiseiadress", "a0");
             mydatabase.addAuthor("Hans Petter Oechsler", "demhansiseiadress", "a1");
             mydatabase.addAuthor("Erwin Schnuerschuh", "demerwinseiadress", "a2");
 
@@ -35,7 +36,7 @@ public class Main {
             mydatabase.addPublication("Husten hat er der Hansi", 2020, PublicationType.BOOK, liste, "p1");
             mydatabase.addPublication("Gartensachen", 2021, PublicationType.BOOK, liste, "p2");
 
-            mydatabase.removePublicationByID("p2");
+            mydatabase.removePublicationByID("p1");
             mydatabase.removeAuthorByID("a1");
             gc();
             //mydatabase.printXMLToConsole();
@@ -54,7 +55,7 @@ public class Main {
             //mydatabase.clear();
             //mydatabase.printXMLToConsole();
 
-
+            gc();
         } catch (LiteratureDatabaseException e) {
             System.out.println("Schrottbude");
         }

@@ -1,14 +1,13 @@
 package de.uniba.wiai.dsg.ajp.assignment2.literature.logic.impl;
 
-import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.DatabaseService;
+
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Author;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Database;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Publication;
-
 import java.util.List;
 
 public class HelpfulMethodValidation {
-     //Database database;
+
 
     public static boolean isAuthorIdUnique(String id, Database db) {
         List<Author> list = db.getAuthors();
@@ -32,7 +31,7 @@ public class HelpfulMethodValidation {
 
     public static boolean isNull(Object o) {
         boolean check = false;
-        if(o.equals(null)){
+        if (o.equals(null)) {
             check = true;
         }
         return check;
@@ -46,4 +45,4 @@ public class HelpfulMethodValidation {
         return check;
 
     }
-}//
+}
