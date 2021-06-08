@@ -28,7 +28,7 @@ public class Main {
 
             mydatabase.addAuthor("Hans Petter Oechsler", "demhansiseiadress", "a0");
             mydatabase.addAuthor("Hans Petter Oechsler", "demhansiseiadress", "a1");
-            mydatabase.addAuthor("Erwin Schnuerschuh","demerwinseiadress","a2");
+            mydatabase.addAuthor("Erwin Schnuerschuh", "demerwinseiadress", "a2");
 
             List<String> liste = new LinkedList<>();
             liste.add("a1");
@@ -37,6 +37,7 @@ public class Main {
             mydatabase.addPublication("Gartensachen", 2021, PublicationType.BOOK, liste, "p2");
 
             mydatabase.removePublicationByID("p2");
+            mydatabase.removeAuthorByID("a1");
             gc();
             //mydatabase.printXMLToConsole();
             //mydatabase.saveXMLToFile("resultFile.xml");
@@ -55,11 +56,9 @@ public class Main {
             //mydatabase.printXMLToConsole();
 
 
-
         } catch (LiteratureDatabaseException e) {
             System.out.println("Schrottbude");
         }
-
 
 
     }

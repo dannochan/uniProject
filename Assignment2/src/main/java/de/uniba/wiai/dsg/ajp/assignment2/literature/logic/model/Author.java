@@ -56,7 +56,7 @@ public class Author {
         this.id = id;
     }
 
-    @XmlElement(name="publication", required = false)
+    @XmlElement(name = "publication", required = false)
     @XmlIDREF
     public List<Publication> getPublications() {
         return publications;
@@ -80,19 +80,12 @@ public class Author {
         return result.toString();
     }
 
-    public static Author getAuthorByID (String id, Database database){
+    public static Author getAuthorByID(String id, Database database) {
 
-      return database.getAuthors().stream()
-              .filter(author -> author.getId().equals(id))
-              .findFirst()
-              .orElse(null);
-    }
-
-    public static List<Author> getAuthorsByPublication (String pubID, Database database) {
-        List<Author> authors = database.getAuthors().stream()
-                .filter(author -> author.getPublications().contains(pubID))
-                .collect(Collectors.toList());
-        return authors;
+        return database.getAuthors().stream()
+                .filter(author -> author.getId().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 
 

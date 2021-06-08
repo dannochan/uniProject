@@ -92,26 +92,11 @@ public class Publication {
         return result.toString();
     }
 
-    public static Publication getPublicationByID (String id, Database database) {
+    public static Publication getPublicationByID(String id, Database database) {
         return database.getPublications().stream()
                 .filter(pub -> pub.getId().equals(id))
                 .findFirst()
                 .orElse(null);
-    }
-
-
-    public static List<Publication> getPublicationByAuthors (String authorName, Database database) {
-        List<Publication> pubs = database.getPublications().stream()
-                                    .filter (pub -> pub.getAuthors().contains(authorName))
-                                    .collect(Collectors.toList());
-        return pubs;
-    }
-
-    public static List<Publication> getPublicationByAuthorsID (String authorID, Database database) {
-        List<Publication> pubs = database.getPublications().stream()
-                .filter (pub -> pub.getAuthors().contains(authorID))
-                .collect(Collectors.toList());
-        return pubs;
     }
 
 }
