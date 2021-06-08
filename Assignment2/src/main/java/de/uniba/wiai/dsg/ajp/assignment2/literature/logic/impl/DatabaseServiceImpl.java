@@ -39,9 +39,9 @@ public class DatabaseServiceImpl implements DatabaseService {
         //TODO: Eingabedaten (Title, yearPublished, type und ID) ueberpruefen -> Validator!
         //TODO: Wenn Author noch nicht in databse vhd.-
 
-        HelpfulMethodValidation helpfulMethodValidation = new HelpfulMethodValidation();
+        //HelpfulMethodValidation helpfulMethodValidation = new HelpfulMethodValidation();
         // validate title
-        if (helpfulMethodValidation.checksValue(title)) {
+        if (HelpfulMethodValidation.checksValue(title)) {
             throw new LiteratureDatabaseException("Invalid publication title.");
         }
 
@@ -51,12 +51,12 @@ public class DatabaseServiceImpl implements DatabaseService {
         }
 
         // validate type
-        if (helpfulMethodValidation.isNull(type)) {
+        if (HelpfulMethodValidation.isNull(type)) {
             throw new LiteratureDatabaseException("Invalid publication type.");
         }
 
         // validate authors
-        if (helpfulMethodValidation.isNull(authorIDs) || authorIDs.isEmpty()) {
+        if (HelpfulMethodValidation.isNull(authorIDs) || authorIDs.isEmpty()) { //liste notEmpty??
             throw new LiteratureDatabaseException("Invalid publication author.");
         } else {
             // remove duplicate author Ids
@@ -69,7 +69,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         if (!ValidationHelper.isId(id)) {
             throw new LiteratureDatabaseException("Invalid publication id.");
         }
-        if (!helpfulMethodValidation.isPublicationIdUnique(id)) {
+        if (!HelpfulMethodValidation.isPublicationIdUnique(id, this.database)) {
             throw new LiteratureDatabaseException("Publication's id must be unique.");
         }
 
@@ -144,11 +144,11 @@ public class DatabaseServiceImpl implements DatabaseService {
     @Override
     public void addAuthor(String name, String email, String id) throws LiteratureDatabaseException {
         //TODO: Eingabedaten (Email und ID) ueberpruefen -> Validator
-        HelpfulMethodValidation helpfulMethodValidation = new HelpfulMethodValidation();
+        //HelpfulMethodValidation helpfulMethodValidation = new HelpfulMethodValidation();
 
 
         //validate name
-        if (helpfulMethodValidation.checksValue(name)) {
+        if (HelpfulMethodValidation.checksValue(name)) {
             throw new LiteratureDatabaseException("Invalid author's name.");
         }
         // validate id
@@ -156,7 +156,7 @@ public class DatabaseServiceImpl implements DatabaseService {
             throw new LiteratureDatabaseException("Invalid author's id.");
         }
 
-        if (!helpfulMethodValidation.isAuthorIdUnique(id)) {
+        if (!HelpfulMethodValidation.isAuthorIdUnique(id, this.database)) { //true
             throw new LiteratureDatabaseException("author's id must be unique.");
         }
 
