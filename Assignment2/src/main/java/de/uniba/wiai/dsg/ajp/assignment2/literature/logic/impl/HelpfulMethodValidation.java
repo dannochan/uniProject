@@ -9,7 +9,7 @@ import java.util.List;
 public class HelpfulMethodValidation {
     Database database;
 
-    public  boolean isAuthorIdUnique(String id) {
+    public boolean isAuthorIdUnique(String id) {
         List<Author> list = this.database.getAuthors();
         for (Author author : list) {
             if (author.getId().equals(id)) {
@@ -31,11 +31,15 @@ public class HelpfulMethodValidation {
 
     public boolean isNull(Object o) {
 
-        return (o == null);
+        return (o.equals(null));
     }
+
     public boolean checksValue(String text) {
+        boolean check = false;
+        if (text.isEmpty() || text.equals(null)) {
+            check = true;
+        }
+        return check;
 
-
-        return text != "" && text != null;
     }
 }//
