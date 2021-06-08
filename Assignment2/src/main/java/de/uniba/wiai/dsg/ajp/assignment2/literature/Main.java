@@ -20,9 +20,9 @@ public class Main {
     public static void main(String[] args) {
         // TODO startet eure Anwendung ueber diese main-Methode
         MainService startIt = new MainServiceImpl();
-        //ConsoleUI mainMenu = new ConsoleUI();
+        ConsoleUI mainMenu = new ConsoleUI();
         try {
-            //mainMenu.startReadEvaPrint();
+            mainMenu.startReadEvaPrint();
 
             DatabaseService mydatabase = startIt.load("database.xml");
 

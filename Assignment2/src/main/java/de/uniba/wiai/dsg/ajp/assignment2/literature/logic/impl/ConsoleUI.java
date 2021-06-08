@@ -7,9 +7,11 @@ import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Publication;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.PublicationType;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.ui.ConsoleHelper;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 
@@ -86,6 +88,16 @@ public class ConsoleUI {
         try {
             if (MAINMENU) {
                 result = consoleHelper.askIntegerInRange("Please choose an option,", 1, 3);
+                while(true){
+                    try{
+                        Scanner scan = new Scanner();
+                        scan.
+
+                    }catch (LiteratureDatabaseException e){
+                        e.
+                        continue;
+                    }
+                }
             } else {
                 result = consoleHelper.askIntegerInRange("Please choose an option,", 0, 8);
             }
