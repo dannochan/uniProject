@@ -4,9 +4,13 @@ import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.DatabaseService;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.LiteratureDatabaseException;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.MainService;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Publication;
+import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.PublicationType;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.ui.ConsoleHelper;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class ConsoleUI {
@@ -17,7 +21,7 @@ public class ConsoleUI {
 
     private MainService newDB;
 
-    private boolean MAINMENU = true;
+    private boolean MAINMENU;
 
     private DatabaseService databaseNew;
 
@@ -30,6 +34,8 @@ public class ConsoleUI {
         exit = false;       // ein Bedingungsvariable
 
         newDB = new MainServiceImpl();
+
+        MAINMENU = true;
     }
 
     //Hauptmenü ausgeben
@@ -171,27 +177,42 @@ public class ConsoleUI {
 
     // die Methode, die der Klasse DatebaseService gehören und beim Untermenü aufgerufen werden sollen:
 
-    private void addAuthor() throws IOException, LiteratureDatabaseException {
+    private void addAuthor() {
         /* was wir hier allerzuerst brauchen, sind die entsprechenden Eingabe für die AddPublication.
          * 1. Name (String)
          * 2. ID (String)
          * 5. Email (String)
          * */
+        try {
+            System.out.println("Now you can add an author: ");
+            String nameNew = consoleHelper.askString("Enter the name of author.");
+            String emailNew = consoleHelper.askString("Enter the email of author.");
+            String idNew = consoleHelper.askString("Enter the id of author");
 
-        System.out.println("Now you can add an author: ");
-        String nameNew = consoleHelper.askString("Enter the name of author.");
-        String emailNew = consoleHelper.askString("Enter the email of author.");
-        String idNew = consoleHelper.askString("Enter the id of author");
+            this.databaseNew.addAuthor(nameNew,emailNew, idNew);
 
-        this.databaseNew.addAuthor(nameNew,emailNew, idNew);
+        } catch (LiteratureDatabaseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    private void removeAuthor() throws IOException, LiteratureDatabaseException {
+    private void removeAuthor() {
         // ID (String )nachfragen
+        try{
+            String idNew = consoleHelper.askString("Now enter the Id of the author you want to delete: ");
+            this.databaseNew.removeAuthorByID(idNew);
+        } catch (LiteratureDatabaseException e) {
+            System.err.println("The Id of author is not valid!");
+            System.out.println(e);
+            removeAuthor();
+        } catch (IOException e) {
+            System.err.println("The given data is not valid!");
+            e.printStackTrace();
+        }
 
-        String idNew = consoleHelper.askString("Now enter the Id of the author you want to delete: ");
-        this.databaseNew.removeAuthorByID(idNew);
     }
 
     private void addPublication() {
@@ -202,11 +223,60 @@ public class ConsoleUI {
          * 4. AuthorsID (List von String)
          * 5. ID (String)
          * */
+        try {
 
+
+            String titleNew = consoleHelper.askNonEmptyString("Please enter the name of the publication!");
+            int publishYear = consoleHelper.askInteger("Please enter the year of publication!");
+
+            List<String> newAuthorIDs = enterIDs();
+
+            String newType = consoleHelper.askString("Now enter the type of this publication!");
+            PublicationType newPT = PublicationType.valueOf(newType);
+            String IdNew = consoleHelper.askNonEmptyString("Please enter the ID of the publication!");
+
+            this.databaseNew.addPublication(titleNew, publishYear, newPT, newAuthorIDs, IdNew);
+        }
+        // TODO: Bitte hier auch noch Fehler behandeln
+        catch (IOException e) {
+            e.printStackTrace();
+        } catch (LiteratureDatabaseException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+    // eine Methode, die Eingabe von user in Array abspeichert und in List umwandeln kann
+    private List<String> enterIDs() {
+        try {
+            int arraySize = consoleHelper.askInteger("Please enter number of ids!");
+            String []resultList = new String[arraySize];
+            for (int i = 0; i<=arraySize; i++){
+                System.out.format(" The %d ID : ");
+             resultList[i] = consoleHelper.askNonEmptyString(" here: ");
+            }
+
+            return Arrays.stream(resultList).collect(Collectors.toList());
+            // TODO: Bitte hier auch noch Fehler behandeln
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // Kann man null zurückgeben? IdK? Idee?
+            return null;
     }
 
     private void removePublication() {
-        // ID von publicationNachfragen
+        try{
+            String idNew = consoleHelper.askString("Now enter the Id of the author you want to delete: ");
+            this.databaseNew.removePublicationByID(idNew);
+        } catch (LiteratureDatabaseException e) {
+            System.err.println("The Id of publication is not valid!");
+            System.out.println(e);
+            removeAuthor();
+        } catch (IOException e) {
+            System.err.println("The given data is not valid!");
+            e.printStackTrace();
+        }
 
     }
 
