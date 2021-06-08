@@ -20,6 +20,14 @@ public class Publication {
         super();
     }
 
+    public Publication(String id, String title, int yearPublished, PublicationType type, List<Author> authors) {
+        this.id = id;
+        this.title = title;
+        this.yearPublished = yearPublished;
+        this.type = type;
+        this.authors = authors;
+    }
+
     @XmlAttribute(name = "type", required = true)
     public PublicationType getType() {
         return type;
@@ -82,4 +90,12 @@ public class Publication {
         }
         return result.toString();
     }
+
+    public static Publication getPublicationByID(String id, Database database) {
+        return database.getPublications().stream()
+                .filter(pub -> pub.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+    }
+
 }

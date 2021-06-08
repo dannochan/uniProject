@@ -4,6 +4,7 @@ package de.uniba.wiai.dsg.ajp.assignment2.literature;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.DatabaseService;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.LiteratureDatabaseException;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.MainService;
+import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.impl.ConsoleUI;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.impl.MainServiceImpl;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Author;
 import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.Publication;
@@ -12,18 +13,22 @@ import de.uniba.wiai.dsg.ajp.assignment2.literature.logic.model.PublicationType;
 import java.util.LinkedList;
 import java.util.List;
 
+import static java.lang.System.gc;
+
 public class Main {
 
     public static void main(String[] args) {
         // TODO startet eure Anwendung ueber diese main-Methode
         MainService startIt = new MainServiceImpl();
+        //ConsoleUI mainMenu = new ConsoleUI();
         try {
+            //mainMenu.startReadEvaPrint();
 
             DatabaseService mydatabase = startIt.load("database.xml");
 
             mydatabase.addAuthor("Hans Petter Oechsler", "demhansiseiadress", "a0");
             mydatabase.addAuthor("Hans Petter Oechsler", "demhansiseiadress", "a1");
-            mydatabase.addAuthor("Erwin Schnuerschuh","demerwinseiadress","a2");
+            mydatabase.addAuthor("Erwin Schnuerschuh", "demerwinseiadress", "a2");
 
             List<String> liste = new LinkedList<>();
             liste.add("a1");
@@ -32,9 +37,11 @@ public class Main {
             mydatabase.addPublication("Gartensachen", 2021, PublicationType.BOOK, liste, "p2");
 
             mydatabase.removePublicationByID("p2");
-            mydatabase.printXMLToConsole();
-            mydatabase.saveXMLToFile("resultFile.xml");
-
+            mydatabase.removeAuthorByID("a1");
+            gc();
+            //mydatabase.printXMLToConsole();
+            //mydatabase.saveXMLToFile("resultFile.xml");
+/*
             for (Author author:mydatabase.getAuthors()
                  ) {
                 System.out.println(author.getName());
@@ -43,15 +50,15 @@ public class Main {
             for (Publication publication : mydatabase.getPublications()
             ) {
                 System.out.println(publication.getTitle());
-            }
+            }*/
 
             //mydatabase.clear();
             //mydatabase.printXMLToConsole();
 
+
         } catch (LiteratureDatabaseException e) {
             System.out.println("Schrottbude");
         }
-
 
 
     }
