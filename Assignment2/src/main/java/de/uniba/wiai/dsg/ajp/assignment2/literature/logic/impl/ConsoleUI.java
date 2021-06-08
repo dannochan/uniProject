@@ -172,11 +172,11 @@ public class ConsoleUI {
     // die Methode, die der Klasse DatebaseService gehören und beim Untermenü aufgerufen werden sollen:
 
     private void addAuthor() {
-        System.out.println("You made it!!!!!!!!!!!!!!!!");
+
     }
 
     private void removeAuthor() {
-        
+
     }
 
     private void addPublication() {
@@ -222,7 +222,6 @@ public class ConsoleUI {
             System.err.println("Something went wrong during printing!");
             // muss hier noch igendwas gemacht werden, um den Fehler richtig zu beheben
         }
-
 
     }
 
