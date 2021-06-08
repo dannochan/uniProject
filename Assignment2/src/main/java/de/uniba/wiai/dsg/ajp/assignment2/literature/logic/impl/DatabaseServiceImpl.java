@@ -69,7 +69,7 @@ public class DatabaseServiceImpl implements DatabaseService {
         if (!ValidationHelper.isId(id)) {
             throw new LiteratureDatabaseException("Invalid publication id.");
         }
-        if (!helpfulMethodValidation.isPublicationIdUnique(id)) {
+        if (!helpfulMethodValidation.isPublicationIdUnique(id)) { // (false)
             throw new LiteratureDatabaseException("Publication's id must be unique.");
         }
 

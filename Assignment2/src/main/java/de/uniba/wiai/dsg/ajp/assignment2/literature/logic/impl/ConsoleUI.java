@@ -74,8 +74,6 @@ public class ConsoleUI {
                 evalSubMenuOption(option);
             }
 
-            // evaluate von Untermenü (auch hier einpacken, mithilfe If-Schleife? )
-
         }
     }
 
@@ -94,13 +92,12 @@ public class ConsoleUI {
             // was hier noch gerne hätte, ist, nachdem die Fehlermeldung auskommt, wird nochmal nach Eingabe gefragt.
 
         } catch (IOException ioException) {
-            System.err.println("input is not valid!");
-            readOption();
+            throw new IllegalArgumentException("A valid number must be entered!" + ioException.getMessage());
         }
 
         return result;
     }
-
+    // hier in dieser Methode wird die Input evaluatiert
     // Je nach Eingabe der User, wirde verischieden Funktionen aufgerufen.
     private void evalOption(int input) throws LiteratureDatabaseException {
 
@@ -127,7 +124,7 @@ public class ConsoleUI {
 
     }
 
-    private void evalSubMenuOption(int input) {
+    private void evalSubMenuOption(int input) throws LiteratureDatabaseException {
 
         switch (input) {
             case 1:
@@ -168,7 +165,6 @@ public class ConsoleUI {
     private void createNewDatabase() throws LiteratureDatabaseException {
         System.out.println("New Database is created!");
         this.databaseNew = newDB.create();
-
     }
 
     private void loadAndValidateDatabase() throws LiteratureDatabaseException {
@@ -178,7 +174,7 @@ public class ConsoleUI {
 
     // die Methode, die der Klasse DatebaseService gehören und beim Untermenü aufgerufen werden sollen:
 
-    private void addAuthor() {
+    private void addAuthor() throws LiteratureDatabaseException {
         /* was wir hier allerzuerst brauchen, sind die entsprechenden Eingabe für die AddPublication.
          * 1. Name (String)
          * 2. ID (String)
@@ -192,95 +188,47 @@ public class ConsoleUI {
 
             this.databaseNew.addAuthor(nameNew, emailNew, idNew);
 
-        } catch (LiteratureDatabaseException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        }  catch (IOException e) {
+            System.err.println("Something went wrong during enter!" + e.getMessage());
         }
-
     }
 
-    private void removeAuthor() {
+    private void removeAuthor() throws LiteratureDatabaseException {
         // ID (String )nachfragen
         try {
             String idNew = consoleHelper.askString("Now enter the Id of the author you want to delete: ");
             this.databaseNew.removeAuthorByID(idNew);
-        } catch (LiteratureDatabaseException e) {
-            System.err.println("The Id of author is not valid!");
-            System.out.println(e);
-            removeAuthor();
         } catch (IOException e) {
-            System.err.println("The given data is not valid!");
-            e.printStackTrace();
+            System.err.println("The given data is not valid!" +e.getMessage());
         }
 
     }
 
-    private void addPublication() {
-        /* was wir hier allerzuerst brauchen, sind die entsprechenden Eingabe für die AddPublication.
-         * 1. title  (String)
-         * 2. yearPublishe (int )
-         * 3. PublicationType
-         * 4. AuthorsID (List von String)
-         * 5. ID (String)
-         * */
+    private void addPublication() throws LiteratureDatabaseException {
         try {
-
-
             String titleNew = consoleHelper.askNonEmptyString("Please enter the name of the publication!");
             int publishYear = consoleHelper.askInteger("Please enter the year of publication!");
 
             List<String> newAuthorIDs = enterIDs();
 
-
-            PublicationType newPT = giveBackPublicationsType();
+            String newType = consoleHelper.askString("Now enter the type of this publication!");
+            PublicationType newPT = checkEnumKeysWithGivenValue(PublicationType.class, newType);
 
             String IdNew = consoleHelper.askNonEmptyString("Please enter the ID of the publication!");
 
             this.databaseNew.addPublication(titleNew, publishYear, newPT, newAuthorIDs, IdNew);
         }
-        // TODO: Bitte hier auch noch Fehler behandeln
         catch (IOException e) {
-            e.printStackTrace();
-        } catch (LiteratureDatabaseException e) {
-            e.printStackTrace();
+            System.err.println("The input cannot be read!" + e.getMessage());
         }
-
 
     }
 
-    private PublicationType giveBackPublicationsType() {
-        PublicationType tmpResult = null;
-        try {
-            String result = consoleHelper.askNonEmptyString("Enter a publication type").toLowerCase();
-
-            switch (result) {
-                case "article":
-                    tmpResult = PublicationType.ARTICLE;
-                    break;
-                case "techreport":
-                    tmpResult = PublicationType.TECHREPORT;
-                    break;
-                case "book":
-                    tmpResult = PublicationType.BOOK;
-                    break;
-                case "mastersthesis":
-                    tmpResult = PublicationType.MASTERSTHESIS;
-                    break;
-                case "phdthesis":
-                    tmpResult = PublicationType.PHDTHESIS;
-                    break;
-                case "inproceedings":
-                    tmpResult = PublicationType.INPROCEEDINGS;
-                    break;
-            }
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
+    private static <E extends Enum<?>> E checkEnumKeysWithGivenValue(Class<E> element, String value)  {
+        for (E key: element.getEnumConstants()) {
+            if(key.name().equalsIgnoreCase(value)) return key;
         }
-
-        return tmpResult;
+        return null;
     }
 
     // eine Methode, die Eingabe von user in Array abspeichert und in List umwandeln kann
@@ -291,24 +239,19 @@ public class ConsoleUI {
             System.out.format(" The Author-ID-List (id1, id2, ...) : ");
             String[] inputArray = (consoleHelper.askNonEmptyString("here: ")).split(", ");
             resultList = Arrays.stream(inputArray).collect(Collectors.toList());
-            // TODO: Bitte hier auch noch Fehler behandeln
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("The input cannot be read!" + e.getMessage());
         }
         return resultList;
     }
 
-    private void removePublication() {
+    private void removePublication() throws LiteratureDatabaseException {
         try {
             String idNew = consoleHelper.askString("Now enter the Id of the author you want to delete: ");
             this.databaseNew.removePublicationByID(idNew);
-        } catch (LiteratureDatabaseException e) {
-            System.err.println("The Id of publication is not valid!");
-            System.out.println(e);
-            removeAuthor();
         } catch (IOException e) {
-            System.err.println("The given data is not valid!");
-            e.printStackTrace();
+            System.err.println("The given data is not valid!" +e.getMessage() );
+
         }
 
     }
@@ -318,14 +261,16 @@ public class ConsoleUI {
         for (int i = 0; i < this.databaseNew.getAuthors().size(); i++) {
             System.out.println(this.databaseNew.getAuthors().get(i).getName());
         }
+        System.out.println("*******************************");
     }
 
     private void listPublications() {
-        System.out.println("************Publications******");
+        System.out.println("************Publications**************");
         for (Publication pubIndex : this.databaseNew.getPublications()
         ) {
             System.out.println(pubIndex.toString());
         }
+        System.out.println("*****************************************");
     }
 
     private void printXML() {
@@ -336,6 +281,7 @@ public class ConsoleUI {
             System.err.println("Something went wrong during printing!");
             // muss hier noch igendwas gemacht werden, um den Fehler richtig zu beheben
         }
+        System.out.println("*****************************************");
 
     }
 
@@ -348,19 +294,17 @@ public class ConsoleUI {
             System.err.println("Something went wrong during printing!");
             // muss hier noch igendwas gemacht werden, um den Fehler richtig zu beheben
         }
-
+        System.out.println("*****************************************");
     }
 
     private void backToMain() {
         MAINMENU = true;
     }
 
-
     // ein Method, um das Menü zu schließen
     private void closeSystem() {
         exit = true;
         System.exit(0);
     }
-
 
 }

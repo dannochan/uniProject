@@ -34,8 +34,10 @@ public class HelpfulMethodValidation {
         return (o == null);
     }
     public boolean checksValue(String text) {
-
-
-        return text != "" && text != null;
+        boolean result = false;
+        if (text.isEmpty() || text.equals(null)){
+            result = true;
+        }
+        return result;
     }
 }//
