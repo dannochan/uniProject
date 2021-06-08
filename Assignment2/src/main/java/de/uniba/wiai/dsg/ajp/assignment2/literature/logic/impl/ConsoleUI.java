@@ -188,36 +188,49 @@ public class ConsoleUI {
     }
 
     private void removeAuthor() throws IOException, LiteratureDatabaseException {
-        // ID (String )nachfragen
-
+        // ToDO: Exception fehlt
+        try {
         String idNew = consoleHelper.askString("Now enter the Id of the author you want to delete: ");
-        this.databaseNew.removeAuthorByID(idNew);
+        this.databaseNew.removeAuthorByID(idNew);}
+        { catch (LiteratureDatabaseException e) {
+            System.err.println("The Author ID is not valid, please check and try again");
+            removeAuthor();
+        }
     }
 
     private void addPublication() {
         /* was wir hier allerzuerst brauchen, sind die entsprechenden Eingabe für die AddPublication.
          * 1. title  (String)
-         * 2. yearPublishe (int )
-         * 3. PublicationType
-         * 4. AuthorsID (List von String)
+         * 2. yearPublished (int)
+         * 3. PublicationType (Type)
+         * 4. AuthorsID (List<String>)
          * 5. ID (String)
          * */
 
+        try{
+            String
+        }
     }
 
-    private void removePublication() {
-        // ID von publicationNachfragen
-
+    private void removePublication() throws LiteratureDatabaseException {
+            // ToDO: Exception fehlt, ähnlich zu removeAuthor + warum erkennt es die Methode nicht?
+        try {
+            String idNew = consoleHelper.askString("Now enter the Id of the author you want to delete: ");
+            this.databaseNew.removePublicationByID(idNew);
+        } catch (LiteratureDatabaseException e) {
+            System.err.println("The Publication ID is not valid, please check and try again");
+            removePublication();
+        }
     }
 
-    private void listAuthor() {
+    private void listAuthor(){
         System.out.println("************Authors***********");
        for (int i = 0; i<this.databaseNew.getAuthors().size(); i++){
            System.out.println(this.databaseNew.getAuthors().get(i).getName());
        }
     }
 
-    private void listPublications() {
+    private void listPublications(){
         System.out.println("************Publications******");
         for (Publication pubIndex: this.databaseNew.getPublications()
              ) {
@@ -225,7 +238,7 @@ public class ConsoleUI {
         }
     }
 
-    private void printXML() {
+    private void printXML(){
         System.out.println("**********XMl FIle printed**************");
         try {
             this.databaseNew.printXMLToConsole();
@@ -236,7 +249,7 @@ public class ConsoleUI {
 
     }
 
-    private void saveXmlFile() {
+    private void saveXmlFile(){
 
         System.out.println("**********Save XML to File**************");
         try {
