@@ -57,13 +57,15 @@ public class MainServiceImpl implements MainService {
 			// wenn die Validierung schiefgelaufen ist, was soll man hier tun?
 			// Exception für Schema schema = sf.newSchema(pathOfData.toFile());
 
-			e.printStackTrace();
+			throw new LiteratureDatabaseException("error during create schema");
+
+
 		} catch (IOException ex) {
 
 			// wenn die Validierung bei Einlesen der Datei schiefgelaufen ist, was soll man hier tun?
 			// Exception für validator.validate(new StreamSource(pathOfData.toFile()));
 
-			ex.printStackTrace();
+			throw new LiteratureDatabaseException("invalid Xml file");
 		}
 
 
@@ -83,12 +85,9 @@ public class MainServiceImpl implements MainService {
 
 		} catch (JAXBException e) {
 			// eine Exception für die Instanzierung einer Klasse
+			throw new LiteratureDatabaseException("error during unmarschalling to java object.");
 
-			e.printStackTrace();
 		}
-
-
-		return null;
 	}
 
 	@Override
