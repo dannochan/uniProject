@@ -232,8 +232,9 @@ public class ConsoleUI {
 
             List<String> newAuthorIDs = enterIDs();
 
-            String newType = consoleHelper.askString("Now enter the type of this publication!");
-            PublicationType newPT = PublicationType.valueOf(newType);
+
+            PublicationType newPT = giveBackPublicationsType();
+
             String IdNew = consoleHelper.askNonEmptyString("Please enter the ID of the publication!");
 
             this.databaseNew.addPublication(titleNew, publishYear, newPT, newAuthorIDs, IdNew);
@@ -246,6 +247,40 @@ public class ConsoleUI {
         }
 
 
+    }
+
+    private PublicationType giveBackPublicationsType() {
+        PublicationType tmpResult = null;
+        try {
+            String result = consoleHelper.askNonEmptyString("Enter a publication type").toLowerCase();
+
+            switch (result) {
+                case "article":
+                    tmpResult = PublicationType.ARTICLE;
+                    break;
+                case "techreport":
+                    tmpResult = PublicationType.TECHREPORT;
+                    break;
+                case "book":
+                    tmpResult = PublicationType.BOOK;
+                    break;
+                case "mastersthesis":
+                    tmpResult = PublicationType.MASTERSTHESIS;
+                    break;
+                case "phdthesis":
+                    tmpResult = PublicationType.PHDTHESIS;
+                    break;
+                case "inproceedings":
+                    tmpResult = PublicationType.INPROCEEDINGS;
+                    break;
+            }
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return tmpResult;
     }
 
     // eine Methode, die Eingabe von user in Array abspeichert und in List umwandeln kann
