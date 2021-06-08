@@ -187,11 +187,16 @@ public class ConsoleUI {
 
     }
 
-    private void removeAuthor() throws IOException, LiteratureDatabaseException {
+    private void removeAuthor() {
         // ID (String )nachfragen
+        try{
+            String idNew = consoleHelper.askString("Now enter the Id of the author you want to delete: ");
+            this.databaseNew.removeAuthorByID(idNew);
+        }catch (LiteratureDatabaseException e){
 
-        String idNew = consoleHelper.askString("Now enter the Id of the author you want to delete: ");
-        this.databaseNew.removeAuthorByID(idNew);
+        }
+
+
     }
 
     private void addPublication() {
@@ -202,6 +207,7 @@ public class ConsoleUI {
          * 4. AuthorsID (List von String)
          * 5. ID (String)
          * */
+
 
     }
 
