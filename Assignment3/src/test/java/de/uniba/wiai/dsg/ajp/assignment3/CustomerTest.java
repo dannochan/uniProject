@@ -1,11 +1,8 @@
-package de.uniba.wiai.dsg.ajp.assignment3;
+package java.de.uniba.wiai.dsg.ajp.assignment3;
 
 public class CustomerTest {
 
     //TODO testing of: public String statment()
-    public void Teststatement(){
-        System.out.println("Test Dummy funktioniert.");
-    }
 
     //TODO testing of: public String htmlStatement()
 
