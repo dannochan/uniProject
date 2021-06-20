@@ -9,23 +9,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class CustomerTest {
 
     private Customer customer;
-    private Movie movie1;
-    private Movie movie2;
-    private Movie movie3;
 
     @BeforeEach
     void setUp() {
         customer = new Customer("Bob");
-        movie1 = new Movie("Hangover", 0);
-        movie2 = new Movie("His Dark Material", 1);
-        movie3 = new Movie("Harry Potter", 2);
-        movie1.getCharge(3);
 
     }
 
@@ -53,33 +47,30 @@ public class CustomerTest {
     void statementShouldBeGivenOutInCorrectFormat() {
         // given
         List<Rental> testList = new LinkedList<>();
+
+        Movie movieMocke = mock(Movie.class);
+        when(movieMocke.getTitle()).thenReturn("Harry Potter");
+        when(movieMocke.getPriceCode()).thenReturn(1);
+        when(movieMocke.getCharge(3)).thenReturn(23.99);
+
         Rental rental = mock(Rental.class);
-        when(rental.getMovie()).thenReturn(movie1);
+        when(rental.getMovie()).thenReturn(movieMocke);
         when(rental.getDaysRented()).thenReturn(3);
-        when(rental.getCharge()).thenReturn(23.1);
+        when(rental.getCharge()).thenReturn(23.99);
 
         testList.add(rental);
+
         customer.setRentals(testList);
 
         //then
 
         String resultTest = customer.statement();
 
-        String test2 = testList.get(0).getMovie().getTitle();
-        String test3 = customer.getRentals().get(0).getMovie().getTitle();
-        int test4 = customer.getRentals().get(0).getDaysRented();
-        int test5 = customer.getRentals().get(0).getDaysRented();
-        double test6 = customer.getRentals().get(0).getCharge();
-
-        System.out.println(test2);
-        System.out.println(test3);
-        System.out.println(test4);
-        System.out.println(test5);
-        System.out.println(test6);
         System.out.println(resultTest);
 
         // then
-       // then(rental).should().getMovie().getTitle();
+
+
     }
 
     @Test
@@ -87,10 +78,16 @@ public class CustomerTest {
     void htmlStatementShouldBeGivenOutInCorrectForm() {
         // given
         List<Rental> testList = new LinkedList<>();
+
+        Movie movieMocke = mock(Movie.class);
+        when(movieMocke.getTitle()).thenReturn("The End of the fxxking world");
+        when(movieMocke.getPriceCode()).thenReturn(1);
+        when(movieMocke.getCharge(3)).thenReturn(23.99);
+
         Rental rental = mock(Rental.class);
-        when(rental.getMovie()).thenReturn(movie1);
+        when(rental.getMovie()).thenReturn(movieMocke);
         when(rental.getDaysRented()).thenReturn(3);
-        when(rental.getCharge()).thenReturn(23.1);
+        when(rental.getCharge()).thenReturn(23.99);
 
         testList.add(rental);
         customer.setRentals(testList);
@@ -98,21 +95,9 @@ public class CustomerTest {
         //then
 
         String resultTest = customer.htmlStatement();
-
-        String test2 = testList.get(0).getMovie().getTitle();
-        String test3 = customer.getRentals().get(0).getMovie().getTitle();
-        int test4 = customer.getRentals().get(0).getDaysRented();
-        int test5 = customer.getRentals().get(0).getDaysRented();
-        double test6 = customer.getRentals().get(0).getCharge();
-
-        System.out.println(test2);
-        System.out.println(test3);
-        System.out.println(test4);
-        System.out.println(test5);
-        System.out.println(test6);
         System.out.println(resultTest);
 
         // then
-        // then(rental).should().getMovie().getTitle();
+
     }
 }
