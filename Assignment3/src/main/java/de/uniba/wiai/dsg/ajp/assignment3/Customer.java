@@ -56,14 +56,14 @@ public class Customer {
 		for (Rental each : rentals) {
 			// show figures for each rental
 			result += each.getMovie().getTitle() + ": "
-					+ String.valueOf(each.getCharge()) + "<BR>\n";
+					+ each.getCharge() + "<BR>\n";
 		}
 
 		// add footer lines
-		result += "<P>You owe <EM>" + String.valueOf(getTotalCharge())
+		result += "<P>You owe <EM>" + getTotalCharge()
 				+ "</EM><P>\n";
 		result += "On this rental you earned <EM>"
-				+ String.valueOf(getTotalFrequentRenterPoints())
+				+ getTotalFrequentRenterPoints()
 				+ "</EM> frequent renter points<P>";
 		return result;
 	}
