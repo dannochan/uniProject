@@ -54,7 +54,7 @@ public class CustomerTest {
 
         customer.setRentals(testList);
 
-        //then
+        //when
 
         String resultTest = customer.statement();
 
@@ -84,7 +84,7 @@ public class CustomerTest {
         testList.add(rental);
         customer.setRentals(testList);
 
-        //then
+        //when
 
         String resultTest = customer.htmlStatement();
         System.out.println(resultTest);
