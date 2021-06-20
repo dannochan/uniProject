@@ -60,6 +60,7 @@ public class CustomerTest {
 
         System.out.println(resultTest);
 
+
         // then
 
     }
