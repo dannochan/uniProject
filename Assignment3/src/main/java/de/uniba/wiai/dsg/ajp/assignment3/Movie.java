@@ -2,15 +2,11 @@ package de.uniba.wiai.dsg.ajp.assignment3;
 
 public class Movie {
 
-	public static final int CHILDRENS = 2;
-	public static final int REGULAR = 0;
-	public static final int NEW_RELEASE = 1;
-
 	private Price price;
 
 	private String title;
 
-	public Movie(String title, int priceCode) {
+	public Movie(String title, Category priceCode) {
 		this.title = title;
 		this.setPriceCode(priceCode);
 	}
@@ -31,7 +27,7 @@ public class Movie {
 		return price.getPriceCode();
 	}
 
-	public void setPriceCode(int priceCode) {
+	public void setPriceCode(Category priceCode) {
 		switch (priceCode) {
 		case REGULAR:
 			price = new RegularPrice();
