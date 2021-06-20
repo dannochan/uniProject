@@ -81,7 +81,7 @@ public class CustomerTest {
         String test2 = testList.get(0).getMovie().getTitle();
         String test3 = customer.getRentals().get(0).getMovie().getTitle();
         int test4 = customer.getRentals().get(0).getDaysRented();
-        int test5 = customer.getRentals().get(0).getCharge();
+        double test5 = customer.getRentals().get(0).getCharge();
 
         System.out.println(test2);
         System.out.println(test3);
