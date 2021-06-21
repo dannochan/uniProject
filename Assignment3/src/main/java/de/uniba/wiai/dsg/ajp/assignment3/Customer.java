@@ -30,6 +30,7 @@ public class Customer {
 		this.rentals = rentals;
 	}
 
+	// String.valueOf werden löscht.
 	public String statement() {
 		String result = "Rental Record for " + getName() + "\n";
 
@@ -39,12 +40,12 @@ public class Customer {
 
 			// show figures for this rental
 			result += "\t" + each.getMovie().getTitle() + "\t"
-					+ String.valueOf(each.getCharge()) + "\n";
+					+ each.getCharge() + "\n";
 		}
 
 		// add footer lines
-		result += "Amount owed is " + String.valueOf(getTotalCharge()) + "\n";
-		result += "You earned " + String.valueOf(frequentRenterPoints)
+		result += "Amount owed is " + getTotalCharge() + "\n";
+		result += "You earned " + frequentRenterPoints
 				+ " frequent renter points";
 		return result;
 	}
@@ -55,14 +56,14 @@ public class Customer {
 		for (Rental each : rentals) {
 			// show figures for each rental
 			result += each.getMovie().getTitle() + ": "
-					+ String.valueOf(each.getCharge()) + "<BR>\n";
+					+ each.getCharge() + "<BR>\n";
 		}
 
 		// add footer lines
-		result += "<P>You owe <EM>" + String.valueOf(getTotalCharge())
+		result += "<P>You owe <EM>" + getTotalCharge()
 				+ "</EM><P>\n";
 		result += "On this rental you earned <EM>"
-				+ String.valueOf(getTotalFrequentRenterPoints())
+				+ getTotalFrequentRenterPoints()
 				+ "</EM> frequent renter points<P>";
 		return result;
 	}

@@ -32,7 +32,7 @@ public class ChildrensPriceTest {
     @Test
     public void getPriceCodeReturnsCorrectNumber() {
         Movie testMovie = Mockito.mock(Movie.class);
-        assertEquals(testMovie.CHILDRENS, childrensPrice.getPriceCode(), "Method getPriceCode does not return the correct Number");
+        assertEquals(Category.CHILDRENS.getValue(), childrensPrice.getPriceCode(), "Method getPriceCode does not return the correct Number");
     }
 
 
