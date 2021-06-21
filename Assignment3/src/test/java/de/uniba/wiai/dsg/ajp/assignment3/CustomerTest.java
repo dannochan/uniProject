@@ -3,11 +3,13 @@ package de.uniba.wiai.dsg.ajp.assignment3;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.reset;
@@ -47,9 +49,7 @@ public class CustomerTest {
         assertEquals(expectedStatementOutput(), customer.statement(), "Method statement() does not print in correct format.");
 
         // tear down
-        for (Rental each : rentalList) {
-            tearDownMocks(each);
-        }
+        tearDownMocks(rentalList);
     }
 
     @Test
@@ -67,18 +67,37 @@ public class CustomerTest {
         assertEquals(expectedHtmlStatementOutput(), customer.htmlStatement(), "Method htmlstatement() does not print in correct format.");
 
         // tear down
-        for (Rental each : rentalList) {
-            tearDownMocks(each);
-        }
+
+        tearDownMocks(rentalList);
+
     }
 
     //TODO: testing DOUBLE getTotalCharge() positive Number >0
+    @Test
+    public void getTotalChargeReturnspositiveNumber(){
+        // given
+        List<Rental> rentalList = setUpRentalList();
+        int i = 0;
+        for (Rental each : rentalList) {
+            setUpRentals(each, i);
+            i++;
+        }
+        customer.setRentals(rentalList);
+
+        // then
+        assertNotEquals(null, customer.getTotalCharge(), "Method getTotalCharge returns null.");
+        assertTrue(customer.getTotalCharge()>0,"Method getTotalCharge returns negative Number.");
+
+        // tear down
+        tearDownMocks(rentalList);
+    }
 
     //TODO: testing INT getTotalFrequentRenterPoints() positive Number >= 0
 
-    private void tearDownMocks(Rental rental) {
-        reset(rental.getMovie());
-        reset(rental);
+    private void tearDownMocks(List<Rental> rentalList) {
+        for(Rental each : rentalList){
+        reset(each.getMovie());
+        reset(each);}
     }
 
     private void setUpRentals(Rental rental, int i) {
