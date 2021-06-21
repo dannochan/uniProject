@@ -33,14 +33,7 @@ public class CustomerTest {
     @Test
     public void statementInCorrectFormat() {
         // given
-        List<Rental> rentalList = setUpRentalList();
-        int i = 0;
-        for (Rental each : rentalList) {
-            setUpRentals(each, i);
-            i++;
-        }
-        customer.setRentals(rentalList);
-
+        setUpCustomer();
         // when
         //TODO: unnötige String Variable deshalb kein when-Teil nötig???
         //String expected = expectedStatementOutput();
@@ -49,33 +42,46 @@ public class CustomerTest {
         assertEquals(expectedStatementOutput(), customer.statement(), "Method statement() does not print in correct format.");
 
         // tear down
-        tearDownMocks(rentalList);
+        tearDownMocks();
     }
 
     @Test
     public void htmlStatementInCorrectForm() {
         // given
-        List<Rental> rentalList = setUpRentalList();
-        int i = 0;
-        for (Rental each : rentalList) {
-            setUpRentals(each, i);
-            i++;
-        }
-        customer.setRentals(rentalList);
+        setUpCustomer();
 
         //then
         assertEquals(expectedHtmlStatementOutput(), customer.htmlStatement(), "Method htmlstatement() does not print in correct format.");
 
         // tear down
 
-        tearDownMocks(rentalList);
+        tearDownMocks();
 
     }
 
-    //TODO: testing DOUBLE getTotalCharge() positive Number >0
     @Test
-    public void getTotalChargeReturnspositiveNumber(){
+    public void getTotalChargeReturnspPositiveNumber() {
         // given
+        setUpCustomer();
+
+        // then
+        assertNotEquals(null, customer.getTotalCharge(), "Method getTotalCharge returns null.");
+        assertTrue(customer.getTotalCharge() > 0, "Method getTotalCharge returns negative Number.");
+
+        // tear down
+        tearDownMocks();
+    }
+
+    //TODO: testing INT getTotalFrequentRenterPoints() positive Number >= 0
+    @Test
+    public void getTotalFrequentRenterPointsReturnsPositiveNumber() {
+        setUpCustomer();
+
+        assertTrue(customer.getTotalFrequentRenterPoints() >= 0, "Method getFrequentRenterPoints returns negative Number.");
+        tearDownMocks();
+    }
+
+    private void setUpCustomer() {
         List<Rental> rentalList = setUpRentalList();
         int i = 0;
         for (Rental each : rentalList) {
@@ -84,20 +90,13 @@ public class CustomerTest {
         }
         customer.setRentals(rentalList);
 
-        // then
-        assertNotEquals(null, customer.getTotalCharge(), "Method getTotalCharge returns null.");
-        assertTrue(customer.getTotalCharge()>0,"Method getTotalCharge returns negative Number.");
-
-        // tear down
-        tearDownMocks(rentalList);
     }
 
-    //TODO: testing INT getTotalFrequentRenterPoints() positive Number >= 0
-
-    private void tearDownMocks(List<Rental> rentalList) {
-        for(Rental each : rentalList){
-        reset(each.getMovie());
-        reset(each);}
+    private void tearDownMocks() {
+        for (Rental each : customer.getRentals()) {
+            reset(each.getMovie());
+            reset(each);
+        }
     }
 
     private void setUpRentals(Rental rental, int i) {
