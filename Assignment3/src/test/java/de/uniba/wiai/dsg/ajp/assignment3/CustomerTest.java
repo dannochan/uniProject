@@ -72,6 +72,10 @@ public class CustomerTest {
         }
     }
 
+    //TODO: testing DOUBLE getTotalCharge() positive Number >0
+
+    //TODO: testing INT getTotalFrequentRenterPoints() positive Number >= 0
+
     private void tearDownMocks(Rental rental) {
         reset(rental.getMovie());
         reset(rental);
