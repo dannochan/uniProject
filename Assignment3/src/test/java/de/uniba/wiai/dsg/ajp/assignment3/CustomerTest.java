@@ -13,12 +13,14 @@ import static org.mockito.BDDMockito.given;
 public class CustomerTest {
 
     private Customer customer;
+    private List<Rental> rentalList;
+    private int i;
 
     @BeforeEach
     void setUp() {
         customer = new Customer("Bob");
-        List<Rental> rentalList = setUpRentalList();
-        int i = 0;
+        rentalList = setUpRentalList();
+        i = 0;
         for (Rental rentals : rentalList) {
             setUpRentals(rentals, i);
             i++;
