@@ -1,5 +1,6 @@
 package de.uniba.wiai.dsg.ajp.assignment3;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -9,6 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.reset;
 
 public class CustomerTest {
 
@@ -16,13 +18,18 @@ public class CustomerTest {
 
 
     @BeforeEach
-    void setUp() {
+    private void setUp() {
         customer = new Customer("Bob");
+    }
+
+    @AfterEach
+    private void tearDown() {
+        customer = null;
     }
 
 
     @Test
-    void statementInCorrectFormat() {
+    public void statementInCorrectFormat() {
         // given
         List<Rental> rentalList = setUpRentalList();
         int i = 0;
@@ -32,17 +39,21 @@ public class CustomerTest {
         }
         customer.setRentals(rentalList);
 
-        //when
-        //TODO: unnötige String Variable deshalb kein when-Teil
+        // when
+        //TODO: unnötige String Variable deshalb kein when-Teil nötig???
         //String expected = expectedStatementOutput();
 
-        //then
+        // then
         assertEquals(expectedStatementOutput(), customer.statement(), "Method statement() does not print in correct format.");
 
+        // tear down
+        for (Rental rentals : rentalList) {
+            tearDownMocks(rentals);
+        }
     }
 
     @Test
-    void htmlStatementInCorrectForm() {
+    public void htmlStatementInCorrectForm() {
         // given
         List<Rental> rentalList = setUpRentalList();
         int i = 0;
@@ -55,6 +66,15 @@ public class CustomerTest {
         //then
         assertEquals(expectedHtmlStatementOutput(), customer.htmlStatement(), "Method htmlstatement() does not print in correct format.");
 
+        // tear down
+        for (Rental rentals : rentalList) {
+            tearDownMocks(rentals);
+        }
+    }
+
+    private void tearDownMocks(Rental rental) {
+        reset(rental.getMovie());
+        reset(rental);
     }
 
     private void setUpRentals(Rental rental, int i) {
