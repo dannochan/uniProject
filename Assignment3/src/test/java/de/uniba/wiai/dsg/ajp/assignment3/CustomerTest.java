@@ -129,6 +129,7 @@ public class CustomerTest {
     }
 
     private String expectedStatementOutput() {
+        //TODO: Dateien anlegen und einlesen zum testen
         String resultStatement = "Rental Record for Bob" + "\n";
         resultStatement += "\t" + "Harry Potter" + "\t" + "4.0" + "\n";
         resultStatement += "\t" + "Feuerzangenbowle" + "\t" + "5.0" + "\n";
@@ -138,6 +139,8 @@ public class CustomerTest {
     }
 
     private String expectedHtmlStatementOutput() {
+        //TODO: Datein anlegen und einlesen
+
         String resultHtmlStatement = "<H1>Rentals for <EM>Bob" + "</EM></H1><P>\n";
         resultHtmlStatement += "Harry Potter: " + "4.0" + "<BR>\n";
         resultHtmlStatement += "Feuerzangenbowle: " + "5.0" + "<BR>\n";
