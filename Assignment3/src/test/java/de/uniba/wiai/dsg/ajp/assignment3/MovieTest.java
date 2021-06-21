@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class MovieTest {
 
     private Movie movie;
+<<<<<<< HEAD
     @ParameterizedTest
     @MethodSource("differentPictureQuality")
     public void getChargereturncorrectvalue(PictureQuality picturequality, double expected) {
@@ -50,6 +51,8 @@ public class MovieTest {
 
     }
 
+=======
+>>>>>>> 05d49903465906116b0fd43ef29061195098aecb
 
 
 
