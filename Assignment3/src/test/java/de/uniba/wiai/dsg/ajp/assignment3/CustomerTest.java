@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.reset;
@@ -31,14 +31,7 @@ public class CustomerTest {
     @Test
     public void statementInCorrectFormat() {
         // given
-        List<Rental> rentalList = setUpRentalList();
-        int i = 0;
-        for (Rental rentals : rentalList) {
-            setUpRentals(rentals, i);
-            i++;
-        }
-        customer.setRentals(rentalList);
-
+        setUpCustomer();
         // when
         //TODO: unnötige String Variable deshalb kein when-Teil nötig???
         //String expected = expectedStatementOutput();
@@ -47,37 +40,63 @@ public class CustomerTest {
         assertEquals(expectedStatementOutput(), customer.statement(), "Method statement() does not print in correct format.");
 
         // tear down
-        for (Rental rentals : rentalList) {
-            tearDownMocks(rentals);
-        }
+        tearDownMocks();
     }
 
     @Test
     public void htmlStatementInCorrectForm() {
         // given
-        List<Rental> rentalList = setUpRentalList();
-        int i = 0;
-        for (Rental rentals : rentalList) {
-            setUpRentals(rentals, i);
-            i++;
-        }
-        customer.setRentals(rentalList);
+        setUpCustomer();
 
         //then
         assertEquals(expectedHtmlStatementOutput(), customer.htmlStatement(), "Method htmlstatement() does not print in correct format.");
 
         // tear down
-        for (Rental rentals : rentalList) {
-            tearDownMocks(rentals);
+
+        tearDownMocks();
+
+    }
+
+    @Test
+    public void getTotalChargeReturnspPositiveNumber() {
+        // given
+        setUpCustomer();
+
+        // then
+        assertNotEquals(null, customer.getTotalCharge(), "Method getTotalCharge returns null.");
+        assertTrue(customer.getTotalCharge() > 0, "Method getTotalCharge returns negative Number.");
+
+        // tear down
+        tearDownMocks();
+    }
+
+    @Test
+    public void getTotalFrequentRenterPointsReturnsPositiveNumber() {
+        setUpCustomer();
+
+        assertTrue(customer.getTotalFrequentRenterPoints() >= 0, "Method getFrequentRenterPoints returns negative Number.");
+        tearDownMocks();
+    }
+
+    private void setUpCustomer() {
+        List<Rental> rentalList = setUpRentalList();
+        int i = 0;
+        for (Rental each : rentalList) {
+            setUpRentalsAndMovies(each, i);
+            i++;
+        }
+        customer.setRentals(rentalList);
+
+    }
+
+    private void tearDownMocks() {
+        for (Rental each : customer.getRentals()) {
+            reset(each.getMovie());
+            reset(each);
         }
     }
 
-    private void tearDownMocks(Rental rental) {
-        reset(rental.getMovie());
-        reset(rental);
-    }
-
-    private void setUpRentals(Rental rental, int i) {
+    private void setUpRentalsAndMovies(Rental rental, int i) {
 
         given(rental.getFrequentRenterPoints()).willReturn(1);
 
