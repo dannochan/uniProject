@@ -4,10 +4,14 @@ package de.uniba.wiai.dsg.ajp.assignment3;
  * give the  films that can be rented by a Customer with different prices
  */
 public class Movie {
+    private PictureQuality pictureQuality;
 
     private Price price;
 
     private String title;
+    public Movie(){
+
+    }
 
     public Movie(String title, int priceCode) {
         this.title = title;
@@ -25,6 +29,17 @@ public class Movie {
         }
 
         this.title = title;
+    }
+
+    public PictureQuality getPictureQuality() {
+        return pictureQuality;
+    }
+
+    public void setPictureQuality(PictureQuality pictureQuality) {
+        if(pictureQuality ==null){
+            throw new IllegalArgumentException("pictureQuality must be null.");
+        }
+        this.pictureQuality = pictureQuality;
     }
 
     /**
@@ -49,9 +64,12 @@ public class Movie {
         if (daysRented <= 0) {
             throw new IllegalArgumentException("daysRented must not be negativ or 0");
         }
-
-
-        return price.getCharge(daysRented);
+        // pictureQuality
+        double result = price.getCharge(daysRented);
+            if (pictureQuality == PictureQuality.Resolution_4k) {
+                 result+= 2 ;
+        }
+            return result;
     }
 
     public int getPriceCode() {
