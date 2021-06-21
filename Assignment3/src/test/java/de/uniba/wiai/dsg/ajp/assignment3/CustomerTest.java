@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Test;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.when;
 
 public class CustomerTest {
 
@@ -21,53 +23,61 @@ public class CustomerTest {
 
 
     @Test
-    void statementShouldBeGivenOutInCorrectFormat() {
+    void statementInCorrectFormat() {
         // given
-        List<Rental> testList = new LinkedList<>();
 
-        Movie movieMocke = mock(Movie.class);
-        when(movieMocke.getTitle()).thenReturn("Harry Potter");
-        when(movieMocke.getPriceCode()).thenReturn(1);
-        when(movieMocke.getCharge(3)).thenReturn(23.99);
-
-
-        Rental rental = mock(Rental.class);
-        when(rental.getMovie()).thenReturn(movieMocke);
-        when(rental.getDaysRented()).thenReturn(3);
-        when(rental.getCharge()).thenReturn(23.99);
-        when(rental.getFrequentRenterPoints()).thenReturn(1);
-
-        Movie movieMocked1 = mock(Movie.class);
-        when(movieMocked1.getTitle()).thenReturn("Harry Potter 2");
-        when(movieMocked1.getPriceCode()).thenReturn(1);
-        when(movieMocked1.getCharge(3)).thenReturn(23.99);
-
-        Rental rental1 = mock(Rental.class);
-        when(rental1.getMovie()).thenReturn(movieMocked1);
-        when(rental1.getDaysRented()).thenReturn(3);
-        when(rental1.getCharge()).thenReturn(23.99);
-        when(rental1.getFrequentRenterPoints()).thenReturn(1);
-
-        testList.add(rental);
-        testList.add(rental1);
-
-        customer.setRentals(testList);
-
-        //when
-
-        String resultTest = customer.statement();
-
-        System.out.println(resultTest);
-
+        List<Rental> rentalList = setUpRentalList();
+        int i = 0;
+        for (Rental rentals : rentalList) {
+            setUpRentals(rentals, i);
+            i++;
+        }
+        customer.setRentals(rentalList);
 
         // then
+        assertEquals(expectedStatementOutput(), customer.statement(), "Schrott is schrott");
 
-        //zuerst assertEquals()..
+    }
 
-        // Verifizierung von Mockito
-        verify(rental, times(3)).getMovie();
+    private void setUpRentals(Rental rental, int i) {
+
+        given(rental.getFrequentRenterPoints()).willReturn(1);
+
+        Movie movieMock = mock(Movie.class);
+        given(rental.getMovie()).willReturn(movieMock);
+        switch (i) {
+            case 0:
+                given(movieMock.getTitle()).willReturn("Harry Potter");
+                given(rental.getCharge()).willReturn(4.0);
+                break;
+            case 1:
+                given(movieMock.getTitle()).willReturn("Feuerzangenbowle");
+                given(rental.getCharge()).willReturn(5.0);
+                break;
+            default:
+                given(movieMock.getTitle()).willReturn("Something");
+                given(rental.getCharge()).willReturn(1.0);
+                break;
+        }
+    }
 
 
+    private List<Rental> setUpRentalList() {
+        List<Rental> rentalList = new LinkedList<>();
+        Rental rentalOne = mock(Rental.class);
+        Rental rentalTwo = mock(Rental.class);
+        rentalList.add(rentalOne);
+        rentalList.add(rentalTwo);
+        return rentalList;
+    }
+
+    private String expectedStatementOutput() {
+        String resultStatement = "Rental Record for Bob" + "\n";
+        resultStatement += "\t" + "Harry Potter" + "\t" + "4.0" + "\n";
+        resultStatement += "\t" + "Feuerzangenbowle" + "\t" + "5.0" + "\n";
+        resultStatement += "Amount owed is 9.0" + "\n";
+        resultStatement += "You earned 2 frequent renter points";
+        return resultStatement;
     }
 
     @Test
