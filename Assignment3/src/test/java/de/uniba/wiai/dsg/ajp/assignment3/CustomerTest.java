@@ -18,14 +18,6 @@ public class CustomerTest {
     @BeforeEach
     void setUp() {
         customer = new Customer("Bob");
-
-    }
-
-
-    @Test
-    void statementInCorrectFormat() {
-        // given
-
         List<Rental> rentalList = setUpRentalList();
         int i = 0;
         for (Rental rentals : rentalList) {
@@ -34,8 +26,20 @@ public class CustomerTest {
         }
         customer.setRentals(rentalList);
 
-        // then
-        assertEquals(expectedStatementOutput(), customer.statement(), "Schrott is schrott");
+    }
+
+
+    @Test
+    void statementInCorrectFormat() {
+
+        assertEquals(expectedStatementOutput(), customer.statement(), "Method statement() does not print in correct format.");
+
+    }
+
+    @Test
+    void htmlStatementInCorrectForm() {
+
+        assertEquals(expectedHtmlStatementOutput(), customer.htmlStatement(), "Method htmlstatement() does not print in correct format.");
 
     }
 
@@ -80,31 +84,13 @@ public class CustomerTest {
         return resultStatement;
     }
 
-    @Test
-
-    void htmlStatementShouldBeGivenOutInCorrectForm() {
-        // given
-        List<Rental> testList = new LinkedList<>();
-
-        Movie movieMocke = mock(Movie.class);
-        when(movieMocke.getTitle()).thenReturn("The End of the fxxking world");
-        when(movieMocke.getPriceCode()).thenReturn(1);
-        when(movieMocke.getCharge(3)).thenReturn(23.99);
-
-        Rental rental = mock(Rental.class);
-        when(rental.getMovie()).thenReturn(movieMocke);
-        when(rental.getDaysRented()).thenReturn(3);
-        when(rental.getCharge()).thenReturn(23.99);
-
-        testList.add(rental);
-        customer.setRentals(testList);
-
-        //when
-
-        String resultTest = customer.htmlStatement();
-        System.out.println(resultTest);
-
-        // then
-
+    private String expectedHtmlStatementOutput() {
+        String resultHtmlStatement = "<H1>Rentals for <EM>Bob" + "</EM></H1><P>\n";
+        resultHtmlStatement += "Harry Potter: " + "4.0" + "<BR>\n";
+        resultHtmlStatement += "Feuerzangenbowle: " + "5.0" + "<BR>\n";
+        resultHtmlStatement += "<P>You owe <EM>9.0" + "</EM><P>\n";
+        resultHtmlStatement += "On this rental you earned <EM>2" + "</EM> frequent renter points<P>";
+        return resultHtmlStatement;
     }
+
 }
