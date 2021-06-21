@@ -13,33 +13,46 @@ import static org.mockito.BDDMockito.given;
 public class CustomerTest {
 
     private Customer customer;
-    private List<Rental> rentalList;
-    private int i;
+
 
     @BeforeEach
     void setUp() {
         customer = new Customer("Bob");
-        rentalList = setUpRentalList();
-        i = 0;
+    }
+
+
+    @Test
+    void statementInCorrectFormat() {
+        // given
+        List<Rental> rentalList = setUpRentalList();
+        int i = 0;
         for (Rental rentals : rentalList) {
             setUpRentals(rentals, i);
             i++;
         }
         customer.setRentals(rentalList);
 
-    }
+        //when
+        //TODO: unnötige String Variable deshalb kein when-Teil
+        //String expected = expectedStatementOutput();
 
-
-    @Test
-    void statementInCorrectFormat() {
-
+        //then
         assertEquals(expectedStatementOutput(), customer.statement(), "Method statement() does not print in correct format.");
 
     }
 
     @Test
     void htmlStatementInCorrectForm() {
+        // given
+        List<Rental> rentalList = setUpRentalList();
+        int i = 0;
+        for (Rental rentals : rentalList) {
+            setUpRentals(rentals, i);
+            i++;
+        }
+        customer.setRentals(rentalList);
 
+        //then
         assertEquals(expectedHtmlStatementOutput(), customer.htmlStatement(), "Method htmlstatement() does not print in correct format.");
 
     }
