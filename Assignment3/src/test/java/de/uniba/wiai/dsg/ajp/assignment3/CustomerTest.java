@@ -6,9 +6,8 @@ import org.junit.jupiter.api.Test;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.*;
 
 public class CustomerTest {
 
@@ -62,6 +61,12 @@ public class CustomerTest {
 
 
         // then
+
+        //zuerst assertEquals()..
+
+        // Verifizierung von Mockito
+        verify(rental, times(3)).getMovie();
+
 
     }
 
