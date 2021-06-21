@@ -69,8 +69,7 @@ public class CustomerTest {
         // tear down
         tearDownMocks();
     }
-
-    //TODO: testing INT getTotalFrequentRenterPoints() positive Number >= 0
+    
     @Test
     public void getTotalFrequentRenterPointsReturnsPositiveNumber() {
         setUpCustomer();
