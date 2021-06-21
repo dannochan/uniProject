@@ -9,13 +9,24 @@ public class Movie {
 
     private String title;
 
-    public Movie(String title, int priceCode) {
+    private VideoQuality quality;
+
+    public Movie(String title, int priceCode, String quality) {
         this.title = title;
         this.setPriceCode(priceCode);
+        this.quality = getQualityType(quality);
     }
 
     public String getTitle() {
-        return title;
+        return title + " (" + quality.getValue() + ")";
+    }
+
+    public void setQualilty(String qualiltyValue) {
+        this.quality = getQualityType(qualiltyValue);
+    }
+
+    public String getQuality() {
+        return this.quality.getValue();
     }
 
     public void setTitle(String title) {
@@ -49,7 +60,9 @@ public class Movie {
         if (daysRented <= 0) {
             throw new IllegalArgumentException("daysRented must not be negativ or 0");
         }
-
+        if (this.quality == VideoQuality.QUALITY_4K) {
+            return price.getCharge(daysRented) + 2.0;
+        }
 
         return price.getCharge(daysRented);
     }
@@ -94,8 +107,18 @@ public class Movie {
             throw new IllegalArgumentException("daysRented must not be negativ or 0");
         }
 
-
         return price.getFrequentRenterPoints(daysRented);
     }
 
+    private VideoQuality getQualityType(String typeInput) {
+        VideoQuality tmp = VideoQuality.QUALITY_4K;
+        if (typeInput == "hd" || typeInput == "Hd" ||
+                typeInput == "hD" || typeInput == "HD") {
+            tmp = VideoQuality.QUALITY_HD;
+        }
+        return tmp;
+
+    }
+
 }
+
