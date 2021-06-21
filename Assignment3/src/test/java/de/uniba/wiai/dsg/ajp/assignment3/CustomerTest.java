@@ -24,23 +24,32 @@ public class CustomerTest {
 
     @AfterEach
     private void tearDown() {
+        tearDownMocks();
         customer = null;
+
     }
 
 
     @Test
     public void statementInCorrectFormat() {
-        // given
+        // given -> in given werden Objekte mit Werte angelegt. die wir zum Testen brauchen
         setUpCustomer();
+
         // when
+
         //TODO: unnötige String Variable deshalb kein when-Teil nötig???
-        //String expected = expectedStatementOutput();
+        //mit der String Variable wird der Code von statement ausgeführt, und die Rückgabewerten
+        //werden für Verifikation gebraucht.
+        String testStatement = customer.statement();
 
         // then
-        assertEquals(expectedStatementOutput(), customer.statement(), "Method statement() does not print in correct format.");
+        // Verifikation -> dabei geht es darum ob das Ergebnis korrekt ausgeben wird
+        // darüber hinaus, die Verhältnisse von SUT müssen noch überprüft werden
 
-        // tear down
-        tearDownMocks();
+        assertEquals(expectedStatementOutput(), testStatement, "Method statement() does not print in correct format.");
+
+
+
     }
 
     @Test
@@ -48,12 +57,11 @@ public class CustomerTest {
         // given
         setUpCustomer();
 
+        // when
+        String outputTest = customer.htmlStatement();
+
         //then
-        assertEquals(expectedHtmlStatementOutput(), customer.htmlStatement(), "Method htmlstatement() does not print in correct format.");
-
-        // tear down
-
-        tearDownMocks();
+        assertEquals(expectedHtmlStatementOutput(), outputTest, "Method htmlstatement() does not print in correct format.");
 
     }
 
@@ -62,20 +70,27 @@ public class CustomerTest {
         // given
         setUpCustomer();
 
-        // then
-        assertNotEquals(null, customer.getTotalCharge(), "Method getTotalCharge returns null.");
-        assertTrue(customer.getTotalCharge() > 0, "Method getTotalCharge returns negative Number.");
+        // when
+        double chargeTest = customer.getTotalCharge();
 
-        // tear down
-        tearDownMocks();
+        // then
+        assertNotEquals(null, chargeTest, "Method getTotalCharge returns null.");
+        assertTrue(chargeTest > 0, "Method getTotalCharge returns negative Number.");
+
     }
 
     @Test
     public void getTotalFrequentRenterPointsReturnsPositiveNumber() {
+
+        // given -> eine Mockobjekt erzeugen
         setUpCustomer();
 
-        assertTrue(customer.getTotalFrequentRenterPoints() >= 0, "Method getFrequentRenterPoints returns negative Number.");
-        tearDownMocks();
+        // when
+        double pointTest = customer.getTotalFrequentRenterPoints();
+
+        // then
+        assertTrue(pointTest >= 0, "Method getFrequentRenterPoints returns negative Number.");
+
     }
 
     private void setUpCustomer() {
