@@ -3,8 +3,6 @@ package de.uniba.wiai.dsg.ajp.assignment3;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -85,7 +83,7 @@ public class CustomerTest {
         List<Rental> rentalList = setUpRentalList();
         int i = 0;
         for (Rental each : rentalList) {
-            setUpRentals(each, i);
+            setUpRentalsAndMovies(each, i);
             i++;
         }
         customer.setRentals(rentalList);
@@ -99,7 +97,7 @@ public class CustomerTest {
         }
     }
 
-    private void setUpRentals(Rental rental, int i) {
+    private void setUpRentalsAndMovies(Rental rental, int i) {
 
         given(rental.getFrequentRenterPoints()).willReturn(1);
 
