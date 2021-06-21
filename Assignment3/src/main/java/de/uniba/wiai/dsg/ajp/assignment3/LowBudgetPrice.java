@@ -4,20 +4,19 @@ public class LowBudgetPrice extends Price {
     @Override
     double getCharge(int daysRented) {
 
-        if (daysRented<=0){
+        if (daysRented <= 0) {
             throw new IllegalArgumentException("The given number ist not valid! Please try again!");
         }
 
-        double result=1.5;
-        if(daysRented==1){
+        double result = 1.5;
+        if (daysRented == 1) {
             result = 1;
-        }
-        else if (daysRented==2){
+        } else if (daysRented == 2) {
             result = 1.5;
-        }else {
+        } else {
             int index = 3;
-            while (index<=daysRented){
-                result +=0.5;
+            while (index <= daysRented) {
+                result += 0.5;
             }
         }
         return result;
