@@ -33,8 +33,8 @@ public class CustomerTest {
         // given
         List<Rental> rentalList = setUpRentalList();
         int i = 0;
-        for (Rental rentals : rentalList) {
-            setUpRentals(rentals, i);
+        for (Rental each : rentalList) {
+            setUpRentals(each, i);
             i++;
         }
         customer.setRentals(rentalList);
@@ -47,8 +47,8 @@ public class CustomerTest {
         assertEquals(expectedStatementOutput(), customer.statement(), "Method statement() does not print in correct format.");
 
         // tear down
-        for (Rental rentals : rentalList) {
-            tearDownMocks(rentals);
+        for (Rental each : rentalList) {
+            tearDownMocks(each);
         }
     }
 
@@ -57,8 +57,8 @@ public class CustomerTest {
         // given
         List<Rental> rentalList = setUpRentalList();
         int i = 0;
-        for (Rental rentals : rentalList) {
-            setUpRentals(rentals, i);
+        for (Rental each : rentalList) {
+            setUpRentals(each, i);
             i++;
         }
         customer.setRentals(rentalList);
@@ -67,8 +67,8 @@ public class CustomerTest {
         assertEquals(expectedHtmlStatementOutput(), customer.htmlStatement(), "Method htmlstatement() does not print in correct format.");
 
         // tear down
-        for (Rental rentals : rentalList) {
-            tearDownMocks(rentals);
+        for (Rental each : rentalList) {
+            tearDownMocks(each);
         }
     }
 
