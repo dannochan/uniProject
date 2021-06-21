@@ -69,7 +69,7 @@ public class CustomerTest {
         // tear down
         tearDownMocks();
     }
-    
+
     @Test
     public void getTotalFrequentRenterPointsReturnsPositiveNumber() {
         setUpCustomer();
