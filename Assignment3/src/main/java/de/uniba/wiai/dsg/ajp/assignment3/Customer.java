@@ -178,5 +178,13 @@ public class Customer {
 		return result;
 	}
 
+	double getTotalDiscountPoint(){
+		double result = 0;
+		for (Rental each: rentals){
+			each.getDiscountOfRental();
+		}
+		return result; 
+	}
+
 }
 //
