@@ -1,49 +1,102 @@
 package de.uniba.wiai.dsg.ajp.assignment3;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.reset;
 
 public class CustomerTest {
 
     private Customer customer;
 
+
     @BeforeEach
-    void setUp() {
+    private void setUp() {
         customer = new Customer("Bob");
+    }
+
+    @AfterEach
+    private void tearDown() {
+        customer = null;
+    }
+
+
+    @Test
+    public void statementInCorrectFormat() {
+        // given
+        setUpCustomer();
+        // when
+        //TODO: unnötige String Variable deshalb kein when-Teil nötig???
+        //String expected = expectedStatementOutput();
+
+        // then
+        assertEquals(expectedStatementOutput(), customer.statement(), "Method statement() does not print in correct format.");
+
+        // tear down
+        tearDownMocks();
+    }
+
+    @Test
+    public void htmlStatementInCorrectForm() {
+        // given
+        setUpCustomer();
+
+        //then
+        assertEquals(expectedHtmlStatementOutput(), customer.htmlStatement(), "Method htmlstatement() does not print in correct format.");
+
+        // tear down
+
+        tearDownMocks();
+
+    }
+
+    @Test
+    public void getTotalChargeReturnspPositiveNumber() {
+        // given
+        setUpCustomer();
+
+        // then
+        assertNotEquals(null, customer.getTotalCharge(), "Method getTotalCharge returns null.");
+        assertTrue(customer.getTotalCharge() > 0, "Method getTotalCharge returns negative Number.");
+
+        // tear down
+        tearDownMocks();
+    }
+
+    @Test
+    public void getTotalFrequentRenterPointsReturnsPositiveNumber() {
+        setUpCustomer();
+
+        assertTrue(customer.getTotalFrequentRenterPoints() >= 0, "Method getFrequentRenterPoints returns negative Number.");
+        tearDownMocks();
+    }
+
+    private void setUpCustomer() {
         List<Rental> rentalList = setUpRentalList();
         int i = 0;
-        for (Rental rentals : rentalList) {
-            setUpRentals(rentals, i);
+        for (Rental each : rentalList) {
+            setUpRentalsAndMovies(each, i);
             i++;
         }
         customer.setRentals(rentalList);
 
     }
 
-
-    @Test
-    void statementInCorrectFormat() {
-
-        assertEquals(expectedStatementOutput(), customer.statement(), "Method statement() does not print in correct format.");
-
+    private void tearDownMocks() {
+        for (Rental each : customer.getRentals()) {
+            reset(each.getMovie());
+            reset(each);
+        }
     }
 
-    @Test
-    void htmlStatementInCorrectForm() {
-
-        assertEquals(expectedHtmlStatementOutput(), customer.htmlStatement(), "Method htmlstatement() does not print in correct format.");
-
-    }
-
-    private void setUpRentals(Rental rental, int i) {
+    private void setUpRentalsAndMovies(Rental rental, int i) {
 
         given(rental.getFrequentRenterPoints()).willReturn(1);
 
@@ -76,6 +129,7 @@ public class CustomerTest {
     }
 
     private String expectedStatementOutput() {
+        //TODO: Dateien anlegen und einlesen zum testen
         String resultStatement = "Rental Record for Bob" + "\n";
         resultStatement += "\t" + "Harry Potter" + "\t" + "4.0" + "\n";
         resultStatement += "\t" + "Feuerzangenbowle" + "\t" + "5.0" + "\n";
@@ -85,6 +139,8 @@ public class CustomerTest {
     }
 
     private String expectedHtmlStatementOutput() {
+        //TODO: Datein anlegen und einlesen
+
         String resultHtmlStatement = "<H1>Rentals for <EM>Bob" + "</EM></H1><P>\n";
         resultHtmlStatement += "Harry Potter: " + "4.0" + "<BR>\n";
         resultHtmlStatement += "Feuerzangenbowle: " + "5.0" + "<BR>\n";

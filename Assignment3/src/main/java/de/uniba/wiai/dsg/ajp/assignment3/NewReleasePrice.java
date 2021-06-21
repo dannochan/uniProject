@@ -4,11 +4,18 @@ public class NewReleasePrice extends Price{
 
 	@Override
 	double getCharge(int daysRented) {
+		if (daysRented <= 0){
+			throw new IllegalArgumentException("daysRented must not be negativ or 0");
+		}
+
 		return daysRented * 3;
 	}
 
 	@Override
 	int getFrequentRenterPoints(int daysRented) {
+		if (daysRented <= 0){
+			throw new IllegalArgumentException("daysRented must not be negativ or 0");
+		}
 		if(daysRented > 1) {
 			return 2;
 		} else {
