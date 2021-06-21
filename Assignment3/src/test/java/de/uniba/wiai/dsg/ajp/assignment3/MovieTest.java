@@ -1,27 +1,59 @@
 package de.uniba.wiai.dsg.ajp.assignment3;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MovieTest {
 
     private Movie movie;
-    private Movie movie1;
+<<<<<<< HEAD
+    @ParameterizedTest
+    @MethodSource("differentPictureQuality")
+    public void getChargereturncorrectvalue(PictureQuality picturequality, double expected) {
+        //given
 
-    @BeforeEach
-    public void setUp(){
-        movie=new Movie("His dark Material", 1, "hd");
-       movie1=new Movie("His dark Material", 1, "4k");
+        Movie movie = new Movie("Titan",3, picturequality);
+
+        // when
+        double result = movie.getCharge(2);
+
+        // then
+        assertEquals(result, expected);
     }
 
-    @Test
-    public void setMovieShouldGiveOutRightQuality(){
+    public static List<Arguments> differentPictureQuality() {
 
-        System.out.println(movie.getTitle());
-        System.out.println(movie.getCharge(3));
-        System.out.println(movie1.getTitle());
-        System.out.println(movie1.getCharge(3));
+        return List.of(Arguments.of(PictureQuality.Resolution_HD, 2),
+                Arguments.of(PictureQuality.Resolution_4k, 4));
+
 
     }
+
+    @ParameterizedTest
+    @ValueSource(ints = {-1, 0})
+    public void getChargeThrowExceptionnonvalideinput(int daysRented) {
+        //given
+        movie = new Movie();
+
+        // when and then
+        assertThrows(IllegalArgumentException.class, () -> {
+            movie.getCharge(daysRented);
+        });
+
+
+    }
+
+=======
+>>>>>>> 05d49903465906116b0fd43ef29061195098aecb
+
+
 
 }
