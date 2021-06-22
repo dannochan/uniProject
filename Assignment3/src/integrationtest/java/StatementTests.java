@@ -16,7 +16,7 @@ public class StatementTests {
     private Movie movie;
 
     @BeforeEach
-    private void setUp(){
+    private void setUp() {
         customer = new Customer("Bob");
         List<Rental> rentalList = new LinkedList<>();
         rental = new Rental();
@@ -30,8 +30,9 @@ public class StatementTests {
 
         customer.setRentals(rentalList);
     }
+
     @AfterEach
-    private void tearDown(){
+    private void tearDown() {
         customer = null;
         rental = null;
         movie = null;
@@ -39,16 +40,16 @@ public class StatementTests {
 
 
     @Test
-    public void statementWorksCorrectly(){
+    public void statementWorksCorrectly() {
         assertEquals(expectedOutput(), customer.statement(), "Methode statement prints correctly");
     }
 
     @Test
-    public void htmlStatementWorksCorrectly(){
+    public void htmlStatementWorksCorrectly() {
         assertEquals(expectedHtmlOutput(), customer.htmlStatement(), "Methode statement prints correctly");
     }
 
-    private String expectedOutput(){
+    private String expectedOutput() {
         String resultStatement = "Rental Record for Bob" + "\n";
         resultStatement += "\t" + "Sit (4K)" + "\t" + "3.5" + "\t" + "20" + "\t" + "2.8" + "\n";
         resultStatement += "Amount owed is 2.8" + "\n";
