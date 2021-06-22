@@ -4,6 +4,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -130,6 +136,27 @@ public class CustomerTest {
 
     private String expectedStatementOutput() {
         //TODO: Dateien anlegen und einlesen zum testen
+
+/*        String resultStatement = "";
+        try {
+            BufferedReader reader = Files.newBufferedReader(Paths.get("src/test/expectedStatementOuput"), StandardCharsets.UTF_8);
+            String readerInput = reader.readLine();
+            while (readerInput != null) {
+                resultStatement += readerInput;
+                readerInput = reader.readLine();
+            }
+            reader.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            resultStatement = null;
+
+        }
+        return resultStatement;*/
+
+
+
+
         String resultStatement = "Rental Record for Bob" + "\n";
         resultStatement += "\t" + "Harry Potter" + "\t" + "4.0" + "\n";
         resultStatement += "\t" + "Feuerzangenbowle" + "\t" + "5.0" + "\n";
