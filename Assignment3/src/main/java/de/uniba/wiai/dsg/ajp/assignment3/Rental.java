@@ -4,7 +4,7 @@ public class Rental {
 
     private int daysRented;
     private Movie movie;
-    private int discount = 0;
+    private double discount = 0.0;
 
     public Movie getMovie() {
         return movie;
@@ -47,16 +47,16 @@ public class Rental {
         this.discount = discount;
     }
 
-    public int getDiscount() {
+    public double getDiscount() {
         return discount;
     }
 
     public double getDiscountAmount() {
-        return movie.getCharge(daysRented) * (getDiscount() / 100);
+        return getCharge() * (getDiscount()/100);
     }
 
     public double getDiscountedCharge(){
-        return this.getCharge()-this.getDiscountAmount();
+        return getCharge()-getDiscountAmount();
     }
 
 }
