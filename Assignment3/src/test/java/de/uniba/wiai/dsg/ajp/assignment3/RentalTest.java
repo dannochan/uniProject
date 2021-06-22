@@ -1,6 +1,6 @@
 package de.uniba.wiai.dsg.ajp.assignment3;
 
-import org.junit.jupiter.api.AfterEach;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +35,7 @@ class RentalTest {
 
 
     @Test
-    void giveBackARightDiscountAmount() {
+    public void giveBackARightDiscountAmount() {
         //given
 
         rental.setDiscount(20);
@@ -48,16 +48,30 @@ class RentalTest {
         //when
 
         double discountTest = rental.getDiscountAmount();
-        System.out.println(discountTest);
-
-        System.out.println(rental.getDiscount());
 
         //then
-       // assertEquals(2.0, discountTest, "The discount is not correct!");
+        assertEquals(2.0, discountTest, "The discount is not correct!");
 
     }
 
     @Test
-    void getDiscountedCharge() {
+    public void getDiscountedCharge() {
+
+        //given
+
+        rental.setDiscount(20);
+        rental.setDaysRented(4);
+        Movie movie = mock(Movie.class);
+        given(movie.getCharge(rental.getDaysRented())).willReturn(10.0);
+        rental.setMovie(movie);
+
+        //when
+
+        double discountTest = rental.getDiscountedCharge();
+
+        //then
+        assertEquals(8.0, discountTest, "The total amount is not correct!" + rental.getCharge() + " minus " +
+                rental.getDiscountAmount() + "is 8!");
+
     }
 }
