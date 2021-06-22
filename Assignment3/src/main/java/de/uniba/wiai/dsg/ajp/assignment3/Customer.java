@@ -2,189 +2,192 @@ package de.uniba.wiai.dsg.ajp.assignment3;
 
 import java.util.LinkedList;
 import java.util.List;
+
 /**
  * Give the information about a Customer who rents a Movie
  */
 
 public class Customer {
 
-	private String name;
+    private String name;
 
-	private List<Rental> rentals = new LinkedList<Rental>();
+    private List<Rental> rentals = new LinkedList<Rental>();
 
-	public Customer(String name) {
-		super();
-		this.name = name;
-	}
+    public Customer(String name) {
+        super();
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		if (name == null && name == ""){
-			throw new IllegalArgumentException("name must not be null or empty.");
-		}
+    public void setName(String name) {
+        if (name == null && name == "") {
+            throw new IllegalArgumentException("name must not be null or empty.");
+        }
 
-		this.name = name;
-	}
+        this.name = name;
+    }
 
-	public List<Rental> getRentals() {
-		return rentals;
-	}
+    public List<Rental> getRentals() {
+        return rentals;
+    }
 
-	public void setRentals(List<Rental> rentals) {
-		if (rentals == null && rentals.size() == 0) {
-			throw new IllegalArgumentException("rentals must not be empty");
-		}
-		this.rentals = rentals;
-	}
-	/**
-	 * Statement gives  the information on a Customer  rental record in html format .
-	 *
-	 * <p>
-	 * Precondition:
-	 * <ul>
-	 * <li> The Statement must not take any input  </li>
-	 * </ul>
-	 * </p>
-	 *
-	 *
-	 * <p>
-	 * Postcondition:
-	 * <ul>
-	 * <li> All the values to add to the result must be of type String  </li>
-	 * </ul>
-	 *
-	 * @return rental Record of a Customer.
-	 */
+    public void setRentals(List<Rental> rentals) {
+        if (rentals == null && rentals.size() == 0) {
+            throw new IllegalArgumentException("rentals must not be empty");
+        }
+        this.rentals = rentals;
+    }
 
-	// String.valueOf werden löscht.
-	public String statement() {
-		String result = "Rental Record for " + getName() + "\n";
+    /**
+     * Statement gives  the information on a Customer  rental record in html format .
+     *
+     * <p>
+     * Precondition:
+     * <ul>
+     * <li> The Statement must not take any input  </li>
+     * </ul>
+     * </p>
+     *
+     *
+     * <p>
+     * Postcondition:
+     * <ul>
+     * <li> All the values to add to the result must be of type String  </li>
+     * </ul>
+     *
+     * @return rental Record of a Customer.
+     */
 
-		int frequentRenterPoints = 0;
-		for (Rental each : this.rentals) {
-			frequentRenterPoints += each.getFrequentRenterPoints();
+    // String.valueOf werden löscht.
+    public String statement() {
+        String result = "Rental Record for " + getName() + "\n";
 
-			// show figures for this rental
-			result += "\t" + each.getMovie().getTitle() + "\t"
-					+ each.getCharge() + "\n";
-		}
+        int frequentRenterPoints = 0;
+        for (Rental each : this.rentals) {
+            frequentRenterPoints += each.getFrequentRenterPoints();
 
-		// add footer lines
-		result += "Amount owed is " + getTotalCharge() + "\n";
-		result += "You earned " + frequentRenterPoints
-				+ " frequent renter points";
-		return result;
-	}
+            // show figures for this rental
+            result += "\t" + each.getMovie().getTitle() + "\t"
+                    + each.getCharge() + "\t"
+                    + each.getDiscount() + "\t"
+                    + each.getDiscountedCharge() + "\n";
+        }
 
-	/**
-	 * Html statement gives  the information on a customer  rental record in html format .
-	 *
-	 * <p>
-	 * Precondition:
-	 * <ul>
-	 * <li> The Statement must not take any input  </li>
-	 * </ul>
-	 * </p>
-	 *
-	 *
-	 * <p>
-	 * Postcondition:
-	 * <ul>
-	 * <li> All the values to add to the result must be of type string  </li>
-	 * </ul>
-	 *
-	 * @return rental Record of a customer.
-	 */
+        // add footer lines
+        result += "Amount owed is " + getTotalCharge() + "\n";
+        result += "You earned " + frequentRenterPoints
+                + " frequent renter points";
+        return result;
+    }
 
-	public String htmlStatement() {
-		String result = "<H1>Rentals for <EM>" + getName() + "</EM></H1><P>\n";
+    /**
+     * Html statement gives  the information on a customer  rental record in html format .
+     *
+     * <p>
+     * Precondition:
+     * <ul>
+     * <li> The Statement must not take any input  </li>
+     * </ul>
+     * </p>
+     *
+     *
+     * <p>
+     * Postcondition:
+     * <ul>
+     * <li> All the values to add to the result must be of type string  </li>
+     * </ul>
+     *
+     * @return rental Record of a customer.
+     */
 
-		for (Rental each : rentals) {
-			// show figures for each rental
-			result += each.getMovie().getTitle() + ": "
-					+ each.getCharge() + "<BR>\n";
-		}
+    public String htmlStatement() {
+        String result = "<H1>Rentals for <EM>" + getName() + "</EM></H1><P>\n";
 
-		// add footer lines
-		result += "<P>You owe <EM>" + getTotalCharge()
-				+ "</EM><P>\n";
-		result += "On this rental you earned <EM>"
-				+ getTotalFrequentRenterPoints()
-				+ "</EM> frequent renter points<P>";
-		return result;
-	}
+        for (Rental each : rentals) {
+            // show figures for each rental
+            result += each.getMovie().getTitle() + ": "
+                    + each.getCharge() + "<BR>\n";
+        }
 
-	/**
-	 * Get the total charge of all rental of a customer
-	 *
-	 * <p>
-	 * Precondition:
-	 * <ul>
-	 * <li> The Result muss not be negative . </li>
-	 * </ul>
-	 * </p>
-	 *
-	 *
-	 * <p>
-	 * Postcondition:
-	 * <ul>
-	 * <li> The charge of each rental muss be to add at result. </li>
-	 * </ul>
-	 * </p>
-	 *
-	 * @return The total charge of all rental of a customer
-	 *
-	 */
-	double getTotalCharge() {
-		double result = 0;
+        // add footer lines
+        result += "<P>You owe <EM>" + getTotalCharge()
+                + "</EM><P>\n";
+        result += "On this rental you earned <EM>"
+                + getTotalFrequentRenterPoints()
+                + "</EM> frequent renter points<P>";
+        return result;
+    }
 
-		for (Rental each : rentals) {
-			result += each.getCharge();
-		}
+    /**
+     * Get the total charge of all rental of a customer
+     *
+     * <p>
+     * Precondition:
+     * <ul>
+     * <li> The Result muss not be negative . </li>
+     * </ul>
+     * </p>
+     *
+     *
+     * <p>
+     * Postcondition:
+     * <ul>
+     * <li> The charge of each rental muss be to add at result. </li>
+     * </ul>
+     * </p>
+     *
+     * @return The total charge of all rental of a customer
+     */
+    double getTotalCharge() {
+        double result = 0;
 
-		return result;
-	}
-	/**
-	 * Get total frequent renters point of all rentals of a customer.
-	 *
-	 * <p>
-	 * Precondition:
-	 * <ul>
-	 * <li> The result muss not be negative . </li>
-	 * </ul>
-	 * </p>
-	 *
-	 *
-	 * <p>
-	 * Postcondition:
-	 * <ul>
-	 * <li> The frequent renter points of each rental muss to be add at result. </li>
-	 * </ul>
-	 * </p>
-	 *
-	 * @return The total number of frequent renters points.
-	 */
+        for (Rental each : rentals) {
+            result += each.getDiscountedCharge();
+        }
 
-	int getTotalFrequentRenterPoints() {
-		int result = 0;
+        return result;
+    }
 
-		for (Rental each : rentals) {
-			result += each.getFrequentRenterPoints();
-		}
+    /**
+     * Get total frequent renters point of all rentals of a customer.
+     *
+     * <p>
+     * Precondition:
+     * <ul>
+     * <li> The result muss not be negative . </li>
+     * </ul>
+     * </p>
+     *
+     *
+     * <p>
+     * Postcondition:
+     * <ul>
+     * <li> The frequent renter points of each rental muss to be add at result. </li>
+     * </ul>
+     * </p>
+     *
+     * @return The total number of frequent renters points.
+     */
 
-		return result;
-	}
+    int getTotalFrequentRenterPoints() {
+        int result = 0;
 
+        for (Rental each : rentals) {
+            result += each.getFrequentRenterPoints();
+        }
+
+        return result;
+    }
+/*
 	double getTotalDiscountPoint(){
 		double result = 0;
 		for (Rental each: rentals){
-			each.getDiscountOfRental();
+			each.getDiscountAmount();
 		}
 		return result; 
-	}
+	}*/
 
 }
-//

@@ -4,7 +4,7 @@ public class Rental {
 
     private int daysRented;
     private Movie movie;
-    private int discount=0;
+    private int discount = 0;
 
     public Movie getMovie() {
         return movie;
@@ -29,6 +29,7 @@ public class Rental {
     }
 
     public double getCharge() {
+
         return movie.getCharge(daysRented);
     }
 
@@ -40,7 +41,7 @@ public class Rental {
     }
 
     public void setDiscount(int discount) {
-        if(discount<0 || discount>100){
+        if (discount < 0 || discount > 100) {
             throw new IllegalArgumentException("Invalid discount, please try again!");
         }
         this.discount = discount;
@@ -50,8 +51,12 @@ public class Rental {
         return discount;
     }
 
-    public double getDiscountOfRental(){
-        return this.getCharge()*(getDiscount()/100);
+    public double getDiscountAmount() {
+        return movie.getCharge(daysRented) * (getDiscount() / 100);
+    }
+
+    public double getDiscountedCharge(){
+        return this.getCharge()-this.getDiscountAmount();
     }
 
 }
