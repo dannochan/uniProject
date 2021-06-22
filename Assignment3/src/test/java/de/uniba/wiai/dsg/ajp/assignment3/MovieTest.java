@@ -1,5 +1,7 @@
 package de.uniba.wiai.dsg.ajp.assignment3;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -36,10 +38,19 @@ public class MovieTest {
 
     }
 */
+    @BeforeEach
+    private void setUp(){
+        movie = new Movie("Sit",2,"4K");
+    }
+
+    @AfterEach
+    private void tearDown(){
+        movie = null;
+    }
+
     @ParameterizedTest
     @ValueSource(ints={1,2,5,10})
     public void getChargeReturnsPositveNumber(int daysRented){
-        movie = new Movie("Sit", 2, "HD");
         double result = movie.getCharge(daysRented);
         assertTrue(result>0,"Method getCharge returns negative Number.");
 
@@ -48,12 +59,14 @@ public class MovieTest {
     @ParameterizedTest
     @ValueSource(ints = {-1, 0})
     public void getChargeThrowsExceptionOnInvalideInput(int daysRented) {
-        //given
-        movie = new Movie("Sit",2,"4K");
         assertThrows(IllegalArgumentException.class, () -> {
             movie.getCharge(daysRented);
         });
+    }
 
+    @Test
+    public void getTitleInCorrectFormat(){
+        assertEquals("Sit (4K)",movie.getTitle(), "Method getTitle() does not print in correct Format.");
 
     }
 
