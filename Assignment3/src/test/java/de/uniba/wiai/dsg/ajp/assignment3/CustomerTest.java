@@ -118,13 +118,13 @@ public class CustomerTest {
             case 0:
                 given(movieMock.getTitle()).willReturn("Harry Potter");
                 given(rental.getCharge()).willReturn(4.0);
-                given(rental.getDiscount()).willReturn(20);
+                given(rental.getDiscount()).willReturn(20.0);
                 given(rental.getDiscountedCharge()).willReturn(3.0);
                 break;
             case 1:
                 given(movieMock.getTitle()).willReturn("Feuerzangenbowle");
                 given(rental.getCharge()).willReturn(5.0);
-                given(rental.getDiscount()).willReturn(25);
+                given(rental.getDiscount()).willReturn(25.0);
                 given(rental.getDiscountedCharge()).willReturn(4.0);
                 break;
             default:
@@ -166,8 +166,8 @@ public class CustomerTest {
 
 
         String resultStatement = "Rental Record for Bob" + "\n";
-        resultStatement += "\t" + "Harry Potter" + "\t" + "4.0" + "\t" + "20" + "\t" + "3.0" + "\n";
-        resultStatement += "\t" + "Feuerzangenbowle" + "\t" + "5.0" + "\t" + "25" + "\t" + "4.0" + "\n";
+        resultStatement += "\t" + "Harry Potter" + "\t" + "4.0" + "\t" + "20.0" + "\t" + "3.0" + "\n";
+        resultStatement += "\t" + "Feuerzangenbowle" + "\t" + "5.0" + "\t" + "25.0" + "\t" + "4.0" + "\n";
         resultStatement += "Amount owed is 7.0" + "\n";
         resultStatement += "You earned 2 frequent renter points";
         return resultStatement;
@@ -177,8 +177,8 @@ public class CustomerTest {
         //TODO: Datein anlegen und einlesen
 
         String resultHtmlStatement = "<H1>Rentals for <EM>Bob" + "</EM></H1><P>\n";
-        resultHtmlStatement += "Harry Potter: " + "4.0 20 3.0" + "<BR>\n";
-        resultHtmlStatement += "Feuerzangenbowle: " + "5.0 25 4.0" + "<BR>\n";
+        resultHtmlStatement += "Harry Potter: " + "4.0 20.0 3.0" + "<BR>\n";
+        resultHtmlStatement += "Feuerzangenbowle: " + "5.0 25.0 4.0" + "<BR>\n";
         resultHtmlStatement += "<P>You owe <EM>7.0" + "</EM><P>\n";
         resultHtmlStatement += "On this rental you earned <EM>2" + "</EM> frequent renter points<P>";
         return resultHtmlStatement;
