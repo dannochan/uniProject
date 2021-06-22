@@ -38,37 +38,32 @@ public class CustomerTest {
 
     @Test
     public void statementInCorrectFormat() {
-        // given
+        
         setUpCustomer();
-        // when
+
         String testStatement = customer.statement();
-        // then
-        // TODO: darüber hinaus, die Verhältnisse von SUT müssen noch überprüft werden
+
         assertEquals(expectedStatementOutput(), testStatement, "Method statement() does not print in correct format.");
     }
 
     @Test
     public void htmlStatementInCorrectForm() {
-        // given
+
         setUpCustomer();
 
-        // when
         String outputTest = customer.htmlStatement();
 
-        //then
         assertEquals(expectedHtmlStatementOutput(), outputTest, "Method htmlstatement() does not print in correct format.");
 
     }
 
     @Test
     public void getTotalChargeReturnspPositiveNumber() {
-        // given
+
         setUpCustomer();
 
-        // when
         double chargeTest = customer.getTotalCharge();
 
-        // then
         assertNotEquals(null, chargeTest, "Method getTotalCharge returns null.");
         assertTrue(chargeTest > 0, "Method getTotalCharge returns negative Number.");
 
@@ -77,14 +72,10 @@ public class CustomerTest {
     @Test
     public void getTotalFrequentRenterPointsReturnsPositiveNumber() {
 
-        // given -> eine Mockobjekt erzeugen
         setUpCustomer();
 
-
-        // when
         double pointTest = customer.getTotalFrequentRenterPoints();
 
-        // then
         assertTrue(pointTest >= 0, "Method getFrequentRenterPoints returns negative Number.");
 
     }
@@ -97,7 +88,6 @@ public class CustomerTest {
             i++;
         }
         customer.setRentals(rentalList);
-        //given(customer.getTotalCharge()).willReturn(8.0);
 
     }
 
@@ -145,7 +135,6 @@ public class CustomerTest {
     }
 
     private String expectedStatementOutput() {
-        //TODO: Dateien anlegen und einlesen zum testen
 
 /*        String resultStatement = "";
         try {
@@ -174,7 +163,6 @@ public class CustomerTest {
     }
 
     private String expectedHtmlStatementOutput() {
-        //TODO: Datein anlegen und einlesen
 
         String resultHtmlStatement = "<H1>Rentals for <EM>Bob" + "</EM></H1><P>\n";
         resultHtmlStatement += "Harry Potter: " + "4.0 20 3.0" + "<BR>\n";
