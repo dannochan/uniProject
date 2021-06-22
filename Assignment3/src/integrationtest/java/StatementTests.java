@@ -35,7 +35,7 @@ public class StatementTests {
 
     private String expectedOutput(){
         String resultStatement = "Rental Record for Bob" + "\n";
-        resultStatement += "\t" + "Sit (4K)" + "\t" + "3.5" + "\t" + "20.0" + "\t" + "2.8" + "\n";
+        resultStatement += "\t" + "Sit (4K)" + "\t" + "3.5" + "\t" + "20" + "\t" + "2.8" + "\n";
         resultStatement += "Amount owed is 2.8" + "\n";
         resultStatement += "You earned 1 frequent renter points";
         return resultStatement;
