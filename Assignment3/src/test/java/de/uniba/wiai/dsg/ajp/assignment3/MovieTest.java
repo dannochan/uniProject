@@ -17,10 +17,10 @@ public class MovieTest {
 
     @ParameterizedTest
     @MethodSource("differentPictureQuality")
-    public void getChargereturncorrectvalue(PictureQuality picturequality, double expected) {
+    public void getChargeReturnCorrectValue(PictureQuality picturequality, double expected) {
         //given
 
-        Movie movie = new Movie();
+        Movie movie = new Movie("Sit", 2,"4K");
 
         // when
         double result = movie.getCharge(2);
@@ -39,11 +39,9 @@ public class MovieTest {
 
     @ParameterizedTest
     @ValueSource(ints = {-1, 0})
-    public void getChargeThrowExceptionnonvalideinput(int daysRented) {
+    public void getChargeThrowsExceptionOnInvalideInput(int daysRented) {
         //given
-        movie = new Movie();
-
-        // when and then
+        movie = new Movie("Sit",2,"4K");
         assertThrows(IllegalArgumentException.class, () -> {
             movie.getCharge(daysRented);
         });
