@@ -4,6 +4,7 @@ public class Rental {
 
     private int daysRented;
     private Movie movie;
+    private int discount;
 
     public Movie getMovie() {
         return movie;
@@ -36,6 +37,21 @@ public class Rental {
             return 0;
         }
         return movie.getFrequentRenterPoints(daysRented);
+    }
+
+    public void setDiscount(int discount) {
+        if(discount<0 || discount>100){
+            throw new IllegalArgumentException("Invalid discount, please try again!");
+        }
+        this.discount = discount;
+    }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public double getDiscountOfRental(){
+        return this.getCharge()*(getDiscount()/100);
     }
 
 }
