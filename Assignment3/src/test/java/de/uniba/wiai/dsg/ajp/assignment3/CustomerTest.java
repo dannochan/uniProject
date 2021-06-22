@@ -38,24 +38,13 @@ public class CustomerTest {
 
     @Test
     public void statementInCorrectFormat() {
-        // given -> in given werden Objekte mit Werte angelegt. die wir zum Testen brauchen
+        // given
         setUpCustomer();
-
         // when
-
-        //TODO: unnötige String Variable deshalb kein when-Teil nötig???
-        //mit der String Variable wird der Code von statement ausgeführt, und die Rückgabewerten
-        //werden für Verifikation gebraucht.
         String testStatement = customer.statement();
-
         // then
-        // Verifikation -> dabei geht es darum ob das Ergebnis korrekt ausgeben wird
-        // darüber hinaus, die Verhältnisse von SUT müssen noch überprüft werden
-
+        // TODO: darüber hinaus, die Verhältnisse von SUT müssen noch überprüft werden
         assertEquals(expectedStatementOutput(), testStatement, "Method statement() does not print in correct format.");
-
-
-
     }
 
     @Test
@@ -90,6 +79,7 @@ public class CustomerTest {
 
         // given -> eine Mockobjekt erzeugen
         setUpCustomer();
+
 
         // when
         double pointTest = customer.getTotalFrequentRenterPoints();
@@ -175,8 +165,6 @@ public class CustomerTest {
         return resultStatement;*/
 
 
-
-
         String resultStatement = "Rental Record for Bob" + "\n";
         resultStatement += "\t" + "Harry Potter" + "\t" + "4.0" + "\t" + "20" + "\t" + "3.0" + "\n";
         resultStatement += "\t" + "Feuerzangenbowle" + "\t" + "5.0" + "\t" + "25" + "\t" + "4.0" + "\n";
@@ -189,8 +177,8 @@ public class CustomerTest {
         //TODO: Datein anlegen und einlesen
 
         String resultHtmlStatement = "<H1>Rentals for <EM>Bob" + "</EM></H1><P>\n";
-        resultHtmlStatement += "Harry Potter: " + "4.0" + "<BR>\n";
-        resultHtmlStatement += "Feuerzangenbowle: " + "5.0" + "<BR>\n";
+        resultHtmlStatement += "Harry Potter: " + "4.0 20 3.0" + "<BR>\n";
+        resultHtmlStatement += "Feuerzangenbowle: " + "5.0 25 4.0" + "<BR>\n";
         resultHtmlStatement += "<P>You owe <EM>7.0" + "</EM><P>\n";
         resultHtmlStatement += "On this rental you earned <EM>2" + "</EM> frequent renter points<P>";
         return resultHtmlStatement;

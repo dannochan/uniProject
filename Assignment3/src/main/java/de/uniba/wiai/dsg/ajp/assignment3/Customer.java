@@ -109,7 +109,7 @@ public class Customer {
         for (Rental each : rentals) {
             // show figures for each rental
             result += each.getMovie().getTitle() + ": "
-                    + each.getCharge() + "<BR>\n";
+                    + each.getCharge() + " " + each.getDiscount() + " " + each.getDiscountedCharge() + "<BR>\n";
         }
 
         // add footer lines
