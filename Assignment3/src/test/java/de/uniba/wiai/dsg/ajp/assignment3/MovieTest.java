@@ -1,5 +1,13 @@
 package de.uniba.wiai.dsg.ajp.assignment3;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -7,14 +15,12 @@ public class MovieTest {
 
     private Movie movie;
 
-
-/*
     @ParameterizedTest
     @MethodSource("differentPictureQuality")
     public void getChargereturncorrectvalue(PictureQuality picturequality, double expected) {
         //given
 
-        Movie movie = new Movie("Titan",3, picturequality);
+        Movie movie = new Movie();
 
         // when
         double result = movie.getCharge(2);
@@ -45,7 +51,8 @@ public class MovieTest {
 
     }
 
-*/
+
+
 
 
 }
