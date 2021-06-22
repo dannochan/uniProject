@@ -14,13 +14,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class MovieTest {
 
     private Movie movie;
-<<<<<<< HEAD
+
     @ParameterizedTest
     @MethodSource("differentPictureQuality")
     public void getChargereturncorrectvalue(PictureQuality picturequality, double expected) {
         //given
 
-        Movie movie = new Movie("Titan",3, picturequality);
+        Movie movie = new Movie();
 
         // when
         double result = movie.getCharge(2);
@@ -51,8 +51,7 @@ public class MovieTest {
 
     }
 
-=======
->>>>>>> 05d49903465906116b0fd43ef29061195098aecb
+
 
 
 

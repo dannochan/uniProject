@@ -1,6 +1,5 @@
 package de.uniba.wiai.dsg.ajp.assignment3;
 
-<<<<<<< HEAD
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -36,8 +35,5 @@ public class PriceTest {
 
 
 
-=======
-public class PriceTest {
-    //TODO: PriceTest mit Klasse die von abstrakter Klasse erbt
->>>>>>> 05d49903465906116b0fd43ef29061195098aecb
+
 }
