@@ -4,7 +4,7 @@ public class Rental {
 
     private int daysRented;
     private Movie movie;
-    private int discount;
+    private int discount=0;
 
     public Movie getMovie() {
         return movie;

@@ -1,20 +1,14 @@
 package de.uniba.wiai.dsg.ajp.assignment3;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
-
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class MovieTest {
 
     private Movie movie;
-<<<<<<< HEAD
+
+
+/*
     @ParameterizedTest
     @MethodSource("differentPictureQuality")
     public void getChargereturncorrectvalue(PictureQuality picturequality, double expected) {
@@ -51,9 +45,7 @@ public class MovieTest {
 
     }
 
-=======
->>>>>>> 05d49903465906116b0fd43ef29061195098aecb
-
+*/
 
 
 }
