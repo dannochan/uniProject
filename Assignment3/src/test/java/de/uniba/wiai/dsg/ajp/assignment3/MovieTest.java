@@ -8,13 +8,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MovieTest {
 
     private Movie movie;
-
+/*
     @ParameterizedTest
     @MethodSource("differentPictureQuality")
     public void getChargeReturnCorrectValue(PictureQuality picturequality, double expected) {
@@ -34,6 +33,15 @@ public class MovieTest {
         return List.of(Arguments.of(PictureQuality.Resolution_HD, 2),
                 Arguments.of(PictureQuality.Resolution_4k, 4));
 
+
+    }
+*/
+    @ParameterizedTest
+    @ValueSource(ints={1,2,5,10})
+    public void getChargeReturnsPositveNumber(int daysRented){
+        movie = new Movie("Sit", 2, "HD");
+        double result = movie.getCharge(daysRented);
+        assertTrue(result>0,"Method getCharge returns negative Number.");
 
     }
 
