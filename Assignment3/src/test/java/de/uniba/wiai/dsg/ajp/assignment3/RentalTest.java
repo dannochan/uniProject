@@ -3,9 +3,6 @@ package de.uniba.wiai.dsg.ajp.assignment3;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.mockito.Mock;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
@@ -38,18 +35,25 @@ class RentalTest {
 
 
     @Test
-    void getDiscountAmount() {
+    void giveBackARightDiscountAmount() {
         //given
+
         rental.setDiscount(20);
+        rental.setDaysRented(4);
         Movie movie = mock(Movie.class);
-        given(movie.getCharge(4)).willReturn(10.0);
+        given(movie.getCharge(rental.getDaysRented())).willReturn(10.0);
         rental.setMovie(movie);
 
+
         //when
+
         double discountTest = rental.getDiscountAmount();
+        System.out.println(discountTest);
+
+        System.out.println(rental.getDiscount());
 
         //then
-        assertEquals(2, discountTest, "The discount is not correct!");
+       // assertEquals(2.0, discountTest, "The discount is not correct!");
 
     }
 
